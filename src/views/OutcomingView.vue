@@ -26,13 +26,11 @@ const categorias = [
 
 // Datos de ejemplo
 const egresos = ref<Egreso[]>([
-  { id: 1, descripcion: 'Alquiler mensual', monto: 800.00, fecha: '2025-11-01', categoria: 'Vivienda' },
-  { id: 2, descripcion: 'Supermercado semanal', monto: 350.00, fecha: '2025-11-05', categoria: 'Alimentación' },
-  { id: 3, descripcion: 'Servicios (luz, agua, gas)', monto: 150.00, fecha: '2025-11-10', categoria: 'Servicios' },
-  { id: 4, descripcion: 'Gasolina', monto: 100.00, fecha: '2025-11-12', categoria: 'Transporte' },
-  { id: 5, descripcion: 'Cine y restaurante', monto: 80.00, fecha: '2025-11-18', categoria: 'Entretenimiento' },
-  { id: 6, descripcion: 'Medicamentos', monto: 45.00, fecha: '2025-11-20', categoria: 'Salud' },
-  { id: 7, descripcion: 'Internet y teléfono', monto: 75.00, fecha: '2025-11-15', categoria: 'Servicios' },
+  { id: 1, descripcion: 'Alquiler', monto: 1200000.00, fecha: '2025-11-01', categoria: 'Vivienda' },
+  { id: 2, descripcion: 'Supermercado', monto: 500000.00, fecha: '2025-11-05', categoria: 'Alimentación' },
+  { id: 3, descripcion: 'Servicios (luz, agua, gas)', monto: 210000.00, fecha: '2025-11-10', categoria: 'Servicios' },
+  { id: 4, descripcion: 'Transporte', monto: 500000.00, fecha: '2025-11-12', categoria: 'Transporte' },
+  { id: 5, descripcion: 'Entretenimiento', monto: 200000.00, fecha: '2025-11-18', categoria: 'Ocio' },
 ]);
 
 // Estado del formulario
@@ -109,11 +107,11 @@ const mayorGasto = computed(() => {
 
 // Funciones
 const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(amount);
+  return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(amount);
 };
 
 const formatDate = (dateStr: string) => {
-  return new Date(dateStr).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+  return new Date(dateStr).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
 const abrirModalNuevo = () => {

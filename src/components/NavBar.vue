@@ -14,7 +14,7 @@ const links = [
   <nav class="navbar">
     <div class="navbar-container">
       <div class="navbar-brand">
-        <h1>Mi Aplicación</h1>
+        <h1>Riwi Wallet</h1>
       </div>
       <ul class="navbar-links">
         <li v-for="link in links" :key="link.name">

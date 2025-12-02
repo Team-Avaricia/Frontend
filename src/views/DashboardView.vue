@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+﻿﻿<script setup lang="ts">
 import { ref, computed } from 'vue';
 
 // Datos de ejemplo para el dashboard
@@ -11,19 +11,20 @@ const user = ref({
 
 // Datos de ejemplo para ingresos
 const ingresos = ref([
-  { id: 1, descripcion: 'Salario mensual', monto: 2500.00, fecha: '2025-11-01', categoria: 'Salario' },
-  { id: 2, descripcion: 'Freelance proyecto web', monto: 800.00, fecha: '2025-11-10', categoria: 'Freelance' },
-  { id: 3, descripcion: 'Dividendos', monto: 150.00, fecha: '2025-11-15', categoria: 'Inversiones' },
-  { id: 4, descripcion: 'Venta de artículos', monto: 200.00, fecha: '2025-11-20', categoria: 'Ventas' },
+  { id: 1, descripcion: 'Salario mensual', monto: 1600000.00, fecha: '2025-11-01', categoria: 'Salario' },
+  { id: 2, descripcion: 'Freelance proyecto web', monto: 800000.00, fecha: '2025-11-10', categoria: 'Freelance' },
+  { id: 3, descripcion: 'Dividendos', monto: 200000.00, fecha: '2025-11-15', categoria: 'Inversiones' },
+  { id: 4, descripcion: 'Venta de artículos', monto: 200000.00, fecha: '2025-11-20', categoria: 'Ventas' },
+  { id: 5, descripcion: 'Bono de productividad', monto: 100000.00, fecha: '2025-11-22', categoria: 'Salario' },
 ]);
 
 // Datos de ejemplo para egresos
 const egresos = ref([
-  { id: 1, descripcion: 'Alquiler', monto: 800.00, fecha: '2025-11-01', categoria: 'Vivienda' },
-  { id: 2, descripcion: 'Supermercado', monto: 350.00, fecha: '2025-11-05', categoria: 'Alimentación' },
-  { id: 3, descripcion: 'Servicios (luz, agua, gas)', monto: 150.00, fecha: '2025-11-10', categoria: 'Servicios' },
-  { id: 4, descripcion: 'Transporte', monto: 100.00, fecha: '2025-11-12', categoria: 'Transporte' },
-  { id: 5, descripcion: 'Entretenimiento', monto: 80.00, fecha: '2025-11-18', categoria: 'Ocio' },
+  { id: 1, descripcion: 'Alquiler', monto: 1200000.00, fecha: '2025-11-01', categoria: 'Vivienda' },
+  { id: 2, descripcion: 'Supermercado', monto: 500000.00, fecha: '2025-11-05', categoria: 'Alimentación' },
+  { id: 3, descripcion: 'Servicios (luz, agua, gas)', monto: 210000.00, fecha: '2025-11-10', categoria: 'Servicios' },
+  { id: 4, descripcion: 'Transporte', monto: 500000.00, fecha: '2025-11-12', categoria: 'Transporte' },
+  { id: 5, descripcion: 'Entretenimiento', monto: 200000.00, fecha: '2025-11-18', categoria: 'Ocio' },
 ]);
 
 // Cálculos
@@ -42,12 +43,12 @@ const ultimasTransacciones = computed(() => {
 
 // Formateo de moneda
 const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(amount);
+  return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(amount);
 };
 
 // Formateo de fecha
 const formatDate = (dateStr: string) => {
-  return new Date(dateStr).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+  return new Date(dateStr).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 </script>
 

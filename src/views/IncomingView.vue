@@ -23,11 +23,11 @@ const categorias = [
 
 // Datos de ejemplo
 const ingresos = ref<Ingreso[]>([
-  { id: 1, descripcion: 'Salario mensual', monto: 2500.00, fecha: '2025-11-01', categoria: 'Salario' },
-  { id: 2, descripcion: 'Freelance proyecto web', monto: 800.00, fecha: '2025-11-10', categoria: 'Freelance' },
-  { id: 3, descripcion: 'Dividendos acciones', monto: 150.00, fecha: '2025-11-15', categoria: 'Inversiones' },
-  { id: 4, descripcion: 'Venta de artículos usados', monto: 200.00, fecha: '2025-11-20', categoria: 'Ventas' },
-  { id: 5, descripcion: 'Bono de productividad', monto: 500.00, fecha: '2025-11-22', categoria: 'Salario' },
+  { id: 1, descripcion: 'Salario mensual', monto: 1600000.00, fecha: '2025-11-01', categoria: 'Salario' },
+  { id: 2, descripcion: 'Freelance proyecto web', monto: 800000.00, fecha: '2025-11-10', categoria: 'Freelance' },
+  { id: 3, descripcion: 'Dividendos acciones', monto: 200000.00, fecha: '2025-11-15', categoria: 'Inversiones' },
+  { id: 4, descripcion: 'Venta de artículos usados', monto: 200000.00, fecha: '2025-11-20', categoria: 'Ventas' },
+  { id: 5, descripcion: 'Bono de productividad', monto: 100000.00, fecha: '2025-11-22', categoria: 'Salario' },
 ]);
 
 // Estado del formulario
@@ -98,11 +98,11 @@ const estadisticasPorCategoria = computed(() => {
 
 // Funciones
 const formatCurrency = (amount: number) => {
-  return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(amount);
+  return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(amount);
 };
 
 const formatDate = (dateStr: string) => {
-  return new Date(dateStr).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+  return new Date(dateStr).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
 const abrirModalNuevo = () => {
