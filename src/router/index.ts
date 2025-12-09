@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { authService } from '@/services/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,45 +8,68 @@ const router = createRouter({
       path: '/',
       name: 'landing',
       component: () => import('../views/LandingView.vue'),
-      meta: { title: 'Inicio' }
+      meta: { title: 'Inicio', requiresAuth: false }
     },
     {
       path: '/registrarse',
       name: 'Register',
       component: () => import('../views/RegisterView.vue'),
-      meta: { title: 'Registrarse' }
+      meta: { title: 'Registrarse', requiresAuth: false, guestOnly: true }
     },
     {
       path: '/iniciar-sesion',
       name: 'login',
       component: () => import('../views/LoginView.vue'),
-      meta: { title: 'Iniciar Sesión' }
+      meta: { title: 'Iniciar Sesión', requiresAuth: false, guestOnly: true }
     },
     {
       path: '/panel-control',
       name: 'dashboard',
       component: () => import('../views/DashboardView.vue'),
-      meta: { title: 'Panel de Control' }
+      meta: { title: 'Panel de Control', requiresAuth: true }
     },
     {
       path: '/ingresos',
       name: 'incoming',
       component: () => import('../views/IncomingView.vue'),
-      meta: { title: 'Ingresos' }
+      meta: { title: 'Ingresos', requiresAuth: true }
     },
     {
       path: '/egresos',
       name: 'outcoming',
       component: () => import('../views/OutcomingView.vue'),
-      meta: { title: 'Egresos' }
+      meta: { title: 'Egresos', requiresAuth: true }
+    },
+    {
+      path: '/oauth2/callback',
+      name: 'oauth2-callback',
+      component: () => import('../views/OAuth2CallbackView.vue'),
+      meta: { title: 'Autenticacion', requiresAuth: false }
     },
   ],
 })
 
-// Navigation guard para actualizar el título de la página
+// Navigation guard
 router.beforeEach((to, from, next) => {
   const baseTitle = 'Riwi Wallet';
   document.title = to.meta.title ? `${baseTitle} | ${to.meta.title}` : baseTitle;
+
+  const isAuthenticated = !!authService.getToken();
+  const requiresAuth = to.meta.requiresAuth;
+  const guestOnly = to.meta.guestOnly;
+
+  // Si la ruta requiere autenticación y el usuario no está autenticado
+  if (requiresAuth && !isAuthenticated) {
+    next('/iniciar-sesion');
+    return;
+  }
+
+  // Si la ruta es solo para invitados (login/register) y el usuario está autenticado
+  if (guestOnly && isAuthenticated) {
+    next('/panel-control');
+    return;
+  }
+
   next();
 })
 

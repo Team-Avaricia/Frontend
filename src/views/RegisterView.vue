@@ -1,12 +1,12 @@
-﻿﻿<template>
+﻿<template>
   <div class="w-full flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-purple-100 py-12 px-4">
     <div class="w-full max-w-md p-8 space-y-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl transition-colors duration-300">
       <div class="text-center">
         <h1 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Crea tu Cuenta</h1>
         <p class="mt-2 text-gray-500 dark:text-gray-400">
-          ¿Ya tienes una?
+          Ya tienes una?
           <RouterLink to="/iniciar-sesion" class="font-medium text-indigo-600 hover:text-purple-600 transition-colors">
-            Inicia sesión
+            Inicia sesion
           </RouterLink>
         </p>
       </div>
@@ -41,22 +41,8 @@
         </div>
 
         <div>
-          <label for="userName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Nombre de usuario
-          </label>
-          <input
-            id="userName"
-            v-model="userName"
-            type="text"
-            required
-            placeholder=""
-            class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-
-        <div>
           <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Correo Electrónico
+            Correo Electronico
           </label>
           <input
             id="email"
@@ -70,7 +56,7 @@
 
         <div>
           <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Contraseña
+            Contrasena
           </label>
           <div class="relative">
             <input
@@ -78,7 +64,7 @@
               v-model="password"
               :type="showPassword ? 'text' : 'password'"
               required
-              placeholder="••••••••"
+              placeholder="********"
               class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10"
             />
             <button
@@ -108,7 +94,7 @@
 
         <div>
           <label for="password-confirm" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Confirmar Contraseña
+            Confirmar Contrasena
           </label>
           <div class="relative">
             <input
@@ -116,7 +102,7 @@
               v-model="passwordConfirm"
               :type="showPasswordConfirm ? 'text' : 'password'"
               required
-              placeholder="••••••••"
+              placeholder="********"
               class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10"
             />
             <button
@@ -134,7 +120,7 @@
             </button>
           </div>
           <p v-if="passwordsDoNotMatch" class="text-xs text-red-500 dark:text-red-400 mt-1">
-            Las contraseñas no coinciden.
+            Las contrasenas no coinciden.
           </p>
         </div>
 
@@ -154,7 +140,7 @@
           <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
         </div>
         <div class="relative flex justify-center text-sm">
-          <span class="px-2 bg-white dark:bg-gray-800 text-gray-500">O regístrate con</span>
+          <span class="px-2 bg-white dark:bg-gray-800 text-gray-500">O registrate con</span>
         </div>
       </div>
 
@@ -197,7 +183,7 @@
 import { ref, computed } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import apiClient from '@/services/api';
+import { authApi } from '@/services/api';
 
 const router = useRouter();
 const toast = useToast();
@@ -205,26 +191,25 @@ const toast = useToast();
 // Variables reactivas para los campos del formulario
 const name = ref('');
 const lastName = ref('');
-const userName = ref('');
 const email = ref('');
 const password = ref('');
 const passwordConfirm = ref('');
 
-// Variables para mostrar/ocultar contraseñas
+// Variables para mostrar/ocultar contrasenas
 const showPassword = ref(false);
 const showPasswordConfirm = ref(false);
 
-// Lógica para validar que las contraseñas coincidan
+// Logica para validar que las contrasenas coincidan
 const passwordsDoNotMatch = computed(() => {
   return password.value !== '' && passwordConfirm.value !== '' && password.value !== passwordConfirm.value;
 });
 
-// --- Lógica para el Medidor de Seguridad ---
+// --- Logica para el Medidor de Seguridad ---
 const passwordStrength = computed(() => {
   let score = 0;
   if (!password.value) return 0;
 
-  // Criterios para evaluar la contraseña
+  // Criterios para evaluar la contrasena
   if (password.value.length >= 8) score++;
   if (/[a-z]/.test(password.value)) score++;
   if (/[A-Z]/.test(password.value)) score++;
@@ -247,8 +232,8 @@ const strengthBarClasses = computed(() => {
 
 const strengthText = computed(() => {
   switch (passwordStrength.value) {
-    case 1: return 'Muy débil';
-    case 2: return 'Débil';
+    case 1: return 'Muy debil';
+    case 2: return 'Debil';
     case 3: return 'Aceptable';
     case 4: return 'Buena';
     case 5: return 'Excelente';
@@ -269,43 +254,103 @@ const strengthTextClasses = computed(() => {
 
 const handleRegister = async () => {
   if (password.value !== passwordConfirm.value) {
-    toast.error('Las contraseñas no coinciden. Por favor, verifica.');
+    toast.error('Las contrasenas no coinciden. Por favor, verifica.');
     return;
   }
 
-  const payload = {
-    name: name.value,
-    lastName: lastName.value,
-    userName: userName.value,
-    email: email.value,
-    password: password.value,
-  };
-
   try {
-    const response = await apiClient.post('/Auth/register', payload);
+    // Concatenar nombre completo
+    let fullName = `${name.value} ${lastName.value}`.trim();
+
+    // Si el nombre completo excede 20 caracteres, usar solo primer nombre y primer apellido
+    if (fullName.length > 20) {
+      const firstName = name.value.trim().split(' ')[0];
+      const firstLastName = lastName.value.trim().split(' ')[0];
+      fullName = `${firstName} ${firstLastName}`.trim();
+
+      // Si aún excede, truncar
+      if (fullName.length > 20) {
+        fullName = fullName.substring(0, 20).trim();
+      }
+
+      console.log('Nombre truncado a 20 caracteres:', fullName);
+    }
+
+    // Validar que el nombre tenga al menos 3 caracteres
+    if (fullName.length < 3) {
+      toast.error('El nombre es demasiado corto. Debe tener al menos 3 caracteres.');
+      return;
+    }
+
+    const requestData = {
+      username: fullName,
+      email: email.value,
+      password: password.value,
+    };
+
+    console.log('Enviando datos de registro:', requestData);
+
+    // La API de Spring Boot espera: username, email, password
+    const response = await authApi.register(requestData);
     console.log('Registro exitoso:', response.data);
-    toast.success('¡Cuenta creada exitosamente! Ahora serás redirigido para iniciar sesión.');
+    toast.success('Cuenta creada exitosamente! Ahora seras redirigido para iniciar sesion.');
     router.push('/iniciar-sesion');
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error en el registro:', error);
-    const message = error?.response?.data?.message || 'Ocurrió un error al crear la cuenta. Es posible que el correo o el nombre de usuario ya existan.';
+    const axiosError = error as {
+      response?: {
+        status?: number;
+        data?: {
+          message?: string;
+          errors?: Record<string, string>[];
+          error?: string;
+        }
+      }
+    };
+
+    // Log del error completo para debugging
+    if (axiosError?.response) {
+      console.error('Response status:', axiosError.response.status);
+      console.error('Response data:', JSON.stringify(axiosError.response.data, null, 2));
+    }
+
+    // Manejar diferentes tipos de errores
+    let message = 'Ocurrio un error al crear la cuenta.';
+
+    if (axiosError?.response?.data) {
+      const data = axiosError.response.data;
+
+      // Error de validación de Spring Boot
+      if (data.errors && Array.isArray(data.errors)) {
+        const validationErrors = data.errors.map((err: Record<string, string>) => err.defaultMessage || err.message).join(', ');
+        message = `Error de validación: ${validationErrors}`;
+      }
+      // Mensaje de error simple
+      else if (data.message) {
+        message = data.message;
+      }
+      // Error genérico
+      else if (data.error) {
+        message = data.error;
+      }
+    }
+
     toast.error(message);
   }
 };
 
 const handleGoogleRegister = () => {
-  toast.info('Registro con Google próximamente disponible');
-  // TODO: Implementar OAuth con Google
-  // window.location.href = '/api/auth/google/register';
+  toast.info('Redirigiendo a Google...');
+  authApi.oauth2.googleLogin();
 };
 
 const handleMicrosoftRegister = () => {
-  toast.info('Registro con Microsoft próximamente disponible');
-  // TODO: Implementar OAuth con Microsoft
-  // window.location.href = '/api/auth/microsoft/register';
+  toast.info('Redirigiendo a Microsoft...');
+  authApi.oauth2.microsoftLogin();
 };
 </script>
 
 <style scoped>
 /* Estilos adicionales si son necesarios */
 </style>
+
