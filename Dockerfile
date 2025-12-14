@@ -6,8 +6,8 @@ WORKDIR /app
 # Copy package.json and package-lock.json first to leverage Docker cache
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies - delete package-lock and regenerate for Linux compatibility
+RUN rm -f package-lock.json && npm install
 
 # Copy the rest of the code
 COPY . .

@@ -3,14 +3,11 @@ import { mainApi } from '@/services/api';
 import type {
   CreateTransactionRequest,
   CreateFinancialRuleRequest,
-  CreateRecurringTransactionRequest,
   SpendingValidationRequest,
   Transaction,
   User,
   BalanceResponse,
-  CashflowResponse,
   FinancialRule,
-  RecurringTransaction,
   SpendingValidationResponse
 } from '@/types/api';
 
@@ -145,104 +142,6 @@ export function useTransactions() {
     deleteTransaction,
     getIncome,
     getExpenses
-  };
-}
-
-/**
- * Composable para manejar transacciones recurrentes
- */
-export function useRecurringTransactions() {
-  const loading = ref(false);
-  const error = ref<string | null>(null);
-  const recurringTransactions = ref<RecurringTransaction[]>([]);
-
-  const createRecurring = async (data: CreateRecurringTransactionRequest) => {
-    loading.value = true;
-    error.value = null;
-    try {
-      const response = await mainApi.recurringTransactions.create(data);
-      return response.data;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Error al crear transacción recurrente';
-      throw err;
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  const getUserRecurring = async (userId: string, type?: 'Income' | 'Expense', isActive?: boolean) => {
-    loading.value = true;
-    error.value = null;
-    try {
-      const response = await mainApi.recurringTransactions.getByUserId(userId, type, isActive);
-      recurringTransactions.value = response.data.data;
-      return response.data;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Error al obtener transacciones recurrentes';
-      throw err;
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  const getCashflow = async (userId: string): Promise<CashflowResponse> => {
-    loading.value = true;
-    error.value = null;
-    try {
-      const response = await mainApi.recurringTransactions.getCashflow(userId);
-      return response.data;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Error al obtener flujo de caja';
-      throw err;
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  const toggleRecurring = async (id: string, isActive: boolean) => {
-    loading.value = true;
-    error.value = null;
-    try {
-      const response = await mainApi.recurringTransactions.toggle(id, { isActive });
-      // Actualizar en la lista local
-      const index = recurringTransactions.value.findIndex(r => r.id === id);
-      if (index !== -1) {
-        recurringTransactions.value[index].isActive = isActive;
-      }
-      return response.data;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Error al activar/pausar transacción recurrente';
-      throw err;
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  const deleteRecurring = async (id: string) => {
-    loading.value = true;
-    error.value = null;
-    try {
-      const response = await mainApi.recurringTransactions.delete(id);
-      // Eliminar de la lista local
-      recurringTransactions.value = recurringTransactions.value.filter(r => r.id !== id);
-      return response.data;
-    } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Error al eliminar transacción recurrente';
-      throw err;
-    } finally {
-      loading.value = false;
-    }
-  };
-
-  return {
-    loading,
-    error,
-    recurringTransactions,
-    createRecurring,
-    getUserRecurring,
-    getCashflow,
-    toggleRecurring,
-    deleteRecurring
   };
 }
 

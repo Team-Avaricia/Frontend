@@ -3,19 +3,12 @@ import type {
   CreateTransactionRequest,
   CreateUserRequest,
   CreateFinancialRuleRequest,
-  CreateRecurringTransactionRequest,
-  UpdateRecurringTransactionRequest,
-  ToggleRecurringTransactionRequest,
   SpendingValidationRequest,
   Transaction,
   User,
   FinancialRule,
-  RecurringTransaction,
   BalanceResponse,
-  CategorySummaryResponse,
-  CashflowResponse,
   TransactionQueryResponse,
-  RecurringTransactionsResponse,
   SpendingValidationResponse
 } from '@/types/api';
 
@@ -213,52 +206,6 @@ export const mainApi = {
     // Helper: Obtener solo gastos
     getExpenses: (userId: string): Promise<AxiosResponse<Transaction[]>> => {
       return mainApiClient.get(`/Transaction/user/${userId}`, { params: { type: 'Expense' } });
-    },
-  },
-
-  // ===== Endpoints de Transacciones Recurrentes =====
-  recurringTransactions: {
-    // POST /api/RecurringTransaction - Crear transacción recurrente
-    create: (data: CreateRecurringTransactionRequest): Promise<AxiosResponse<RecurringTransaction>> => {
-      return mainApiClient.post('/RecurringTransaction', data);
-    },
-
-    // GET /api/RecurringTransaction/user/{userId} - Obtener transacciones recurrentes del usuario
-    getByUserId: (
-      userId: string,
-      type?: 'Income' | 'Expense',
-      isActive?: boolean
-    ): Promise<AxiosResponse<RecurringTransactionsResponse>> => {
-      const params: Record<string, string | boolean> = {};
-      if (type) params.type = type;
-      if (isActive !== undefined) params.isActive = isActive;
-      return mainApiClient.get(`/RecurringTransaction/user/${userId}`, { params });
-    },
-
-    // GET /api/RecurringTransaction/user/{userId}/cashflow - Obtener flujo de caja mensual
-    getCashflow: (userId: string): Promise<AxiosResponse<CashflowResponse>> => {
-      return mainApiClient.get(`/RecurringTransaction/user/${userId}/cashflow`);
-    },
-
-    // PUT /api/RecurringTransaction/{id} - Actualizar transacción recurrente
-    update: (
-      id: string,
-      data: UpdateRecurringTransactionRequest
-    ): Promise<AxiosResponse<{ message: string }>> => {
-      return mainApiClient.put(`/RecurringTransaction/${id}`, data);
-    },
-
-    // PATCH /api/RecurringTransaction/{id}/toggle - Activar/pausar transacción recurrente
-    toggle: (
-      id: string,
-      data: ToggleRecurringTransactionRequest
-    ): Promise<AxiosResponse<{ id: string; isActive: boolean; message: string }>> => {
-      return mainApiClient.patch(`/RecurringTransaction/${id}/toggle`, data);
-    },
-
-    // DELETE /api/RecurringTransaction/{id} - Eliminar transacción recurrente
-    delete: (id: string): Promise<AxiosResponse<{ success: boolean; message: string }>> => {
-      return mainApiClient.delete(`/RecurringTransaction/${id}`);
     },
   },
 
