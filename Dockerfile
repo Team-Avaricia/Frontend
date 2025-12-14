@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:20-alpine as build-stage
+FROM node:20.19-alpine as build-stage
 
 WORKDIR /app
 
@@ -26,7 +26,7 @@ RUN npm run build
 # Stage 2: Nginx server for production
 FROM nginx:alpine as production-stage
 
-# Copy nginx configuration (we'll create it in the next step)
+# Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy files generated in build stage to Nginx folder
