@@ -53,7 +53,7 @@ jobs:
               --name front-vue \
               --restart unless-stopped \
               --memory="512m" \
-              -p 80:80 \
+              -p 8080:80 \
               ${{ secrets.DOCKER_USERNAME }}/front-vue:latest
 
             # 4. OPTIMIZACIÓN CRÍTICA: Limpieza
