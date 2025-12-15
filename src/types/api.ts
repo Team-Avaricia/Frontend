@@ -136,12 +136,16 @@ export interface SpendingValidationResponse {
 
 export interface RuleProgressResponse {
   ruleId: string;
-  currentSpent: number;
-  limit: number;
-  percentage: number;
-  remainingBudget: number;
+  category: string;
   period: string;
-  isExceeded: boolean;
+  limit: number;
+  spent: number;
+  remaining: number;
+  percentUsed: number;
+  periodStartDate: string;
+  periodEndDate: string;
+  isOverBudget: boolean;
+  status: string; // "On Track", "Warning", "Over Budget"
 }
 
 // ==================== TRANSACTION SEARCH ====================

@@ -38,6 +38,14 @@ const periods = [
 ]
 
 const categories = [
+  // Categorías de Ingresos
+  'Salario',
+  'Freelance',
+  'Inversiones',
+  'Ventas',
+  'Regalos',
+  'Reembolsos',
+  // Categorías de Gastos
   'Alimentación',
   'Transporte',
   'Entretenimiento',
@@ -67,6 +75,22 @@ const loadUserInfo = () => {
       console.error('Error al parsear userInfo:', e)
     }
   }
+
+  // Si no hay userId, intentar extraer del token
+  if (!userId.value) {
+    const token = localStorage.getItem('authToken')
+    if (token) {
+      try {
+        const parts = token.split('.')
+        if (parts.length === 3 && parts[1]) {
+          const tokenPayload = JSON.parse(atob(parts[1]))
+          userId.value = tokenPayload.sub || tokenPayload.userId || tokenPayload.id || ''
+        }
+      } catch (e) {
+        console.error('Error al extraer userId del token:', e)
+      }
+    }
+  }
 }
 
 const loadRules = async () => {
@@ -75,8 +99,15 @@ const loadRules = async () => {
   try {
     const response = await mainApi.financialRules.getByUserId(userId.value)
     rules.value = response.data
-  } catch (err) {
+  } catch (err: unknown) {
     console.error('Error al cargar reglas:', err)
+    const axiosError = err as { response?: { status?: number; data?: { message?: string } } }
+    if (axiosError.response?.status === 400) {
+      error.value =
+        'Error de autenticación con el servidor. Por favor, cierra sesión y vuelve a iniciar.'
+    } else {
+      error.value = axiosError.response?.data?.message || 'Error al cargar reglas financieras'
+    }
   }
 }
 
@@ -86,8 +117,9 @@ const loadProgress = async () => {
   try {
     const response = await mainApi.financialRules.getUserProgress(userId.value)
     rulesProgress.value = response.data
-  } catch (err) {
+  } catch (err: unknown) {
     console.error('Error al cargar progreso:', err)
+    // No mostrar error aquí, solo log - el progreso es opcional
   }
 }
 
@@ -164,8 +196,10 @@ const getProgressColor = (percentage: number) => {
 
 onMounted(async () => {
   loadUserInfo()
-  await loadRules()
-  await loadProgress()
+  if (userId.value) {
+    await loadRules()
+    await loadProgress()
+  }
   loading.value = false
 })
 </script>
@@ -291,29 +325,29 @@ onMounted(async () => {
               <span class="text-gray-500">Progreso</span>
               <span
                 :class="
-                  getProgressForRule(rule.id)?.isExceeded
+                  getProgressForRule(rule.id)?.isOverBudget
                     ? 'text-red-600 font-semibold'
                     : 'text-gray-600'
                 "
               >
-                {{ getProgressForRule(rule.id)?.percentage.toFixed(0) }}%
+                {{ (getProgressForRule(rule.id)?.percentUsed || 0).toFixed(0) }}%
               </span>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2">
               <div
-                :class="getProgressColor(getProgressForRule(rule.id)?.percentage || 0)"
+                :class="getProgressColor(getProgressForRule(rule.id)?.percentUsed || 0)"
                 class="h-2 rounded-full transition-all duration-500"
                 :style="{
-                  width: `${Math.min(getProgressForRule(rule.id)?.percentage || 0, 100)}%`,
+                  width: `${Math.min(getProgressForRule(rule.id)?.percentUsed || 0, 100)}%`,
                 }"
               ></div>
             </div>
             <div class="flex justify-between text-xs mt-2">
               <span class="text-gray-500">
-                Gastado: {{ formatCurrency(getProgressForRule(rule.id)?.currentSpent || 0) }}
+                Gastado: {{ formatCurrency(getProgressForRule(rule.id)?.spent || 0) }}
               </span>
               <span class="text-gray-500">
-                Disponible: {{ formatCurrency(getProgressForRule(rule.id)?.remainingBudget || 0) }}
+                Disponible: {{ formatCurrency(getProgressForRule(rule.id)?.remaining || 0) }}
               </span>
             </div>
           </div>

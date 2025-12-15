@@ -136,17 +136,17 @@ export const mainApi = {
 
     // GET /api/User/{id} - Obtener usuario por ID
     getById: (id: string): Promise<AxiosResponse<User>> => {
-      return mainApiClient.get(`/User/${id}`);
+      return mainApiClient.get(`/User/${encodeURIComponent(id)}`);
     },
 
     // GET /api/User/email/{email} - Obtener usuario por email
     getByEmail: (email: string): Promise<AxiosResponse<User>> => {
-      return mainApiClient.get(`/User/email/${email}`);
+      return mainApiClient.get(`/User/email/${encodeURIComponent(email)}`);
     },
 
     // GET /api/User/phone/{phoneNumber} - Obtener usuario por teléfono
     getByPhone: (phoneNumber: string): Promise<AxiosResponse<User>> => {
-      return mainApiClient.get(`/User/phone/${phoneNumber}`);
+      return mainApiClient.get(`/User/phone/${encodeURIComponent(phoneNumber)}`);
     },
 
     // GET /api/User/telegram/{telegramId} - Obtener usuario por Telegram ID
@@ -156,22 +156,22 @@ export const mainApi = {
 
     // GET /api/User/{userId}/telegram - Obtener Telegram ID del usuario
     getUserTelegramId: (userId: string): Promise<AxiosResponse<{ telegramId: number }>> => {
-      return mainApiClient.get(`/User/${userId}/telegram`);
+      return mainApiClient.get(`/User/${encodeURIComponent(userId)}/telegram`);
     },
 
     // GET /api/User/{userId}/balance - Obtener balance del usuario
     getBalance: (userId: string): Promise<AxiosResponse<BalanceResponse>> => {
-      return mainApiClient.get(`/User/${userId}/balance`);
+      return mainApiClient.get(`/User/${encodeURIComponent(userId)}/balance`);
     },
 
     // DELETE /api/User/{userId}/telegram - Eliminar vinculación de Telegram
     deleteTelegram: (userId: string): Promise<AxiosResponse<{ message: string }>> => {
-      return mainApiClient.delete(`/User/${userId}/telegram`);
+      return mainApiClient.delete(`/User/${encodeURIComponent(userId)}/telegram`);
     },
 
     // GET /api/User/{userId}/telegram-link - Obtener enlace para vincular Telegram
     getTelegramLink: (userId: string): Promise<AxiosResponse<TelegramLinkResponse>> => {
-      return mainApiClient.get(`/User/${userId}/telegram-link`);
+      return mainApiClient.get(`/User/${encodeURIComponent(userId)}/telegram-link`);
     },
 
     // POST /api/User/link-telegram - Vincular cuenta de Telegram
@@ -181,7 +181,7 @@ export const mainApi = {
 
     // GET /api/User/{userId}/telegram-status - Obtener estado de vinculación de Telegram
     getTelegramStatus: (userId: string): Promise<AxiosResponse<TelegramStatusResponse>> => {
-      return mainApiClient.get(`/User/${userId}/telegram-status`);
+      return mainApiClient.get(`/User/${encodeURIComponent(userId)}/telegram-status`);
     },
   },
 
@@ -200,7 +200,7 @@ export const mainApi = {
     // GET /api/Transaction/user/{userId} - Obtener transacciones del usuario
     getByUserId: (userId: string, type?: 'Income' | 'Expense'): Promise<AxiosResponse<Transaction[]>> => {
       const params = type ? { type } : {};
-      return mainApiClient.get(`/Transaction/user/${userId}`, { params });
+      return mainApiClient.get(`/Transaction/user/${encodeURIComponent(userId)}`, { params });
     },
 
     // GET /api/Transaction/user/{userId}/range - Obtener transacciones por rango de fechas
@@ -209,14 +209,14 @@ export const mainApi = {
       startDate: string,
       endDate: string
     ): Promise<AxiosResponse<TransactionQueryResponse>> => {
-      return mainApiClient.get(`/Transaction/user/${userId}/range`, {
+      return mainApiClient.get(`/Transaction/user/${encodeURIComponent(userId)}/range`, {
         params: { startDate, endDate }
       });
     },
 
     // GET /api/Transaction/user/{userId}/date/{date} - Obtener transacciones por fecha específica
     getByDate: (userId: string, date: string): Promise<AxiosResponse<TransactionQueryResponse>> => {
-      return mainApiClient.get(`/Transaction/user/${userId}/date/${date}`);
+      return mainApiClient.get(`/Transaction/user/${encodeURIComponent(userId)}/date/${date}`);
     },
 
     // DELETE /api/Transaction/{id} - Eliminar transacción
@@ -226,22 +226,22 @@ export const mainApi = {
 
     // Helper: Obtener solo ingresos
     getIncome: (userId: string): Promise<AxiosResponse<Transaction[]>> => {
-      return mainApiClient.get(`/Transaction/user/${userId}`, { params: { type: 'Income' } });
+      return mainApiClient.get(`/Transaction/user/${encodeURIComponent(userId)}`, { params: { type: 'Income' } });
     },
 
     // Helper: Obtener solo gastos
     getExpenses: (userId: string): Promise<AxiosResponse<Transaction[]>> => {
-      return mainApiClient.get(`/Transaction/user/${userId}`, { params: { type: 'Expense' } });
+      return mainApiClient.get(`/Transaction/user/${encodeURIComponent(userId)}`, { params: { type: 'Expense' } });
     },
 
     // GET /api/Transaction/user/{userId}/search - Buscar transacciones
     search: (userId: string, params: TransactionSearchParams): Promise<AxiosResponse<TransactionQueryResponse>> => {
-      return mainApiClient.get(`/Transaction/user/${userId}/search`, { params });
+      return mainApiClient.get(`/Transaction/user/${encodeURIComponent(userId)}/search`, { params });
     },
 
     // GET /api/Transaction/user/{userId}/summary/category - Resumen por categoría
     getCategorySummary: (userId: string): Promise<AxiosResponse<CategorySummaryResponse>> => {
-      return mainApiClient.get(`/Transaction/user/${userId}/summary/category`);
+      return mainApiClient.get(`/Transaction/user/${encodeURIComponent(userId)}/summary/category`);
     },
   },
 
@@ -259,7 +259,7 @@ export const mainApi = {
 
     // GET /api/FinancialRule/user/{userId} - Obtener reglas activas del usuario
     getByUserId: (userId: string): Promise<AxiosResponse<FinancialRule[]>> => {
-      return mainApiClient.get(`/FinancialRule/user/${userId}`);
+      return mainApiClient.get(`/FinancialRule/user/${encodeURIComponent(userId)}`);
     },
 
     // PATCH /api/FinancialRule/{id}/deactivate - Desactivar regla
@@ -279,7 +279,7 @@ export const mainApi = {
 
     // GET /api/FinancialRule/user/{userId}/progress - Obtener progreso de todas las reglas del usuario
     getUserProgress: (userId: string): Promise<AxiosResponse<RuleProgressResponse[]>> => {
-      return mainApiClient.get(`/FinancialRule/user/${userId}/progress`);
+      return mainApiClient.get(`/FinancialRule/user/${encodeURIComponent(userId)}/progress`);
     },
   },
 

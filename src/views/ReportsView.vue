@@ -18,6 +18,14 @@ const startDate = ref('')
 const endDate = ref('')
 
 const categories = [
+  // Categorías de Ingresos
+  'Salario',
+  'Freelance',
+  'Inversiones',
+  'Ventas',
+  'Regalos',
+  'Reembolsos',
+  // Categorías de Gastos
   'Alimentación',
   'Transporte',
   'Entretenimiento',
@@ -53,6 +61,22 @@ const loadUserInfo = () => {
       userId.value = userInfo.userId || ''
     } catch (e) {
       console.error('Error al parsear userInfo:', e)
+    }
+  }
+
+  // Si no hay userId, intentar extraer del token
+  if (!userId.value) {
+    const token = localStorage.getItem('authToken')
+    if (token) {
+      try {
+        const parts = token.split('.')
+        if (parts.length === 3 && parts[1]) {
+          const tokenPayload = JSON.parse(atob(parts[1]))
+          userId.value = tokenPayload.sub || tokenPayload.userId || tokenPayload.id || ''
+        }
+      } catch (e) {
+        console.error('Error al extraer userId del token:', e)
+      }
     }
   }
 }
@@ -101,6 +125,14 @@ const clearFilters = () => {
 
 const getCategoryColor = (category: string) => {
   const colors: Record<string, string> = {
+    // Categorías de Ingresos (tonos verdes/azules)
+    Salario: 'bg-emerald-500',
+    Freelance: 'bg-teal-500',
+    Inversiones: 'bg-blue-600',
+    Ventas: 'bg-indigo-500',
+    Regalos: 'bg-violet-500',
+    Reembolsos: 'bg-sky-500',
+    // Categorías de Gastos (tonos cálidos/variados)
     Alimentación: 'bg-orange-500',
     Transporte: 'bg-blue-500',
     Entretenimiento: 'bg-purple-500',
@@ -115,7 +147,9 @@ const getCategoryColor = (category: string) => {
 
 onMounted(async () => {
   loadUserInfo()
-  await loadCategorySummary()
+  if (userId.value) {
+    await loadCategorySummary()
+  }
   loading.value = false
 })
 </script>

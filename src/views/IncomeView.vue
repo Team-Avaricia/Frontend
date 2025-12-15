@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+﻿﻿<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { mainApi } from '@/services/api';
@@ -16,8 +16,8 @@ const { emit: emitTransactionEvent } = useTransactionEvents();
 const loading = ref(true);
 const userId = ref('');
 
-// Interfaz para los egresos (compatible con Transaction)
-interface Egreso {
+// Interfaz para los ingresos (compatible con Transaction)
+interface Income {
   id: string;
   descripcion: string;
   monto: number;
@@ -27,20 +27,17 @@ interface Egreso {
 
 // Categorías disponibles
 const categorias = [
-  'Vivienda',
-  'Alimentación',
-  'Transporte',
-  'Servicios',
-  'Salud',
-  'Educación',
-  'Entretenimiento',
-  'Ropa',
-  'Deudas',
+  'Salario',
+  'Freelance',
+  'Inversiones',
+  'Ventas',
+  'Regalos',
+  'Reembolsos',
   'Otros'
 ];
 
-// Datos de egresos (cargados desde API)
-const egresos = ref<Egreso[]>([]);
+// Datos de ingresos (cargados desde API)
+const income = ref<Income[]>([]);
 
 // Estado del formulario
 const showModal = ref(false);
@@ -49,7 +46,7 @@ const formData = ref({
   descripcion: '',
   monto: 0,
   fecha: new Date().toISOString().split('T')[0],
-  categoria: 'Otros'
+  categoria: 'Salario'
 });
 
 // Filtros
@@ -59,22 +56,22 @@ const ordenarPor = ref<'fecha' | 'monto'>('fecha');
 const ordenAscendente = ref(false);
 
 // Cálculos
-const totalEgresos = computed(() => egresos.value.reduce((sum, item) => sum + item.monto, 0));
+const totalIncome = computed(() => income.value.reduce((sum, item) => sum + item.monto, 0));
 
-const egresosFiltrados = computed(() => {
-  let resultado = [...egresos.value];
+const incomeFiltered = computed(() => {
+  let resultado = [...income.value];
 
   // Filtrar por categoría
   if (filtroCategoria.value) {
-    resultado = resultado.filter(e => e.categoria === filtroCategoria.value);
+    resultado = resultado.filter(i => i.categoria === filtroCategoria.value);
   }
 
   // Filtrar por búsqueda
   if (filtroBusqueda.value) {
     const busqueda = filtroBusqueda.value.toLowerCase();
-    resultado = resultado.filter(e =>
-      e.descripcion.toLowerCase().includes(busqueda) ||
-      e.categoria.toLowerCase().includes(busqueda)
+    resultado = resultado.filter(i =>
+      i.descripcion.toLowerCase().includes(busqueda) ||
+      i.categoria.toLowerCase().includes(busqueda)
     );
   }
 
@@ -95,13 +92,13 @@ const egresosFiltrados = computed(() => {
 const estadisticasPorCategoria = computed(() => {
   const stats: Record<string, { total: number; count: number }> = {};
 
-  egresos.value.forEach(egreso => {
-    if (!stats[egreso.categoria]) {
-      stats[egreso.categoria] = { total: 0, count: 0 };
+  income.value.forEach(item => {
+    if (!stats[item.categoria]) {
+      stats[item.categoria] = { total: 0, count: 0 };
     }
-    const stat = stats[egreso.categoria];
+    const stat = stats[item.categoria];
     if (stat) {
-      stat.total += egreso.monto;
+      stat.total += item.monto;
       stat.count++;
     }
   });
@@ -111,14 +108,8 @@ const estadisticasPorCategoria = computed(() => {
     .sort((a, b) => b.total - a.total);
 });
 
-// Mayor gasto
-const mayorGasto = computed(() => {
-  if (egresos.value.length === 0) return null;
-  return egresos.value.reduce((max, current) => current.monto > max.monto ? current : max);
-});
-
-// Cargar egresos desde la API
-const cargarEgresos = async () => {
+// Cargar ingresos desde la API
+const loadIncome = async () => {
   try {
     loading.value = true;
 
@@ -127,10 +118,10 @@ const cargarEgresos = async () => {
       return;
     }
 
-    const response = await mainApi.transactions.getByUserId(userId.value, 'Expense');
+    const response = await mainApi.transactions.getByUserId(userId.value, 'Income');
 
-    // Convertir Transaction a Egreso
-    egresos.value = response.data.map((t: Transaction) => ({
+    // Convertir Transaction a Income
+    income.value = response.data.map((t: Transaction) => ({
       id: t.id,
       descripcion: t.description || 'Sin descripción',
       monto: t.amount,
@@ -138,10 +129,10 @@ const cargarEgresos = async () => {
       categoria: t.category
     }));
 
-    console.log('Egresos cargados:', egresos.value.length);
+    console.log('Ingresos cargados:', income.value.length);
   } catch (error) {
-    console.error('Error al cargar egresos:', error);
-    toast.error('Error al cargar los egresos');
+    console.error('Error al cargar ingresos:', error);
+    toast.error('Error al cargar los ingresos');
   } finally {
     loading.value = false;
   }
@@ -156,29 +147,29 @@ const formatDate = (dateStr: string) => {
   return new Date(dateStr).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
-const abrirModalNuevo = () => {
+const openNewModal = () => {
   editingId.value = null;
   formData.value = {
     descripcion: '',
     monto: 0,
     fecha: new Date().toISOString().split('T')[0],
-    categoria: 'Otros'
+    categoria: 'Salario'
   };
   showModal.value = true;
 };
 
-const abrirModalEditar = (egreso: Egreso) => {
-  editingId.value = egreso.id;
+const openEditModal = (item: Income) => {
+  editingId.value = item.id;
   formData.value = {
-    descripcion: egreso.descripcion,
-    monto: egreso.monto,
-    fecha: egreso.fecha.split('T')[0],
-    categoria: egreso.categoria
+    descripcion: item.descripcion,
+    monto: item.monto,
+    fecha: item.fecha.split('T')[0],
+    categoria: item.categoria
   };
   showModal.value = true;
 };
 
-const guardarEgreso = async () => {
+const saveIncome = async () => {
   try {
     if (editingId.value !== null) {
       // TODO: Implementar edición en el backend
@@ -187,72 +178,53 @@ const guardarEgreso = async () => {
       return;
     }
 
-    // Crear nuevo egreso
+    // Crear nuevo ingreso
     await mainApi.transactions.create({
       userId: userId.value,
       amount: formData.value.monto,
-      type: TransactionType.Expense,
+      type: TransactionType.Income,
       category: formData.value.categoria,
       description: formData.value.descripcion,
       source: TransactionSource.Manual
     });
 
-    toast.success('Egreso agregado exitosamente');
+    toast.success('Ingreso agregado exitosamente');
     showModal.value = false;
-    await cargarEgresos(); // Recargar lista
+    await loadIncome(); // Recargar lista
     emitTransactionEvent(TransactionEvent.CREATED); // Notificar a otros componentes
   } catch (error) {
-    console.error('Error al guardar egreso:', error);
-    toast.error('Error al guardar el egreso');
+    console.error('Error al guardar ingreso:', error);
+    toast.error('Error al guardar el ingreso');
   }
 };
 
-const eliminarEgreso = async (id: string) => {
-  if (!confirm('¿Estás seguro de que deseas eliminar este egreso?')) {
+const deleteIncome = async (id: string) => {
+  if (!confirm('¿Estás seguro de que deseas eliminar este ingreso?')) {
     return;
   }
 
   try {
     await mainApi.transactions.delete(id);
-    toast.success('Egreso eliminado exitosamente');
-    await cargarEgresos(); // Recargar lista
+    toast.success('Ingreso eliminado exitosamente');
+    await loadIncome(); // Recargar lista
     emitTransactionEvent(TransactionEvent.DELETED); // Notificar a otros componentes
   } catch (error) {
-    console.error('Error al eliminar egreso:', error);
-    toast.error('Error al eliminar el egreso');
+    console.error('Error al eliminar ingreso:', error);
+    toast.error('Error al eliminar el ingreso');
   }
 };
 
 const getCategoriaColor = (categoria: string) => {
   const colores: Record<string, string> = {
-    'Vivienda': 'bg-red-100 text-red-800',
-    'Alimentación': 'bg-orange-100 text-orange-800',
-    'Transporte': 'bg-blue-100 text-blue-800',
-    'Servicios': 'bg-yellow-100 text-yellow-800',
-    'Salud': 'bg-pink-100 text-pink-800',
-    'Educación': 'bg-purple-100 text-purple-800',
-    'Entretenimiento': 'bg-indigo-100 text-indigo-800',
-    'Ropa': 'bg-teal-100 text-teal-800',
-    'Deudas': 'bg-rose-100 text-rose-800',
+    'Salario': 'bg-blue-100 text-blue-800',
+    'Freelance': 'bg-purple-100 text-purple-800',
+    'Inversiones': 'bg-green-100 text-green-800',
+    'Ventas': 'bg-yellow-100 text-yellow-800',
+    'Regalos': 'bg-pink-100 text-pink-800',
+    'Reembolsos': 'bg-indigo-100 text-indigo-800',
     'Otros': 'bg-gray-100 text-gray-800'
   };
   return colores[categoria] || 'bg-gray-100 text-gray-800';
-};
-
-const getCategoriaIcon = (categoria: string) => {
-  const iconos: Record<string, string> = {
-    'Vivienda': 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
-    'Alimentación': 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z',
-    'Transporte': 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4',
-    'Servicios': 'M13 10V3L4 14h7v7l9-11h-7z',
-    'Salud': 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
-    'Educación': 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z',
-    'Entretenimiento': 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-    'Ropa': 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z',
-    'Deudas': 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z',
-    'Otros': 'M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z'
-  };
-  return iconos[categoria] || iconos['Otros'];
 };
 
 // Inicializar
@@ -284,7 +256,7 @@ onMounted(async () => {
   }
 
   if (userId.value) {
-    await cargarEgresos();
+    await loadIncome();
   } else {
     toast.error('No se pudo obtener la información del usuario');
     loading.value = false;
@@ -305,33 +277,33 @@ onMounted(async () => {
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </RouterLink>
-              <h1 class="text-3xl font-bold text-gray-900">Egresos</h1>
+              <h1 class="text-3xl font-bold text-gray-900">Ingresos</h1>
             </div>
-            <p class="text-gray-600 mt-2 ml-10">Controla tus gastos y administra tu presupuesto</p>
+            <p class="text-gray-600 mt-2 ml-10">Gestiona todos tus ingresos y fuentes de dinero</p>
           </div>
           <button
-            @click="abrirModalNuevo"
-            class="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 font-medium"
+            @click="openNewModal"
+            class="px-5 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 font-medium"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
-            Nuevo Egreso
+            Nuevo Ingreso
           </button>
         </div>
       </div>
 
       <!-- Estadísticas principales -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6 text-white md:col-span-2">
+        <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg p-6 text-white md:col-span-2">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-red-100 text-sm font-medium">Total de Egresos</p>
-              <p class="text-3xl font-bold mt-1">{{ formatCurrency(totalEgresos) }}</p>
+              <p class="text-green-100 text-sm font-medium">Total de Ingresos</p>
+              <p class="text-3xl font-bold mt-1">{{ formatCurrency(totalIncome) }}</p>
             </div>
             <div class="p-3 bg-white/20 rounded-lg">
               <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
           </div>
@@ -339,29 +311,27 @@ onMounted(async () => {
 
         <div class="bg-white rounded-xl shadow-lg p-6">
           <p class="text-gray-500 text-sm">Transacciones</p>
-          <p class="text-2xl font-bold text-gray-900 mt-1">{{ egresos.length }}</p>
-          <p class="text-red-600 text-sm mt-2 flex items-center gap-1">
+          <p class="text-2xl font-bold text-gray-900 mt-1">{{ income.length }}</p>
+          <p class="text-green-600 text-sm mt-2 flex items-center gap-1">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
             </svg>
             Este mes
           </p>
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-6">
-          <p class="text-gray-500 text-sm">Mayor Gasto</p>
+          <p class="text-gray-500 text-sm">Promedio</p>
           <p class="text-2xl font-bold text-gray-900 mt-1">
-            {{ mayorGasto ? formatCurrency(mayorGasto.monto) : formatCurrency(0) }}
+            {{ income.length ? formatCurrency(totalIncome / income.length) : formatCurrency(0) }}
           </p>
-          <p class="text-gray-500 text-sm mt-2 truncate" :title="mayorGasto?.descripcion">
-            {{ mayorGasto?.descripcion || 'Sin egresos' }}
-          </p>
+          <p class="text-gray-500 text-sm mt-2">Por transacción</p>
         </div>
       </div>
 
       <!-- Contenido principal -->
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- Lista de egresos -->
+        <!-- Lista de ingresos -->
         <div class="lg:col-span-3">
           <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <!-- Filtros -->
@@ -375,14 +345,14 @@ onMounted(async () => {
                     <input
                       v-model="filtroBusqueda"
                       type="text"
-                      placeholder="Buscar egresos..."
-                      class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      placeholder="Buscar ingresos..."
+                      class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     />
                   </div>
                 </div>
                 <select
                   v-model="filtroCategoria"
-                  class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 >
                   <option value="">Todas las categorías</option>
                   <option v-for="cat in categorias" :key="cat" :value="cat">{{ cat }}</option>
@@ -392,7 +362,7 @@ onMounted(async () => {
                     @click="ordenarPor = 'fecha'; ordenAscendente = !ordenAscendente"
                     :class="[
                       'px-3 py-2 rounded-lg transition-colors',
-                      ordenarPor === 'fecha' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ordenarPor === 'fecha' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     ]"
                   >
                     Fecha {{ ordenarPor === 'fecha' ? (ordenAscendente ? '↑' : '↓') : '' }}
@@ -401,7 +371,7 @@ onMounted(async () => {
                     @click="ordenarPor = 'monto'; ordenAscendente = !ordenAscendente"
                     :class="[
                       'px-3 py-2 rounded-lg transition-colors',
-                      ordenarPor === 'monto' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ordenarPor === 'monto' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     ]"
                   >
                     Monto {{ ordenarPor === 'monto' ? (ordenAscendente ? '↑' : '↓') : '' }}
@@ -410,7 +380,7 @@ onMounted(async () => {
               </div>
             </div>
 
-            <!-- Tabla de egresos -->
+            <!-- Tabla de ingresos -->
             <div class="overflow-x-auto">
               <table class="w-full">
                 <thead class="bg-gray-50 border-b">
@@ -424,33 +394,33 @@ onMounted(async () => {
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                   <tr
-                    v-for="egreso in egresosFiltrados"
-                    :key="egreso.id"
+                    v-for="item in incomeFiltered"
+                    :key="item.id"
                     class="hover:bg-gray-50 transition-colors"
                   >
                     <td class="py-4 px-6">
                       <div class="flex items-center gap-3">
-                        <div class="p-2 bg-red-100 rounded-lg">
-                          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getCategoriaIcon(egreso.categoria)" />
+                        <div class="p-2 bg-green-100 rounded-lg">
+                          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
                           </svg>
                         </div>
-                        <span class="font-medium text-gray-900">{{ egreso.descripcion }}</span>
+                        <span class="font-medium text-gray-900">{{ item.descripcion }}</span>
                       </div>
                     </td>
                     <td class="py-4 px-6">
-                      <span :class="['px-3 py-1 rounded-full text-sm font-medium', getCategoriaColor(egreso.categoria)]">
-                        {{ egreso.categoria }}
+                      <span :class="['px-3 py-1 rounded-full text-sm font-medium', getCategoriaColor(item.categoria)]">
+                        {{ item.categoria }}
                       </span>
                     </td>
-                    <td class="py-4 px-6 text-gray-600">{{ formatDate(egreso.fecha) }}</td>
-                    <td class="py-4 px-6 text-right font-semibold text-red-600">
-                      -{{ formatCurrency(egreso.monto) }}
+                    <td class="py-4 px-6 text-gray-600">{{ formatDate(item.fecha) }}</td>
+                    <td class="py-4 px-6 text-right font-semibold text-green-600">
+                      +{{ formatCurrency(item.monto) }}
                     </td>
                     <td class="py-4 px-6">
                       <div class="flex justify-center gap-2">
                         <button
-                          @click="abrirModalEditar(egreso)"
+                          @click="openEditModal(item)"
                           class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
                           title="Editar"
                         >
@@ -459,7 +429,7 @@ onMounted(async () => {
                           </svg>
                         </button>
                         <button
-                          @click="eliminarEgreso(egreso.id)"
+                          @click="deleteIncome(item.id)"
                           class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
                           title="Eliminar"
                         >
@@ -474,16 +444,16 @@ onMounted(async () => {
               </table>
 
               <!-- Estado vacío -->
-              <div v-if="egresosFiltrados.length === 0" class="text-center py-12">
+              <div v-if="incomeFiltered.length === 0" class="text-center py-12">
                 <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <p class="text-gray-500">No se encontraron egresos</p>
+                <p class="text-gray-500">No se encontraron ingresos</p>
                 <button
-                  @click="abrirModalNuevo"
-                  class="mt-4 text-red-600 hover:text-red-700 font-medium"
+                  @click="openNewModal"
+                  class="mt-4 text-green-600 hover:text-green-700 font-medium"
                 >
-                  Agregar primer egreso
+                  Agregar primer ingreso
                 </button>
               </div>
             </div>
@@ -502,59 +472,35 @@ onMounted(async () => {
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2">
                   <div
-                    class="bg-red-500 h-2 rounded-full transition-all duration-300"
-                    :style="{ width: `${(stat.total / totalEgresos) * 100}%` }"
+                    class="bg-green-500 h-2 rounded-full transition-all duration-300"
+                    :style="{ width: `${(stat.total / totalIncome) * 100}%` }"
                   ></div>
                 </div>
-                <p class="text-xs text-gray-500 mt-1">{{ stat.count }} transacción(es) · {{ ((stat.total / totalEgresos) * 100).toFixed(1) }}%</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Alerta de presupuesto -->
-          <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200">
-            <h3 class="text-lg font-semibold text-amber-800 mb-3 flex items-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              Análisis de Gastos
-            </h3>
-            <div class="space-y-3">
-              <div class="flex items-center justify-between text-sm">
-                <span class="text-amber-700">Gasto promedio:</span>
-                <span class="font-medium text-amber-900">
-                  {{ egresos.length ? formatCurrency(totalEgresos / egresos.length) : formatCurrency(0) }}
-                </span>
-              </div>
-              <div class="flex items-center justify-between text-sm">
-                <span class="text-amber-700">Mayor categoría:</span>
-                <span class="font-medium text-amber-900">
-                  {{ estadisticasPorCategoria[0]?.categoria || 'N/A' }}
-                </span>
+                <p class="text-xs text-gray-500 mt-1">{{ stat.count }} transacción(es)</p>
               </div>
             </div>
           </div>
 
           <!-- Tips -->
-          <div class="bg-gradient-to-br from-red-50 to-rose-50 rounded-xl p-6 border border-red-200">
-            <h3 class="text-lg font-semibold text-red-800 mb-3 flex items-center gap-2">
+          <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
+            <h3 class="text-lg font-semibold text-green-800 mb-3 flex items-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
               Consejos
             </h3>
-            <ul class="text-sm text-red-700 space-y-2">
+            <ul class="text-sm text-green-700 space-y-2">
               <li class="flex items-start gap-2">
-                <span class="text-red-500">•</span>
-                Registra cada gasto inmediatamente para no olvidarlo
+                <span class="text-green-500">•</span>
+                Registra todos tus ingresos para un mejor control financiero
               </li>
               <li class="flex items-start gap-2">
-                <span class="text-red-500">•</span>
-                Establece límites por categoría para controlar gastos
+                <span class="text-green-500">•</span>
+                Categoriza correctamente para obtener mejores estadísticas
               </li>
               <li class="flex items-start gap-2">
-                <span class="text-red-500">•</span>
-                Revisa semanalmente para identificar gastos innecesarios
+                <span class="text-green-500">•</span>
+                Revisa tus ingresos regularmente para detectar patrones
               </li>
             </ul>
           </div>
@@ -563,7 +509,7 @@ onMounted(async () => {
     </div>
   </div>
 
-  <!-- Modal para agregar/editar egreso -->
+  <!-- Modal para agregar/editar ingreso -->
   <Teleport to="body">
     <div
       v-if="showModal"
@@ -573,7 +519,7 @@ onMounted(async () => {
       <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all">
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-2xl font-bold text-gray-900">
-            {{ editingId ? 'Editar Egreso' : 'Nuevo Egreso' }}
+            {{ editingId ? 'Editar Ingreso' : 'Nuevo Ingreso' }}
           </h2>
           <button
             @click="showModal = false"
@@ -585,15 +531,15 @@ onMounted(async () => {
           </button>
         </div>
 
-        <form @submit.prevent="guardarEgreso" class="space-y-5">
+        <form @submit.prevent="saveIncome" class="space-y-5">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
             <input
               v-model="formData.descripcion"
               type="text"
               required
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
-              placeholder="Ej: Compra en supermercado"
+              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              placeholder="Ej: Salario mensual"
             />
           </div>
 
@@ -607,7 +553,7 @@ onMounted(async () => {
                 step="0.01"
                 min="0"
                 required
-                class="w-full pl-8 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                class="w-full pl-8 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
                 placeholder="0.00"
               />
             </div>
@@ -617,7 +563,7 @@ onMounted(async () => {
             <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
             <select
               v-model="formData.categoria"
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
             >
               <option v-for="cat in categorias" :key="cat" :value="cat">{{ cat }}</option>
             </select>
@@ -629,7 +575,7 @@ onMounted(async () => {
               v-model="formData.fecha"
               type="date"
               required
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
             />
           </div>
 
@@ -643,9 +589,9 @@ onMounted(async () => {
             </button>
             <button
               type="submit"
-              class="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+              class="flex-1 px-4 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
             >
-              {{ editingId ? 'Guardar Cambios' : 'Agregar Egreso' }}
+              {{ editingId ? 'Guardar Cambios' : 'Agregar Ingreso' }}
             </button>
           </div>
         </form>
