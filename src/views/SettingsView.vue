@@ -23,6 +23,22 @@ const loadUserInfo = () => {
       console.error('Error al parsear userInfo:', e)
     }
   }
+
+  // Si no hay userId, intentar extraer del token
+  if (!userId.value) {
+    const token = localStorage.getItem('authToken')
+    if (token) {
+      try {
+        const parts = token.split('.')
+        if (parts.length === 3 && parts[1]) {
+          const tokenPayload = JSON.parse(atob(parts[1]))
+          userId.value = tokenPayload.sub || tokenPayload.userId || tokenPayload.id || ''
+        }
+      } catch (e) {
+        console.error('Error al extraer userId del token:', e)
+      }
+    }
+  }
 }
 
 const loadTelegramStatus = async () => {
@@ -37,14 +53,26 @@ const loadTelegramStatus = async () => {
 }
 
 const getTelegramLink = async () => {
-  if (!userId.value) return
+  if (!userId.value) {
+    error.value = 'No se encontró el ID de usuario'
+    return
+  }
 
   loading.value = true
+  error.value = null
   try {
+    console.log('Obteniendo enlace de Telegram para userId:', userId.value)
     const response = await mainApi.users.getTelegramLink(userId.value)
+    console.log('Respuesta del enlace de Telegram:', response.data)
     telegramLink.value = response.data
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Error al obtener enlace de Telegram'
+
+    if (!response.data?.linkUrl) {
+      error.value = 'El servidor no devolvió un enlace válido'
+      console.error('linkUrl no encontrado en la respuesta:', response.data)
+    }
+  } catch (err: any) {
+    console.error('Error al obtener enlace de Telegram:', err)
+    error.value = err?.response?.data?.message || err?.message || 'Error al obtener enlace de Telegram'
   } finally {
     loading.value = false
   }
@@ -73,16 +101,21 @@ const unlinkTelegram = async () => {
 }
 
 const copyLink = async () => {
-  if (telegramLink.value?.linkUrl) {
-    try {
-      await navigator.clipboard.writeText(telegramLink.value.linkUrl)
-      successMessage.value = 'Enlace copiado al portapapeles'
-      setTimeout(() => {
-        successMessage.value = null
-      }, 2000)
-    } catch {
-      error.value = 'Error al copiar el enlace'
-    }
+  if (!telegramLink.value?.linkUrl) {
+    error.value = 'No hay enlace disponible para copiar'
+    return
+  }
+
+  try {
+    await navigator.clipboard.writeText(telegramLink.value.linkUrl)
+    successMessage.value = '✓ Enlace copiado al portapapeles'
+    console.log('Enlace copiado:', telegramLink.value.linkUrl)
+    setTimeout(() => {
+      successMessage.value = null
+    }, 2000)
+  } catch (err) {
+    console.error('Error al copiar enlace:', err)
+    error.value = 'Error al copiar el enlace. Intenta seleccionarlo manualmente.'
   }
 }
 
@@ -98,9 +131,11 @@ const formatDate = (dateStr: string) => {
 
 onMounted(async () => {
   loadUserInfo()
-  await loadTelegramStatus()
-  if (!isLinked.value) {
-    await getTelegramLink()
+  if (userId.value) {
+    await loadTelegramStatus()
+    if (!isLinked.value) {
+      await getTelegramLink()
+    }
   }
   loading.value = false
 })
@@ -350,10 +385,19 @@ onMounted(async () => {
                 <p class="text-sm text-blue-800 mb-3">
                   Haz clic en el siguiente enlace para vincular tu cuenta de Telegram:
                 </p>
+
+                <!-- Mostrar el enlace para debugging -->
+                <div class="mb-3 p-2 bg-white rounded border border-blue-200">
+                  <p class="text-xs text-gray-500 mb-1">Enlace de vinculación:</p>
+                  <p class="text-xs font-mono text-blue-600 break-all">{{ telegramLink.linkUrl }}</p>
+                </div>
+
                 <div class="flex gap-2">
                   <a
                     :href="telegramLink.linkUrl"
                     target="_blank"
+                    rel="noopener noreferrer"
+                    @click="console.log('Click en enlace de Telegram:', telegramLink.linkUrl)"
                     class="flex-1 flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-3 rounded-xl hover:bg-blue-600 transition-colors font-medium"
                   >
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">

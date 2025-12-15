@@ -30,14 +30,14 @@ const router = createRouter({
     },
     {
       path: '/ingresos',
-      name: 'incoming',
-      component: () => import('../views/IncomingView.vue'),
+      name: 'income',
+      component: () => import('../views/IncomeView.vue'),
       meta: { title: 'Ingresos', requiresAuth: true }
     },
     {
       path: '/egresos',
-      name: 'outcoming',
-      component: () => import('../views/OutcomingView.vue'),
+      name: 'expenses',
+      component: () => import('../views/ExpensesView.vue'),
       meta: { title: 'Egresos', requiresAuth: true }
     },
     {
