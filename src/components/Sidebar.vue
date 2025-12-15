@@ -4,6 +4,15 @@
     :class="{ '-translate-x-full': !isOpen, 'translate-x-0': isOpen }"
   >
     <div class="flex flex-col h-full py-4">
+      <!-- Logo Section -->
+      <div class="px-4 mb-4 flex items-center justify-center">
+        <img
+          src="@/assets/Riwi Wallet Logo.svg"
+          alt="Riwi Wallet Logo"
+          class="w-12 h-12"
+        />
+      </div>
+
       <!-- User Profile Card -->
       <div class="px-4 mb-4">
         <div

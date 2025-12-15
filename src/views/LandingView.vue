@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+﻿﻿<script setup lang="ts">
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -58,10 +58,19 @@ const benefits = [
     <section class="bg-gradient-to-br from-indigo-600 via-purple-600 to-purple-700 text-white py-20 px-5 min-h-[600px] flex items-center">
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div class="z-10">
+          <div class="flex items-center gap-3 mb-6">
+            <img
+              src="@/assets/Riwi Wallet Logo.svg"
+              alt="Riwi Wallet Logo"
+              class="w-16 h-16"
+            />
+            <img
+              src="@/assets/Riwi Wallet Logotipo.svg"
+              alt="Riwi Wallet"
+              class="h-12"
+            />
+          </div>
           <h1 class="mb-5 flex flex-col gap-2.5">
-            <span class="text-5xl lg:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-white to-gray-100 bg-clip-text text-transparent">
-              Riwi Wallet
-            </span>
             <span class="text-2xl lg:text-3xl font-semibold opacity-95">
               Tu Asistente Financiero Inteligente
             </span>

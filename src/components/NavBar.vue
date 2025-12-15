@@ -17,15 +17,16 @@
 
           <!-- Logo -->
           <RouterLink to="/" class="flex items-center gap-2 group">
-            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30 group-hover:shadow-xl group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
-              <span class="text-white font-bold text-base">RW</span>
-            </div>
-            <div>
-              <h1 class="text-xl font-bold bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-600 bg-clip-text text-transparent group-hover:from-purple-500 group-hover:to-indigo-500 transition-all duration-300">
-                Riwi Wallet
-              </h1>
-              <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium -mt-1">Tu asistente financiero</p>
-            </div>
+            <img
+              src="@/assets/Riwi Wallet Logo.svg"
+              alt="Riwi Wallet Logo"
+              class="w-10 h-10 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3"
+            />
+            <img
+              src="@/assets/Riwi Wallet Logotipo.svg"
+              alt="Riwi Wallet"
+              class="h-8 transition-all duration-300 group-hover:scale-105 hidden sm:block"
+            />
           </RouterLink>
 
           <!-- Breadcrumbs (Only when authenticated) -->
