@@ -9,13 +9,7 @@ import type {
   FinancialRule,
   BalanceResponse,
   TransactionQueryResponse,
-  SpendingValidationResponse,
-  RuleProgressResponse,
-  TransactionSearchParams,
-  TelegramLinkResponse,
-  TelegramStatusResponse,
-  LinkTelegramRequest,
-  CategorySummaryResponse
+  SpendingValidationResponse
 } from '@/types/api';
 
 // API de autenticación - Spring Boot (puerto 8080)
@@ -163,26 +157,6 @@ export const mainApi = {
     getBalance: (userId: string): Promise<AxiosResponse<BalanceResponse>> => {
       return mainApiClient.get(`/User/${userId}/balance`);
     },
-
-    // DELETE /api/User/{userId}/telegram - Eliminar vinculación de Telegram
-    deleteTelegram: (userId: string): Promise<AxiosResponse<{ message: string }>> => {
-      return mainApiClient.delete(`/User/${userId}/telegram`);
-    },
-
-    // GET /api/User/{userId}/telegram-link - Obtener enlace para vincular Telegram
-    getTelegramLink: (userId: string): Promise<AxiosResponse<TelegramLinkResponse>> => {
-      return mainApiClient.get(`/User/${userId}/telegram-link`);
-    },
-
-    // POST /api/User/link-telegram - Vincular cuenta de Telegram
-    linkTelegram: (data: LinkTelegramRequest): Promise<AxiosResponse<{ message: string }>> => {
-      return mainApiClient.post('/User/link-telegram', data);
-    },
-
-    // GET /api/User/{userId}/telegram-status - Obtener estado de vinculación de Telegram
-    getTelegramStatus: (userId: string): Promise<AxiosResponse<TelegramStatusResponse>> => {
-      return mainApiClient.get(`/User/${userId}/telegram-status`);
-    },
   },
 
   // ===== Endpoints de Transacciones =====
@@ -233,16 +207,6 @@ export const mainApi = {
     getExpenses: (userId: string): Promise<AxiosResponse<Transaction[]>> => {
       return mainApiClient.get(`/Transaction/user/${userId}`, { params: { type: 'Expense' } });
     },
-
-    // GET /api/Transaction/user/{userId}/search - Buscar transacciones
-    search: (userId: string, params: TransactionSearchParams): Promise<AxiosResponse<TransactionQueryResponse>> => {
-      return mainApiClient.get(`/Transaction/user/${userId}/search`, { params });
-    },
-
-    // GET /api/Transaction/user/{userId}/summary/category - Resumen por categoría
-    getCategorySummary: (userId: string): Promise<AxiosResponse<CategorySummaryResponse>> => {
-      return mainApiClient.get(`/Transaction/user/${userId}/summary/category`);
-    },
   },
 
   // ===== Endpoints de Reglas Financieras =====
@@ -270,16 +234,6 @@ export const mainApi = {
     // DELETE /api/FinancialRule/{id} - Eliminar regla
     delete: (id: string): Promise<AxiosResponse<{ message: string }>> => {
       return mainApiClient.delete(`/FinancialRule/${id}`);
-    },
-
-    // GET /api/FinancialRule/{id}/progress - Obtener progreso de una regla
-    getProgress: (id: string): Promise<AxiosResponse<RuleProgressResponse>> => {
-      return mainApiClient.get(`/FinancialRule/${id}/progress`);
-    },
-
-    // GET /api/FinancialRule/user/{userId}/progress - Obtener progreso de todas las reglas del usuario
-    getUserProgress: (userId: string): Promise<AxiosResponse<RuleProgressResponse[]>> => {
-      return mainApiClient.get(`/FinancialRule/user/${userId}/progress`);
     },
   },
 

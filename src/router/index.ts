@@ -41,24 +41,6 @@ const router = createRouter({
       meta: { title: 'Egresos', requiresAuth: true }
     },
     {
-      path: '/reportes',
-      name: 'reports',
-      component: () => import('../views/ReportsView.vue'),
-      meta: { title: 'Reportes', requiresAuth: true }
-    },
-    {
-      path: '/reglas-financieras',
-      name: 'financial-rules',
-      component: () => import('../views/FinancialRulesView.vue'),
-      meta: { title: 'Reglas Financieras', requiresAuth: true }
-    },
-    {
-      path: '/configuracion',
-      name: 'settings',
-      component: () => import('../views/SettingsView.vue'),
-      meta: { title: 'Configuración', requiresAuth: true }
-    },
-    {
       path: '/oauth2/callback',
       name: 'oauth2-callback',
       component: () => import('../views/OAuth2CallbackView.vue'),
