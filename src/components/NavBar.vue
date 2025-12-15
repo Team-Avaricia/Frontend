@@ -1,147 +1,280 @@
-﻿<script setup lang="ts">
-
-const links = [
-  { path: '/', label: 'Inicio', name: 'landing' },
-  { path: '/registrarse', label: 'Registrarse', name: 'register' },
-  { path: '/iniciar-sesion', label: 'Iniciar sesión', name: 'login' },
-  { path: '/panel-control', label: 'Panel de control', name: 'dashboard' },
-  { path: '/ingresos', label: 'Ingresos', name: 'incoming' },
-  { path: '/egresos', label: 'Egresos', name: 'outcoming' }
-]
-</script>
-
 <template>
-  <nav class="navbar">
-    <div class="navbar-container">
-      <div class="navbar-brand">
-        <h1>Riwi Wallet</h1>
-      </div>
-      <ul class="navbar-links">
-        <li v-for="link in links" :key="link.name">
-          <RouterLink
-            :to="link.path"
-            :class="{ active: $route.name === link.name }"
-            class="nav-link"
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-800 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Left Section -->
+        <div class="flex items-center gap-4">
+          <!-- Mobile Menu Button -->
+          <button
+            v-if="isAuthenticated && isProtectedRoute"
+            @click="toggleSidebar"
+            class="p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gradient-to-br hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/30 dark:hover:to-indigo-900/30 transition-all duration-300 lg:hidden group"
           >
-            {{ link.label }}
+            <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+
+          <!-- Logo -->
+          <RouterLink to="/" class="flex items-center gap-2 group">
+            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30 group-hover:shadow-xl group-hover:shadow-purple-500/50 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3">
+              <span class="text-white font-bold text-base">RW</span>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-600 bg-clip-text text-transparent group-hover:from-purple-500 group-hover:to-indigo-500 transition-all duration-300">
+                Riwi Wallet
+              </h1>
+              <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium -mt-1">Tu asistente financiero</p>
+            </div>
           </RouterLink>
-        </li>
-      </ul>
+
+          <!-- Breadcrumbs (Only when authenticated) -->
+          <div v-if="isAuthenticated && isProtectedRoute" class="hidden md:flex items-center gap-2 ml-4 pl-4 border-l border-gray-300 dark:border-gray-600">
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            <span class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ currentPageName }}</span>
+          </div>
+        </div>
+
+        <!-- Right Section - Guest -->
+        <div v-if="!isAuthenticated" class="flex items-center gap-3">
+          <RouterLink
+            to="/iniciar-sesion"
+            class="px-5 py-2.5 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gradient-to-br hover:from-gray-50 hover:to-gray-100 dark:hover:from-gray-800 dark:hover:to-gray-700 transition-all duration-300 font-semibold hover:scale-105 active:scale-95"
+          >
+            Iniciar sesión
+          </RouterLink>
+          <RouterLink
+            to="/registrarse"
+            class="relative px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold shadow-lg shadow-purple-500/40 hover:shadow-xl hover:shadow-purple-500/60 transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden group"
+          >
+            <span class="relative z-10">Registrarse</span>
+            <div class="absolute inset-0 bg-gradient-to-r from-purple-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </RouterLink>
+        </div>
+
+        <!-- Right Section - Authenticated -->
+        <div v-if="isAuthenticated" class="flex items-center gap-3">
+          <!-- Notifications Button -->
+          <button class="relative p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gradient-to-br hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/30 dark:hover:to-indigo-900/30 transition-all duration-300 group">
+            <svg class="w-5 h-5 group-hover:scale-110 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <!-- Badge for notifications -->
+            <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-gray-900 animate-pulse"></span>
+          </button>
+
+          <!-- User Menu Dropdown -->
+          <div class="relative" ref="userMenuRef">
+            <button
+              @click="toggleUserMenu"
+              class="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/30 dark:hover:to-indigo-900/30 transition-all duration-300 border border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-600 group"
+            >
+              <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300 ring-2 ring-white dark:ring-gray-800">
+                <span class="text-white font-bold text-sm">{{ userInitial }}</span>
+              </div>
+              <div class="hidden sm:flex flex-col items-start">
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ userName }}</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">@{{ userHandle }}</span>
+              </div>
+              <svg
+                class="w-4 h-4 text-gray-500 transition-transform duration-300"
+                :class="{ 'rotate-180': isUserMenuOpen }"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <Transition
+              enter-active-class="transition ease-out duration-200"
+              enter-from-class="opacity-0 scale-95 -translate-y-2"
+              enter-to-class="opacity-100 scale-100 translate-y-0"
+              leave-active-class="transition ease-in duration-150"
+              leave-from-class="opacity-100 scale-100 translate-y-0"
+              leave-to-class="opacity-0 scale-95 -translate-y-2"
+            >
+              <div
+                v-if="isUserMenuOpen"
+                class="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden backdrop-blur-xl"
+              >
+                <!-- User Info Header -->
+                <div class="bg-gradient-to-br from-purple-500 to-indigo-600 p-4 text-white">
+                  <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center ring-2 ring-white/50">
+                      <span class="text-xl font-bold">{{ userInitial }}</span>
+                    </div>
+                    <div>
+                      <p class="font-bold text-base">{{ userName }}</p>
+                      <p class="text-xs text-purple-100">{{ userEmail }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Menu Items -->
+                <div class="py-2">
+                  <RouterLink
+                    to="/panel-control"
+                    @click="closeUserMenu"
+                    class="flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/20 dark:hover:to-indigo-900/20 transition-all duration-200 group"
+                  >
+                    <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <svg class="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p class="text-sm font-semibold text-gray-900 dark:text-white">Mi Perfil</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">Ver información</p>
+                    </div>
+                  </RouterLink>
+
+                  <button
+                    class="flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/20 dark:hover:to-indigo-900/20 transition-all duration-200 group w-full"
+                  >
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                    <div class="text-left">
+                      <p class="text-sm font-semibold text-gray-900 dark:text-white">Configuración</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">Preferencias</p>
+                    </div>
+                  </button>
+
+                  <div class="h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent my-2"></div>
+
+                  <button
+                    @click="handleLogout"
+                    class="flex items-center gap-3 px-4 py-3 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 group w-full"
+                  >
+                    <div class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                      </svg>
+                    </div>
+                    <div class="text-left">
+                      <p class="text-sm font-semibold text-red-600 dark:text-red-400">Cerrar Sesión</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">Salir de la cuenta</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </Transition>
+          </div>
+        </div>
+      </div>
     </div>
   </nav>
 </template>
 
-<style scoped>
-.navbar {
-  background-color: #333;
-  padding: 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 1000;
-}
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { authService } from '@/services/auth';
+import { useToast } from 'vue-toastification';
 
-.navbar-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 30px;
-  height: 70px;
-}
+const router = useRouter();
+const toast = useToast();
+const emit = defineEmits<{ toggleSidebar: [] }>();
 
-.navbar-brand h1 {
-  color: white;
-  margin: 0;
-  font-size: 24px;
-  font-weight: bold;
-  white-space: nowrap;
-}
+const isAuthenticated = ref(false);
+const userName = ref('Usuario');
+const userEmail = ref('');
+const isUserMenuOpen = ref(false);
+const userMenuRef = ref<HTMLElement | null>(null);
 
-.navbar-links {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 5px;
-  align-items: center;
-}
+const protectedRoutes = ['/panel-control', '/ingresos', '/egresos'];
 
-.nav-link {
-  color: #e0e0e0;
-  text-decoration: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-  display: inline-block;
-  font-weight: 500;
-  font-size: 15px;
-  white-space: nowrap;
-}
+const routeNames: Record<string, string> = {
+  '/panel-control': 'Panel de Control',
+  '/ingresos': 'Gestión de Ingresos',
+  '/egresos': 'Gestión de Egresos'
+};
 
-.nav-link:hover {
-  background-color: #555;
-  color: white;
-}
+const isProtectedRoute = computed(() => {
+  return protectedRoutes.some(route => route === router.currentRoute.value.path);
+});
 
-.nav-link.active {
-  background-color: #4caf50;
-  color: white;
-}
+const currentPageName = computed(() => {
+  return routeNames[router.currentRoute.value.path] || 'Panel de Control';
+});
 
-@media (max-width: 1024px) {
-  .navbar-container {
-    padding: 0 20px;
+const userInitial = computed(() => {
+  return userName.value.charAt(0).toUpperCase();
+});
+
+const userHandle = computed(() => {
+  return userEmail.value.split('@')[0] || 'usuario';
+});
+
+const toggleSidebar = () => {
+  emit('toggleSidebar');
+};
+
+const toggleUserMenu = () => {
+  isUserMenuOpen.value = !isUserMenuOpen.value;
+};
+
+const closeUserMenu = () => {
+  isUserMenuOpen.value = false;
+};
+
+const checkAuth = () => {
+  const token = authService.getToken();
+  isAuthenticated.value = !!token;
+
+  if (isAuthenticated.value) {
+    const userInfoStr = localStorage.getItem('userInfo');
+    if (userInfoStr) {
+      try {
+        const userInfo = JSON.parse(userInfoStr);
+        userName.value = userInfo.username || userInfo.email?.split('@')[0] || 'Usuario';
+        userEmail.value = userInfo.email || 'demo@example.com';
+      } catch (e) {
+        console.error('Error al parsear userInfo:', e);
+      }
+    }
   }
+};
 
-  .navbar-links {
-    gap: 3px;
-  }
+const handleLogout = () => {
+  authService.logout();
+  isAuthenticated.value = false;
+  userName.value = 'Usuario';
+  userEmail.value = '';
+  isUserMenuOpen.value = false;
+  toast.success('¡Hasta pronto! Sesión cerrada correctamente', {
+    icon: '👋',
+  });
+  router.push('/');
+};
 
-  .nav-link {
-    padding: 8px 12px;
-    font-size: 14px;
+// Close dropdown when clicking outside
+const handleClickOutside = (event: MouseEvent) => {
+  if (userMenuRef.value && !userMenuRef.value.contains(event.target as Node)) {
+    closeUserMenu();
   }
+};
 
-  .navbar-brand h1 {
-    font-size: 20px;
-  }
-}
+onMounted(() => {
+  checkAuth();
+  document.addEventListener('click', handleClickOutside);
+});
 
-@media (max-width: 768px) {
-  .navbar-container {
-    height: auto;
-    min-height: 70px;
-    flex-wrap: wrap;
-    padding: 10px 15px;
-    justify-content: center;
-    gap: 10px;
-  }
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 
-  .navbar-brand {
-    width: 100%;
-    text-align: center;
-  }
-
-  .navbar-brand h1 {
-    font-size: 18px;
-  }
-
-  .navbar-links {
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 5px;
-  }
-
-  .nav-link {
-    padding: 8px 12px;
-    font-size: 13px;
-  }
-}
-</style>
+router.afterEach(() => {
+  checkAuth();
+  closeUserMenu();
+});
+</script>
 

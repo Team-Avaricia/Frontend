@@ -1,9 +1,24 @@
 ﻿<script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { mainApi } from '@/services/api';
+import { authService } from '@/services/auth';
+import { useToast } from 'vue-toastification';
+import { TransactionType, TransactionSource } from '@/types/api';
+import type { Transaction } from '@/types/api';
+import { useTransactionEvents, TransactionEvent } from '@/composables/useTransactionEvents';
 
-// Interfaz para los egresos
+const router = useRouter();
+const toast = useToast();
+const { emit: emitTransactionEvent } = useTransactionEvents();
+
+// Estado de carga
+const loading = ref(true);
+const userId = ref('');
+
+// Interfaz para los egresos (compatible con Transaction)
 interface Egreso {
-  id: number;
+  id: string;
   descripcion: string;
   monto: number;
   fecha: string;
@@ -24,18 +39,12 @@ const categorias = [
   'Otros'
 ];
 
-// Datos de ejemplo
-const egresos = ref<Egreso[]>([
-  { id: 1, descripcion: 'Alquiler', monto: 1200000.00, fecha: '2025-11-01', categoria: 'Vivienda' },
-  { id: 2, descripcion: 'Supermercado', monto: 500000.00, fecha: '2025-11-05', categoria: 'Alimentación' },
-  { id: 3, descripcion: 'Servicios (luz, agua, gas)', monto: 210000.00, fecha: '2025-11-10', categoria: 'Servicios' },
-  { id: 4, descripcion: 'Transporte', monto: 500000.00, fecha: '2025-11-12', categoria: 'Transporte' },
-  { id: 5, descripcion: 'Entretenimiento', monto: 200000.00, fecha: '2025-11-18', categoria: 'Ocio' },
-]);
+// Datos de egresos (cargados desde API)
+const egresos = ref<Egreso[]>([]);
 
 // Estado del formulario
 const showModal = ref(false);
-const editingId = ref<number | null>(null);
+const editingId = ref<string | null>(null);
 const formData = ref({
   descripcion: '',
   monto: 0,
@@ -90,8 +99,11 @@ const estadisticasPorCategoria = computed(() => {
     if (!stats[egreso.categoria]) {
       stats[egreso.categoria] = { total: 0, count: 0 };
     }
-    stats[egreso.categoria].total += egreso.monto;
-    stats[egreso.categoria].count++;
+    const stat = stats[egreso.categoria];
+    if (stat) {
+      stat.total += egreso.monto;
+      stat.count++;
+    }
   });
 
   return Object.entries(stats)
@@ -104,6 +116,36 @@ const mayorGasto = computed(() => {
   if (egresos.value.length === 0) return null;
   return egresos.value.reduce((max, current) => current.monto > max.monto ? current : max);
 });
+
+// Cargar egresos desde la API
+const cargarEgresos = async () => {
+  try {
+    loading.value = true;
+
+    if (!userId.value) {
+      console.error('No hay userId disponible');
+      return;
+    }
+
+    const response = await mainApi.transactions.getByUserId(userId.value, 'Expense');
+
+    // Convertir Transaction a Egreso
+    egresos.value = response.data.map((t: Transaction) => ({
+      id: t.id,
+      descripcion: t.description || 'Sin descripción',
+      monto: t.amount,
+      fecha: t.createdAt,
+      categoria: t.category
+    }));
+
+    console.log('Egresos cargados:', egresos.value.length);
+  } catch (error) {
+    console.error('Error al cargar egresos:', error);
+    toast.error('Error al cargar los egresos');
+  } finally {
+    loading.value = false;
+  }
+};
 
 // Funciones
 const formatCurrency = (amount: number) => {
@@ -127,28 +169,57 @@ const abrirModalNuevo = () => {
 
 const abrirModalEditar = (egreso: Egreso) => {
   editingId.value = egreso.id;
-  formData.value = { ...egreso };
+  formData.value = {
+    descripcion: egreso.descripcion,
+    monto: egreso.monto,
+    fecha: egreso.fecha.split('T')[0],
+    categoria: egreso.categoria
+  };
   showModal.value = true;
 };
 
-const guardarEgreso = () => {
-  if (editingId.value !== null) {
-    // Editar existente
-    const index = egresos.value.findIndex(e => e.id === editingId.value);
-    if (index !== -1) {
-      egresos.value[index] = { ...formData.value, id: editingId.value };
+const guardarEgreso = async () => {
+  try {
+    if (editingId.value !== null) {
+      // TODO: Implementar edición en el backend
+      toast.info('La edición de transacciones estará disponible próximamente');
+      showModal.value = false;
+      return;
     }
-  } else {
-    // Crear nuevo
-    const nuevoId = Math.max(...egresos.value.map(e => e.id), 0) + 1;
-    egresos.value.push({ ...formData.value, id: nuevoId });
+
+    // Crear nuevo egreso
+    await mainApi.transactions.create({
+      userId: userId.value,
+      amount: formData.value.monto,
+      type: TransactionType.Expense,
+      category: formData.value.categoria,
+      description: formData.value.descripcion,
+      source: TransactionSource.Manual
+    });
+
+    toast.success('Egreso agregado exitosamente');
+    showModal.value = false;
+    await cargarEgresos(); // Recargar lista
+    emitTransactionEvent(TransactionEvent.CREATED); // Notificar a otros componentes
+  } catch (error) {
+    console.error('Error al guardar egreso:', error);
+    toast.error('Error al guardar el egreso');
   }
-  showModal.value = false;
 };
 
-const eliminarEgreso = (id: number) => {
-  if (confirm('¿Estás seguro de que deseas eliminar este egreso?')) {
-    egresos.value = egresos.value.filter(e => e.id !== id);
+const eliminarEgreso = async (id: string) => {
+  if (!confirm('¿Estás seguro de que deseas eliminar este egreso?')) {
+    return;
+  }
+
+  try {
+    await mainApi.transactions.delete(id);
+    toast.success('Egreso eliminado exitosamente');
+    await cargarEgresos(); // Recargar lista
+    emitTransactionEvent(TransactionEvent.DELETED); // Notificar a otros componentes
+  } catch (error) {
+    console.error('Error al eliminar egreso:', error);
+    toast.error('Error al eliminar el egreso');
   }
 };
 
@@ -183,6 +254,42 @@ const getCategoriaIcon = (categoria: string) => {
   };
   return iconos[categoria] || iconos['Otros'];
 };
+
+// Inicializar
+onMounted(async () => {
+  // Obtener userId
+  const token = authService.getToken();
+  if (!token) {
+    router.push('/iniciar-sesion');
+    return;
+  }
+
+  const userInfoStr = localStorage.getItem('userInfo');
+  if (userInfoStr) {
+    const userInfo = JSON.parse(userInfoStr);
+    userId.value = userInfo.userId || '';
+  }
+
+  if (!userId.value) {
+    // Intentar extraer del token
+    try {
+      const parts = token.split('.');
+      if (parts.length === 3 && parts[1]) {
+        const tokenPayload = JSON.parse(atob(parts[1]));
+        userId.value = tokenPayload.sub || tokenPayload.userId || tokenPayload.id || '';
+      }
+    } catch (e) {
+      console.error('Error al extraer userId:', e);
+    }
+  }
+
+  if (userId.value) {
+    await cargarEgresos();
+  } else {
+    toast.error('No se pudo obtener la información del usuario');
+    loading.value = false;
+  }
+});
 </script>
 
 <template>

@@ -2,11 +2,11 @@
   <div class="w-full flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-purple-100 py-12 px-4">
     <div class="w-full max-w-md p-8 space-y-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl transition-colors duration-300">
       <div class="text-center">
-        <h1 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Inicia Sesión</h1>
+        <h1 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Inicia Sesion</h1>
         <p class="mt-2 text-gray-500 dark:text-gray-400">
-          ¿Aún no tienes una cuenta?
+          Aun no tienes una cuenta?
           <RouterLink to="/registrarse" class="font-medium text-indigo-600 hover:text-purple-600 transition-colors">
-            Regístrate gratis
+            Registrate gratis
           </RouterLink>
         </p>
       </div>
@@ -14,7 +14,7 @@
       <form @submit.prevent="handleLogin" class="space-y-6">
         <div>
           <label for="identifier" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Correo Electrónico o Nombre de Usuario
+            Correo Electronico o Nombre de Usuario
           </label>
           <input
             id="identifier"
@@ -29,10 +29,10 @@
         <div>
           <div class="flex items-center justify-between">
             <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Contraseña
+              Contrasena
             </label>
             <RouterLink to="/recuperar-contrasena" class="text-sm text-indigo-600 hover:text-indigo-500">
-              ¿Olvidaste tu contraseña?
+              Olvidaste tu contrasena?
             </RouterLink>
           </div>
           <div class="relative">
@@ -41,7 +41,7 @@
               v-model="password"
               :type="showPassword ? 'text' : 'password'"
               required
-              placeholder="••••••••"
+              placeholder="********"
               class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10"
             />
             <button
@@ -76,7 +76,7 @@
           <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
         </div>
         <div class="relative flex justify-center text-sm">
-          <span class="px-2 bg-white dark:bg-gray-800 text-gray-500">O continúa con</span>
+          <span class="px-2 bg-white dark:bg-gray-800 text-gray-500">O continua con</span>
         </div>
       </div>
 
@@ -119,7 +119,7 @@
 import { ref } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { useToast } from 'vue-toastification';
-import apiClient from '@/services/api';
+import { authApi } from '@/services/api';
 import { authService } from '@/services/auth';
 
 const router = useRouter();
@@ -131,56 +131,66 @@ const password = ref('');
 const showPassword = ref(false);
 
 const handleLogin = async () => {
-  let payload;
-
-  // Detectamos si el usuario ingresó un email o un username
-  if (identifier.value.includes('@')) {
-    payload = {
-      email: identifier.value,
-      password: password.value,
-    };
-  } else {
-    payload = {
-      userName: identifier.value,
-      password: password.value,
-    };
-  }
-
   try {
-    const response = await apiClient.post('/Auth/login', payload);
+    // La API de Spring Boot usa email para login
+    const response = await authApi.login(identifier.value, password.value);
     console.log('Login exitoso:', response.data);
 
-    // Guardar el token JWT usando el servicio de autenticación
+    // Guardar el token JWT usando el servicio de autenticacion
     const token = response.data.token;
     authService.setToken(token);
 
-    toast.success('¡Bienvenido de nuevo!');
+    // Extraer userId del token JWT
+    let userId = '';
+    try {
+      const parts = token.split('.');
+      if (parts.length === 3 && parts[1]) {
+        const tokenPayload = JSON.parse(atob(parts[1]));
+        // El userId puede estar en diferentes campos dependiendo del backend
+        userId = tokenPayload.sub || tokenPayload.userId || tokenPayload.id || '';
+        console.log('UserId extraido del token:', userId);
+      }
+    } catch (e) {
+      console.error('Error al extraer userId del token:', e);
+    }
+
+    // Guardar información del usuario en localStorage
+    const userInfo = {
+      userId: userId,
+      username: response.data.username,
+      email: response.data.email,
+      provider: response.data.provider || 'LOCAL'
+    };
+    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    console.log('UserInfo guardado:', userInfo);
+
+    toast.success('Bienvenido de nuevo!');
     router.push('/panel-control');
-  } catch (error: any) {
-    console.error('Error de autenticación:', error);
-    const requiresVerification = error?.response?.data?.requiresEmailVerification;
+  } catch (error: unknown) {
+    console.error('Error de autenticacion:', error);
+    const axiosError = error as { response?: { data?: { requiresEmailVerification?: boolean; message?: string } } };
+    const requiresVerification = axiosError?.response?.data?.requiresEmailVerification;
     if (requiresVerification) {
-      toast.error('Debes verificar tu email antes de iniciar sesión. Revisa tu bandeja de entrada.');
+      toast.error('Debes verificar tu email antes de iniciar sesion. Revisa tu bandeja de entrada.');
       return;
     }
-    const message = error?.response?.data?.message ?? 'Credenciales incorrectas. Por favor, intenta de nuevo.';
+    const message = axiosError?.response?.data?.message ?? 'Credenciales incorrectas. Por favor, intenta de nuevo.';
     toast.error(message);
   }
 };
 
 const handleGoogleLogin = () => {
-  toast.info('Inicio de sesión con Google próximamente disponible');
-  // TODO: Implementar OAuth con Google
-  // window.location.href = '/api/auth/google';
+  toast.info('Redirigiendo a Google...');
+  authApi.oauth2.googleLogin();
 };
 
 const handleMicrosoftLogin = () => {
-  toast.info('Inicio de sesión con Microsoft próximamente disponible');
-  // TODO: Implementar OAuth con Microsoft
-  // window.location.href = '/api/auth/microsoft';
+  toast.info('Redirigiendo a Microsoft...');
+  authApi.oauth2.microsoftLogin();
 };
 </script>
 
 <style scoped>
 /* Estilos adicionales si son necesarios */
 </style>
+

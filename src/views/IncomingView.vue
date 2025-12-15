@@ -1,9 +1,24 @@
 ﻿<script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { mainApi } from '@/services/api';
+import { authService } from '@/services/auth';
+import { useToast } from 'vue-toastification';
+import { TransactionType, TransactionSource } from '@/types/api';
+import type { Transaction } from '@/types/api';
+import { useTransactionEvents, TransactionEvent } from '@/composables/useTransactionEvents';
 
-// Interfaz para los ingresos
+const router = useRouter();
+const toast = useToast();
+const { emit: emitTransactionEvent } = useTransactionEvents();
+
+// Estado de carga
+const loading = ref(true);
+const userId = ref('');
+
+// Interfaz para los ingresos (compatible con Transaction)
 interface Ingreso {
-  id: number;
+  id: string;
   descripcion: string;
   monto: number;
   fecha: string;
@@ -21,18 +36,12 @@ const categorias = [
   'Otros'
 ];
 
-// Datos de ejemplo
-const ingresos = ref<Ingreso[]>([
-  { id: 1, descripcion: 'Salario mensual', monto: 1600000.00, fecha: '2025-11-01', categoria: 'Salario' },
-  { id: 2, descripcion: 'Freelance proyecto web', monto: 800000.00, fecha: '2025-11-10', categoria: 'Freelance' },
-  { id: 3, descripcion: 'Dividendos acciones', monto: 200000.00, fecha: '2025-11-15', categoria: 'Inversiones' },
-  { id: 4, descripcion: 'Venta de artículos usados', monto: 200000.00, fecha: '2025-11-20', categoria: 'Ventas' },
-  { id: 5, descripcion: 'Bono de productividad', monto: 100000.00, fecha: '2025-11-22', categoria: 'Salario' },
-]);
+// Datos de ingresos (cargados desde API)
+const ingresos = ref<Ingreso[]>([]);
 
 // Estado del formulario
 const showModal = ref(false);
-const editingId = ref<number | null>(null);
+const editingId = ref<string | null>(null);
 const formData = ref({
   descripcion: '',
   monto: 0,
@@ -87,14 +96,47 @@ const estadisticasPorCategoria = computed(() => {
     if (!stats[ingreso.categoria]) {
       stats[ingreso.categoria] = { total: 0, count: 0 };
     }
-    stats[ingreso.categoria].total += ingreso.monto;
-    stats[ingreso.categoria].count++;
+    const stat = stats[ingreso.categoria];
+    if (stat) {
+      stat.total += ingreso.monto;
+      stat.count++;
+    }
   });
 
   return Object.entries(stats)
     .map(([categoria, data]) => ({ categoria, ...data }))
     .sort((a, b) => b.total - a.total);
 });
+
+// Cargar ingresos desde la API
+const cargarIngresos = async () => {
+  try {
+    loading.value = true;
+
+    if (!userId.value) {
+      console.error('No hay userId disponible');
+      return;
+    }
+
+    const response = await mainApi.transactions.getByUserId(userId.value, 'Income');
+
+    // Convertir Transaction a Ingreso
+    ingresos.value = response.data.map((t: Transaction) => ({
+      id: t.id,
+      descripcion: t.description || 'Sin descripción',
+      monto: t.amount,
+      fecha: t.createdAt,
+      categoria: t.category
+    }));
+
+    console.log('Ingresos cargados:', ingresos.value.length);
+  } catch (error) {
+    console.error('Error al cargar ingresos:', error);
+    toast.error('Error al cargar los ingresos');
+  } finally {
+    loading.value = false;
+  }
+};
 
 // Funciones
 const formatCurrency = (amount: number) => {
@@ -118,28 +160,57 @@ const abrirModalNuevo = () => {
 
 const abrirModalEditar = (ingreso: Ingreso) => {
   editingId.value = ingreso.id;
-  formData.value = { ...ingreso };
+  formData.value = {
+    descripcion: ingreso.descripcion,
+    monto: ingreso.monto,
+    fecha: ingreso.fecha.split('T')[0],
+    categoria: ingreso.categoria
+  };
   showModal.value = true;
 };
 
-const guardarIngreso = () => {
-  if (editingId.value !== null) {
-    // Editar existente
-    const index = ingresos.value.findIndex(i => i.id === editingId.value);
-    if (index !== -1) {
-      ingresos.value[index] = { ...formData.value, id: editingId.value };
+const guardarIngreso = async () => {
+  try {
+    if (editingId.value !== null) {
+      // TODO: Implementar edición en el backend
+      toast.info('La edición de transacciones estará disponible próximamente');
+      showModal.value = false;
+      return;
     }
-  } else {
-    // Crear nuevo
-    const nuevoId = Math.max(...ingresos.value.map(i => i.id), 0) + 1;
-    ingresos.value.push({ ...formData.value, id: nuevoId });
+
+    // Crear nuevo ingreso
+    await mainApi.transactions.create({
+      userId: userId.value,
+      amount: formData.value.monto,
+      type: TransactionType.Income,
+      category: formData.value.categoria,
+      description: formData.value.descripcion,
+      source: TransactionSource.Manual
+    });
+
+    toast.success('Ingreso agregado exitosamente');
+    showModal.value = false;
+    await cargarIngresos(); // Recargar lista
+    emitTransactionEvent(TransactionEvent.CREATED); // Notificar a otros componentes
+  } catch (error) {
+    console.error('Error al guardar ingreso:', error);
+    toast.error('Error al guardar el ingreso');
   }
-  showModal.value = false;
 };
 
-const eliminarIngreso = (id: number) => {
-  if (confirm('¿Estás seguro de que deseas eliminar este ingreso?')) {
-    ingresos.value = ingresos.value.filter(i => i.id !== id);
+const eliminarIngreso = async (id: string) => {
+  if (!confirm('¿Estás seguro de que deseas eliminar este ingreso?')) {
+    return;
+  }
+
+  try {
+    await mainApi.transactions.delete(id);
+    toast.success('Ingreso eliminado exitosamente');
+    await cargarIngresos(); // Recargar lista
+    emitTransactionEvent(TransactionEvent.DELETED); // Notificar a otros componentes
+  } catch (error) {
+    console.error('Error al eliminar ingreso:', error);
+    toast.error('Error al eliminar el ingreso');
   }
 };
 
@@ -155,6 +226,42 @@ const getCategoriaColor = (categoria: string) => {
   };
   return colores[categoria] || 'bg-gray-100 text-gray-800';
 };
+
+// Inicializar
+onMounted(async () => {
+  // Obtener userId
+  const token = authService.getToken();
+  if (!token) {
+    router.push('/iniciar-sesion');
+    return;
+  }
+
+  const userInfoStr = localStorage.getItem('userInfo');
+  if (userInfoStr) {
+    const userInfo = JSON.parse(userInfoStr);
+    userId.value = userInfo.userId || '';
+  }
+
+  if (!userId.value) {
+    // Intentar extraer del token
+    try {
+      const parts = token.split('.');
+      if (parts.length === 3 && parts[1]) {
+        const tokenPayload = JSON.parse(atob(parts[1]));
+        userId.value = tokenPayload.sub || tokenPayload.userId || tokenPayload.id || '';
+      }
+    } catch (e) {
+      console.error('Error al extraer userId:', e);
+    }
+  }
+
+  if (userId.value) {
+    await cargarIngresos();
+  } else {
+    toast.error('No se pudo obtener la información del usuario');
+    loading.value = false;
+  }
+});
 </script>
 
 <template>

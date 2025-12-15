@@ -1,15 +1,41 @@
-﻿import axios from 'axios';
-import { mockApiService, USE_MOCK_API } from './mockApi';
+﻿import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
+import type {
+  CreateTransactionRequest,
+  CreateUserRequest,
+  CreateFinancialRuleRequest,
+  SpendingValidationRequest,
+  Transaction,
+  User,
+  FinancialRule,
+  BalanceResponse,
+  TransactionQueryResponse,
+  SpendingValidationResponse,
+  RuleProgressResponse,
+  TransactionSearchParams,
+  TelegramLinkResponse,
+  TelegramStatusResponse,
+  LinkTelegramRequest,
+  CategorySummaryResponse
+} from '@/types/api';
 
-const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',
+// API de autenticación - Spring Boot (puerto 8080)
+const authApiClient: AxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_AUTH_API_URL || 'http://localhost:8080/api',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptor para agregar el token en cada petición
-apiClient.interceptors.request.use(
+// API principal - .NET (puerto 5203)
+const mainApiClient: AxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_MAIN_API_URL || 'http://localhost:5203/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+// Interceptor para agregar el token en cada petición - Auth API
+authApiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -22,73 +48,253 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Interceptor para manejar errores de respuesta
-apiClient.interceptors.response.use(
-  (response) => response,
+// Interceptor para agregar el token en cada petición - Main API
+mainApiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
   (error) => {
-    // Manejar errores globales aquí si es necesario
     return Promise.reject(error);
   }
 );
 
-// Wrapper del cliente API que puede usar mock o real según configuración
-export const api = {
-  async post(url: string, data: any) {
-    if (USE_MOCK_API) {
-      console.log('🔧 Usando Mock API para:', url);
-
-      // Redirigir a los servicios mock según la URL
-      if (url.includes('/Auth/login')) {
-        const response = await mockApiService.login(data);
-        return { data: response };
-      }
-
-      if (url.includes('/Auth/register')) {
-        const response = await mockApiService.register(data);
-        return { data: response };
-      }
-
-      // Para otras URLs, simular una respuesta genérica
-      return { data: { message: 'Mock response', data } };
+// Interceptor para manejar errores de respuesta - Auth API
+authApiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('authToken');
+      window.location.href = '/login';
     }
+    return Promise.reject(error);
+  }
+);
 
-    // Usar el cliente real de axios
-    return apiClient.post(url, data);
+// Interceptor para manejar errores de respuesta - Main API
+mainApiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('authToken');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Servicio de autenticación (Spring Boot - puerto 8080)
+export const authApi = {
+  // POST /api/auth/login
+  // El backend usa 'username' pero acepta email, así que enviamos email como username
+  async login(email: string, password: string): Promise<AxiosResponse> {
+    return authApiClient.post('/auth/login', { username: email, password });
   },
 
-  async get(url: string) {
-    if (USE_MOCK_API) {
-      console.log('🔧 Usando Mock API para:', url);
-
-      if (url.includes('/Auth/me') || url.includes('/user/current')) {
-        const response = await mockApiService.getCurrentUser();
-        return { data: response };
-      }
-
-      return { data: { message: 'Mock response' } };
-    }
-
-    return apiClient.get(url);
+  // POST /api/auth/register
+  async register(data: {
+    username: string;
+    email: string;
+    password: string;
+  }): Promise<AxiosResponse> {
+    return authApiClient.post('/auth/register', data);
   },
 
-  async put(url: string, data: any) {
-    if (USE_MOCK_API) {
-      console.log('🔧 Usando Mock API para:', url);
-      return { data: { message: 'Mock response', data } };
-    }
+  // OAuth2 URLs - Redirige al backend para iniciar el flujo OAuth
+  oauth2: {
+    // URL base del backend de autenticación (sin /api)
+    getBaseUrl: () => {
+      const apiUrl = import.meta.env.VITE_AUTH_API_URL || 'http://localhost:8080/api';
+      return apiUrl.replace('/api', '');
+    },
 
-    return apiClient.put(url, data);
-  },
+    // Iniciar login con Google
+    googleLogin: () => {
+      const baseUrl = authApi.oauth2.getBaseUrl();
+      window.location.href = `${baseUrl}/oauth2/authorization/google`;
+    },
 
-  async delete(url: string) {
-    if (USE_MOCK_API) {
-      console.log('🔧 Usando Mock API para:', url);
-      return { data: { message: 'Mock response' } };
-    }
-
-    return apiClient.delete(url);
+    // Iniciar login con Microsoft
+    microsoftLogin: () => {
+      const baseUrl = authApi.oauth2.getBaseUrl();
+      window.location.href = `${baseUrl}/oauth2/authorization/microsoft`;
+    },
   },
 };
 
-export default apiClient;
+// Servicio principal (.NET - puerto 5203)
+export const mainApi = {
+  // ===== Endpoints de Usuario =====
+  users: {
+    // POST /api/User - Crear nuevo usuario
+    create: (data: CreateUserRequest): Promise<AxiosResponse<User>> => {
+      return mainApiClient.post('/User', data);
+    },
+
+    // GET /api/User/{id} - Obtener usuario por ID
+    getById: (id: string): Promise<AxiosResponse<User>> => {
+      return mainApiClient.get(`/User/${id}`);
+    },
+
+    // GET /api/User/email/{email} - Obtener usuario por email
+    getByEmail: (email: string): Promise<AxiosResponse<User>> => {
+      return mainApiClient.get(`/User/email/${email}`);
+    },
+
+    // GET /api/User/phone/{phoneNumber} - Obtener usuario por teléfono
+    getByPhone: (phoneNumber: string): Promise<AxiosResponse<User>> => {
+      return mainApiClient.get(`/User/phone/${phoneNumber}`);
+    },
+
+    // GET /api/User/telegram/{telegramId} - Obtener usuario por Telegram ID
+    getByTelegramId: (telegramId: number): Promise<AxiosResponse<User>> => {
+      return mainApiClient.get(`/User/telegram/${telegramId}`);
+    },
+
+    // GET /api/User/{userId}/telegram - Obtener Telegram ID del usuario
+    getUserTelegramId: (userId: string): Promise<AxiosResponse<{ telegramId: number }>> => {
+      return mainApiClient.get(`/User/${userId}/telegram`);
+    },
+
+    // GET /api/User/{userId}/balance - Obtener balance del usuario
+    getBalance: (userId: string): Promise<AxiosResponse<BalanceResponse>> => {
+      return mainApiClient.get(`/User/${userId}/balance`);
+    },
+
+    // DELETE /api/User/{userId}/telegram - Eliminar vinculación de Telegram
+    deleteTelegram: (userId: string): Promise<AxiosResponse<{ message: string }>> => {
+      return mainApiClient.delete(`/User/${userId}/telegram`);
+    },
+
+    // GET /api/User/{userId}/telegram-link - Obtener enlace para vincular Telegram
+    getTelegramLink: (userId: string): Promise<AxiosResponse<TelegramLinkResponse>> => {
+      return mainApiClient.get(`/User/${userId}/telegram-link`);
+    },
+
+    // POST /api/User/link-telegram - Vincular cuenta de Telegram
+    linkTelegram: (data: LinkTelegramRequest): Promise<AxiosResponse<{ message: string }>> => {
+      return mainApiClient.post('/User/link-telegram', data);
+    },
+
+    // GET /api/User/{userId}/telegram-status - Obtener estado de vinculación de Telegram
+    getTelegramStatus: (userId: string): Promise<AxiosResponse<TelegramStatusResponse>> => {
+      return mainApiClient.get(`/User/${userId}/telegram-status`);
+    },
+  },
+
+  // ===== Endpoints de Transacciones =====
+  transactions: {
+    // POST /api/Transaction - Crear nueva transacción
+    create: (data: CreateTransactionRequest): Promise<AxiosResponse<Transaction>> => {
+      return mainApiClient.post('/Transaction', data);
+    },
+
+    // GET /api/Transaction/{id} - Obtener transacción por ID
+    getById: (id: string): Promise<AxiosResponse<Transaction>> => {
+      return mainApiClient.get(`/Transaction/${id}`);
+    },
+
+    // GET /api/Transaction/user/{userId} - Obtener transacciones del usuario
+    getByUserId: (userId: string, type?: 'Income' | 'Expense'): Promise<AxiosResponse<Transaction[]>> => {
+      const params = type ? { type } : {};
+      return mainApiClient.get(`/Transaction/user/${userId}`, { params });
+    },
+
+    // GET /api/Transaction/user/{userId}/range - Obtener transacciones por rango de fechas
+    getByRange: (
+      userId: string,
+      startDate: string,
+      endDate: string
+    ): Promise<AxiosResponse<TransactionQueryResponse>> => {
+      return mainApiClient.get(`/Transaction/user/${userId}/range`, {
+        params: { startDate, endDate }
+      });
+    },
+
+    // GET /api/Transaction/user/{userId}/date/{date} - Obtener transacciones por fecha específica
+    getByDate: (userId: string, date: string): Promise<AxiosResponse<TransactionQueryResponse>> => {
+      return mainApiClient.get(`/Transaction/user/${userId}/date/${date}`);
+    },
+
+    // DELETE /api/Transaction/{id} - Eliminar transacción
+    delete: (id: string): Promise<AxiosResponse<{ message: string }>> => {
+      return mainApiClient.delete(`/Transaction/${id}`);
+    },
+
+    // Helper: Obtener solo ingresos
+    getIncome: (userId: string): Promise<AxiosResponse<Transaction[]>> => {
+      return mainApiClient.get(`/Transaction/user/${userId}`, { params: { type: 'Income' } });
+    },
+
+    // Helper: Obtener solo gastos
+    getExpenses: (userId: string): Promise<AxiosResponse<Transaction[]>> => {
+      return mainApiClient.get(`/Transaction/user/${userId}`, { params: { type: 'Expense' } });
+    },
+
+    // GET /api/Transaction/user/{userId}/search - Buscar transacciones
+    search: (userId: string, params: TransactionSearchParams): Promise<AxiosResponse<TransactionQueryResponse>> => {
+      return mainApiClient.get(`/Transaction/user/${userId}/search`, { params });
+    },
+
+    // GET /api/Transaction/user/{userId}/summary/category - Resumen por categoría
+    getCategorySummary: (userId: string): Promise<AxiosResponse<CategorySummaryResponse>> => {
+      return mainApiClient.get(`/Transaction/user/${userId}/summary/category`);
+    },
+  },
+
+  // ===== Endpoints de Reglas Financieras =====
+  financialRules: {
+    // POST /api/FinancialRule - Crear regla financiera
+    create: (data: CreateFinancialRuleRequest): Promise<AxiosResponse<FinancialRule>> => {
+      return mainApiClient.post('/FinancialRule', data);
+    },
+
+    // GET /api/FinancialRule/{id} - Obtener regla por ID
+    getById: (id: string): Promise<AxiosResponse<FinancialRule>> => {
+      return mainApiClient.get(`/FinancialRule/${id}`);
+    },
+
+    // GET /api/FinancialRule/user/{userId} - Obtener reglas activas del usuario
+    getByUserId: (userId: string): Promise<AxiosResponse<FinancialRule[]>> => {
+      return mainApiClient.get(`/FinancialRule/user/${userId}`);
+    },
+
+    // PATCH /api/FinancialRule/{id}/deactivate - Desactivar regla
+    deactivate: (id: string): Promise<AxiosResponse<{ message: string }>> => {
+      return mainApiClient.patch(`/FinancialRule/${id}/deactivate`);
+    },
+
+    // DELETE /api/FinancialRule/{id} - Eliminar regla
+    delete: (id: string): Promise<AxiosResponse<{ message: string }>> => {
+      return mainApiClient.delete(`/FinancialRule/${id}`);
+    },
+
+    // GET /api/FinancialRule/{id}/progress - Obtener progreso de una regla
+    getProgress: (id: string): Promise<AxiosResponse<RuleProgressResponse>> => {
+      return mainApiClient.get(`/FinancialRule/${id}/progress`);
+    },
+
+    // GET /api/FinancialRule/user/{userId}/progress - Obtener progreso de todas las reglas del usuario
+    getUserProgress: (userId: string): Promise<AxiosResponse<RuleProgressResponse[]>> => {
+      return mainApiClient.get(`/FinancialRule/user/${userId}/progress`);
+    },
+  },
+
+  // ===== Endpoints de Validación de Gastos =====
+  spendingValidation: {
+    // POST /api/SpendingValidation/validate - Validar un gasto propuesto
+    validate: (data: SpendingValidationRequest): Promise<AxiosResponse<SpendingValidationResponse>> => {
+      return mainApiClient.post('/SpendingValidation/validate', data);
+    },
+  },
+};
+
+// Exportar los clientes para uso directo si es necesario
+export { authApiClient, mainApiClient };
+
+// Exportar por defecto el servicio principal para compatibilidad
+export default mainApi;
 
