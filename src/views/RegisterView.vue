@@ -173,7 +173,7 @@
         <button
           type="button"
           @click="handleMicrosoftRegister"
-          class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-white border-2 border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md"
+          class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-white dark:bg-slate-700 border-2 border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors duration-200 shadow-sm hover:shadow-md"
         >
           <svg class="w-5 h-5" viewBox="0 0 23 23">
             <path fill="#f3f3f3" d="M0 0h23v23H0z"/>
@@ -182,7 +182,7 @@
             <path fill="#05a6f0" d="M1 12h10v10H1z"/>
             <path fill="#ffba08" d="M12 12h10v10H12z"/>
           </svg>
-          <span class="font-medium text-gray-700">Registrarse con Microsoft</span>
+          <span class="font-medium text-gray-700 dark:text-gray-100">Registrarse con Microsoft</span>
         </button>
       </div>
     </div>
