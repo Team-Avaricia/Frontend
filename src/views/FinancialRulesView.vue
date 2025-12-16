@@ -42,17 +42,19 @@ const categories = [
   'Salario',
   'Freelance',
   'Inversiones',
-  'Ventas',
   'Regalos',
-  'Reembolsos',
   // Categorías de Gastos
-  'Alimentación',
+  'Comida',
   'Transporte',
   'Entretenimiento',
   'Salud',
   'Educación',
+  'Hogar',
+  'Ropa',
+  'Tecnología',
   'Servicios',
-  'Compras',
+  'Arriendo',
+  'Vivienda',
   'Otros',
 ]
 
@@ -355,9 +357,9 @@ onMounted(async () => {
       </div>
 
       <!-- Empty State -->
-      <div v-else class="bg-white rounded-xl shadow-lg p-12 text-center">
+      <div v-else class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-12 text-center">
         <svg
-          class="w-16 h-16 mx-auto mb-4 text-gray-300"
+          class="w-16 h-16 mx-auto mb-4 text-gray-300 dark:text-gray-600"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -369,8 +371,8 @@ onMounted(async () => {
             d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
           />
         </svg>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">No tienes reglas financieras</h3>
-        <p class="text-gray-500 mb-4">Crea tu primera regla para controlar tus gastos</p>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">No tienes reglas financieras</h3>
+        <p class="text-gray-500 dark:text-gray-400 mb-4">Crea tu primera regla para controlar tus gastos</p>
         <button
           @click="showCreateModal = true"
           class="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-6 py-2 rounded-lg hover:from-amber-600 hover:to-orange-700 transition-all font-medium"
