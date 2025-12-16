@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+﻿﻿<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { authService } from '@/services/auth';
@@ -212,7 +212,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="w-full min-h-screen bg-gray-50 py-8 px-4">
+  <div class="w-full min-h-screen bg-gray-100 py-8 px-4">
     <div class="max-w-7xl mx-auto">
       <!-- Loading State -->
       <div v-if="loading" class="flex items-center justify-center min-h-[400px]">
@@ -462,26 +462,26 @@ onUnmounted(() => {
             </div>
 
             <!-- Acceso rapido -->
-            <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg p-6 text-white">
-              <h3 class="text-lg font-semibold mb-4">Acceso Rapido</h3>
+            <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg p-6 border border-gray-200">
+              <h3 class="text-lg font-semibold mb-4 text-gray-800">Acceso Rapido</h3>
               <div class="grid grid-cols-2 gap-3">
                 <RouterLink
                   to="/ingresos"
-                  class="p-3 bg-white/10 hover:bg-white/20 rounded-lg text-center transition-colors"
+                  class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-center transition-colors shadow-sm"
                 >
-                  <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-6 h-6 mx-auto mb-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span class="text-sm">Ingresos</span>
+                  <span class="text-sm text-gray-700 font-medium">Ingresos</span>
                 </RouterLink>
                 <RouterLink
                   to="/egresos"
-                  class="p-3 bg-white/10 hover:bg-white/20 rounded-lg text-center transition-colors"
+                  class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-center transition-colors shadow-sm"
                 >
-                  <svg class="w-6 h-6 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-6 h-6 mx-auto mb-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
-                  <span class="text-sm">Egresos</span>
+                  <span class="text-sm text-gray-700 font-medium">Egresos</span>
                 </RouterLink>
               </div>
             </div>

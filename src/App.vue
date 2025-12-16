@@ -68,7 +68,7 @@ router.afterEach(() => {
 <style scoped>
 .app-container {
   min-height: 100vh;
-  background-color: #f9fafb;
+  background-color: #F4F4F4; /* Light gray for better contrast */
 }
 
 .app-content {
@@ -80,7 +80,7 @@ router.afterEach(() => {
   transition: margin-left 0.3s ease-in-out;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   .app-main {
     margin-left: 0 !important;
   }

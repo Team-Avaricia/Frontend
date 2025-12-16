@@ -142,8 +142,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-full min-h-screen bg-gray-50 py-8 px-4">
-    <div class="max-w-4xl mx-auto">
+  <div class="w-full min-h-screen bg-gray-100 py-8 px-4">
+    <div class="max-w-7xl mx-auto">
       <!-- Header -->
       <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
         <div class="flex items-center gap-3">

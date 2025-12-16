@@ -246,17 +246,17 @@ const benefits = [
     </section>
 
     <!-- CTA Section with Tailwind -->
-    <section class="py-20 px-5 bg-gray-800 text-white text-center">
+    <section class="py-20 px-5 bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800 text-center">
       <div class="max-w-7xl mx-auto">
         <h2 class="text-4xl lg:text-5xl mb-5 font-bold">
           ¿Listo para Transformar tus Finanzas?
         </h2>
-        <p class="text-lg lg:text-xl mb-10 opacity-90">
+        <p class="text-lg lg:text-xl mb-10 text-gray-600">
           Únete a miles de usuarios que ya controlan sus gastos de forma inteligente
         </p>
         <button
           @click="navigateToRegister"
-          class="px-12 py-4 text-lg bg-white text-indigo-600 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl shadow-lg"
+          class="px-12 py-4 text-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl shadow-lg hover:from-indigo-700 hover:to-purple-700"
         >
           Crear Cuenta Gratuita
         </button>

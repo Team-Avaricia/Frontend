@@ -1,7 +1,8 @@
 <template>
   <aside
-    class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 ease-in-out z-40 shadow-lg"
+    class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 border-r border-gray-300 transition-transform duration-300 ease-in-out z-40 shadow-lg"
     :class="{ '-translate-x-full': !isOpen, 'translate-x-0': isOpen }"
+    style="background-color: #F4F4F4;"
   >
     <div class="flex flex-col h-full py-4">
       <!-- Logo Section -->
@@ -9,15 +10,10 @@
         <img
           src="@/assets/Riwi Wallet Logo.svg"
           alt="Riwi Wallet Logo"
-          class="w-10 h-10 dark:hidden"
-        />
-        <img
-          src="@/assets/Riwi Wallet Logo.svg"
-          alt="Riwi Wallet Logo"
-          class="w-10 h-10 hidden dark:block"
+          class="w-10 h-10"
         />
         <div class="text-center">
-          <h2 class="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-indigo-400">
+          <h2 class="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
             Riwi Wallet
           </h2>
         </div>
@@ -53,7 +49,7 @@
       <div class="px-4 mb-4">
         <div class="grid grid-cols-2 gap-2">
           <div
-            class="bg-green-50 dark:bg-green-900/20 rounded-lg p-2 border border-green-200 dark:border-green-800"
+            class="bg-green-50 rounded-lg p-2 border border-green-200"
           >
             <div class="flex items-center gap-1.5">
               <div class="w-6 h-6 rounded bg-green-500 flex items-center justify-center">
@@ -72,21 +68,21 @@
                 </svg>
               </div>
               <div>
-                <p class="text-[10px] text-green-600 dark:text-green-400 font-medium">Ingresos</p>
+                <p class="text-[10px] text-green-600 font-medium">Ingresos</p>
                 <p
                   v-if="loading"
-                  class="text-xs font-bold text-green-700 dark:text-green-300 animate-pulse"
+                  class="text-xs font-bold text-green-700 animate-pulse"
                 >
                   ...
                 </p>
-                <p v-else class="text-xs font-bold text-green-700 dark:text-green-300">
+                <p v-else class="text-xs font-bold text-green-700">
                   {{ formattedIncome }}
                 </p>
               </div>
             </div>
           </div>
           <div
-            class="bg-red-50 dark:bg-red-900/20 rounded-lg p-2 border border-red-200 dark:border-red-800"
+            class="bg-red-50 rounded-lg p-2 border border-red-200"
           >
             <div class="flex items-center gap-1.5">
               <div class="w-6 h-6 rounded bg-red-500 flex items-center justify-center">
@@ -105,14 +101,14 @@
                 </svg>
               </div>
               <div>
-                <p class="text-[10px] text-red-600 dark:text-red-400 font-medium">Egresos</p>
+                <p class="text-[10px] text-red-600 font-medium">Egresos</p>
                 <p
                   v-if="loading"
-                  class="text-xs font-bold text-red-700 dark:text-red-300 animate-pulse"
+                  class="text-xs font-bold text-red-700 animate-pulse"
                 >
                   ...
                 </p>
-                <p v-else class="text-xs font-bold text-red-700 dark:text-red-300">
+                <p v-else class="text-xs font-bold text-red-700">
                   {{ formattedExpense }}
                 </p>
               </div>
@@ -123,7 +119,7 @@
 
       <!-- Navigation Label -->
       <div class="px-4 mb-2">
-        <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
           Navegación
         </h3>
       </div>
@@ -136,7 +132,7 @@
           :class="
             isActive('/panel-control')
               ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-md shadow-purple-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
           "
         >
           <div
@@ -144,13 +140,13 @@
             :class="
               isActive('/panel-control')
                 ? 'bg-white/20'
-                : 'bg-purple-100 dark:bg-purple-900/30 group-hover:scale-110'
+                : 'bg-purple-100 group-hover:scale-110'
             "
           >
             <svg
               class="w-4 h-4"
               :class="
-                isActive('/panel-control') ? 'text-white' : 'text-purple-600 dark:text-purple-400'
+                isActive('/panel-control') ? 'text-white' : 'text-purple-600'
               "
               fill="none"
               stroke="currentColor"
@@ -177,7 +173,7 @@
           :class="
             isActive('/ingresos')
               ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md shadow-green-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
           "
         >
           <div
@@ -185,12 +181,12 @@
             :class="
               isActive('/ingresos')
                 ? 'bg-white/20'
-                : 'bg-green-100 dark:bg-green-900/30 group-hover:scale-110'
+                : 'bg-green-100 group-hover:scale-110'
             "
           >
             <svg
               class="w-4 h-4"
-              :class="isActive('/ingresos') ? 'text-white' : 'text-green-600 dark:text-green-400'"
+              :class="isActive('/ingresos') ? 'text-white' : 'text-green-600'"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -216,7 +212,7 @@
           :class="
             isActive('/egresos')
               ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-md shadow-red-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
           "
         >
           <div
@@ -224,12 +220,12 @@
             :class="
               isActive('/egresos')
                 ? 'bg-white/20'
-                : 'bg-red-100 dark:bg-red-900/30 group-hover:scale-110'
+                : 'bg-red-100 group-hover:scale-110'
             "
           >
             <svg
               class="w-4 h-4"
-              :class="isActive('/egresos') ? 'text-white' : 'text-red-600 dark:text-red-400'"
+              :class="isActive('/egresos') ? 'text-white' : 'text-red-600'"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -251,7 +247,7 @@
 
         <!-- Divider -->
         <div
-          class="h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent my-3"
+          class="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-3"
         ></div>
 
         <!-- Additional Links -->
@@ -261,7 +257,7 @@
           :class="
             isActive('/reportes')
               ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md shadow-blue-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
           "
         >
           <div
@@ -269,12 +265,12 @@
             :class="
               isActive('/reportes')
                 ? 'bg-white/20'
-                : 'bg-blue-100 dark:bg-blue-900/30 group-hover:scale-110'
+                : 'bg-blue-100 group-hover:scale-110'
             "
           >
             <svg
               class="w-4 h-4"
-              :class="isActive('/reportes') ? 'text-white' : 'text-blue-600 dark:text-blue-400'"
+              :class="isActive('/reportes') ? 'text-white' : 'text-blue-600'"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -300,7 +296,7 @@
           :class="
             isActive('/reglas-financieras')
               ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md shadow-amber-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
           "
         >
           <div
@@ -308,7 +304,7 @@
             :class="
               isActive('/reglas-financieras')
                 ? 'bg-white/20'
-                : 'bg-amber-100 dark:bg-amber-900/30 group-hover:scale-110'
+                : 'bg-amber-100 group-hover:scale-110'
             "
           >
             <svg
@@ -316,7 +312,7 @@
               :class="
                 isActive('/reglas-financieras')
                   ? 'text-white'
-                  : 'text-amber-600 dark:text-amber-400'
+                  : 'text-amber-600'
               "
               fill="none"
               stroke="currentColor"
@@ -343,7 +339,7 @@
           :class="
             isActive('/configuracion')
               ? 'bg-gradient-to-r from-gray-600 to-gray-800 text-white shadow-md shadow-gray-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
           "
         >
           <div
@@ -351,13 +347,13 @@
             :class="
               isActive('/configuracion')
                 ? 'bg-white/20'
-                : 'bg-gray-100 dark:bg-gray-700/50 group-hover:scale-110'
+                : 'bg-gray-100 group-hover:scale-110'
             "
           >
             <svg
               class="w-4 h-4"
               :class="
-                isActive('/configuracion') ? 'text-white' : 'text-gray-600 dark:text-gray-400'
+                isActive('/configuracion') ? 'text-white' : 'text-gray-600'
               "
               fill="none"
               stroke="currentColor"
@@ -386,10 +382,10 @@
       </nav>
 
       <!-- Footer -->
-      <div class="px-4 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
+      <div class="px-4 pt-3 border-t border-gray-200 space-y-2">
         <!-- Help Button -->
         <button
-          class="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all group"
+          class="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs text-gray-600 hover:bg-gray-100 transition-all group"
         >
           <svg
             class="w-4 h-4 group-hover:rotate-12 transition-transform"
@@ -409,7 +405,7 @@
 
         <!-- Version Info -->
         <div
-          class="flex items-center justify-between px-3 py-2 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg"
+          class="flex items-center justify-between px-3 py-2 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg"
         >
           <div class="flex items-center gap-2">
             <div
@@ -417,9 +413,9 @@
             >
               <span class="text-white font-bold text-[10px]">RW</span>
             </div>
-            <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Riwi Wallet</span>
+            <span class="text-xs font-semibold text-gray-700">Riwi Wallet</span>
           </div>
-          <span class="text-[10px] text-gray-500 dark:text-gray-400 font-mono">v1.0</span>
+          <span class="text-[10px] text-gray-500 font-mono">v1.0</span>
         </div>
       </div>
     </div>

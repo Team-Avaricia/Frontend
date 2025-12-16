@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="w-full flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-purple-100 py-12 px-4">
-    <div class="w-full max-w-md p-8 space-y-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl transition-colors duration-300">
+  <div class="w-full flex items-center justify-center min-h-screen py-12 px-4" style="background-color: #F4F4F4;">
+    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-xl transition-colors duration-300">
       <div class="text-center">
         <div class="flex items-center justify-center gap-3 mb-4">
           <img
@@ -12,8 +12,8 @@
             Riwi Wallet
           </h2>
         </div>
-        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Crea tu Cuenta</h1>
-        <p class="mt-2 text-gray-500 dark:text-gray-400">
+        <h1 class="text-2xl font-bold text-gray-800">Crea tu Cuenta</h1>
+        <p class="mt-2 text-gray-500">
           Ya tienes una?
           <RouterLink to="/iniciar-sesion" class="font-medium text-indigo-600 hover:text-purple-600 transition-colors">
             Inicia sesion
@@ -23,7 +23,7 @@
 
       <form @submit.prevent="handleRegister" class="space-y-4">
         <div>
-          <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="name" class="block text-sm font-medium text-gray-700">
             Nombre
           </label>
           <input
@@ -32,12 +32,12 @@
             type="text"
             required
             placeholder=""
-            class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            class="w-full px-3 py-2 mt-1 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
         <div>
-          <label for="lastName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="lastName" class="block text-sm font-medium text-gray-700">
             Apellido
           </label>
           <input
@@ -46,12 +46,12 @@
             type="text"
             required
             placeholder=""
-            class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            class="w-full px-3 py-2 mt-1 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="email" class="block text-sm font-medium text-gray-700">
             Correo Electronico
           </label>
           <input
@@ -60,12 +60,12 @@
             type="email"
             required
             placeholder="tu@correo.com"
-            class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            class="w-full px-3 py-2 mt-1 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
 
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="password" class="block text-sm font-medium text-gray-700">
             Contrasena
           </label>
           <div class="relative">
@@ -75,12 +75,12 @@
               :type="showPassword ? 'text' : 'password'"
               required
               placeholder="********"
-              class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10"
+              class="w-full px-3 py-2 mt-1 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10"
             />
             <button
               type="button"
               @click="showPassword = !showPassword"
-              class="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              class="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-gray-500 hover:text-gray-700"
             >
               <svg v-if="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -94,7 +94,7 @@
         </div>
 
         <div v-if="password.length > 0" class="w-full">
-          <div class="h-2 w-full bg-gray-200 dark:bg-gray-700 rounded">
+          <div class="h-2 w-full bg-gray-200 rounded">
             <div class="h-full rounded transition-all duration-300" :class="strengthBarClasses"></div>
           </div>
           <p class="text-xs mt-1" :class="strengthTextClasses">
@@ -103,7 +103,7 @@
         </div>
 
         <div>
-          <label for="password-confirm" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label for="password-confirm" class="block text-sm font-medium text-gray-700">
             Confirmar Contrasena
           </label>
           <div class="relative">
@@ -113,12 +113,12 @@
               :type="showPasswordConfirm ? 'text' : 'password'"
               required
               placeholder="********"
-              class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10"
+              class="w-full px-3 py-2 mt-1 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10"
             />
             <button
               type="button"
               @click="showPasswordConfirm = !showPasswordConfirm"
-              class="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              class="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-gray-500 hover:text-gray-700"
             >
               <svg v-if="!showPasswordConfirm" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -129,7 +129,7 @@
               </svg>
             </button>
           </div>
-          <p v-if="passwordsDoNotMatch" class="text-xs text-red-500 dark:text-red-400 mt-1">
+          <p v-if="passwordsDoNotMatch" class="text-xs text-red-500 mt-1">
             Las contrasenas no coinciden.
           </p>
         </div>
@@ -147,10 +147,10 @@
 
       <div class="relative">
         <div class="absolute inset-0 flex items-center">
-          <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+          <div class="w-full border-t border-gray-300"></div>
         </div>
         <div class="relative flex justify-center text-sm">
-          <span class="px-2 bg-white dark:bg-gray-800 text-gray-500">O registrate con</span>
+          <span class="px-2 bg-white text-gray-500">O registrate con</span>
         </div>
       </div>
 
@@ -159,7 +159,7 @@
         <button
           type="button"
           @click="handleGoogleRegister"
-          class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-650 transition-colors duration-200 shadow-sm hover:shadow-md"
+          class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-white border-2 border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md"
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -167,13 +167,13 @@
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
-          <span class="font-medium text-gray-700 dark:text-gray-200">Registrarse con Google</span>
+          <span class="font-medium text-gray-700">Registrarse con Google</span>
         </button>
 
         <button
           type="button"
           @click="handleMicrosoftRegister"
-          class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-650 transition-colors duration-200 shadow-sm hover:shadow-md"
+          class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-white border-2 border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md"
         >
           <svg class="w-5 h-5" viewBox="0 0 23 23">
             <path fill="#f3f3f3" d="M0 0h23v23H0z"/>
@@ -182,7 +182,7 @@
             <path fill="#05a6f0" d="M1 12h10v10H1z"/>
             <path fill="#ffba08" d="M12 12h10v10H12z"/>
           </svg>
-          <span class="font-medium text-gray-700 dark:text-gray-200">Registrarse con Microsoft</span>
+          <span class="font-medium text-gray-700">Registrarse con Microsoft</span>
         </button>
       </div>
     </div>
