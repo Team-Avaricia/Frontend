@@ -4,6 +4,25 @@
     :class="{ '-translate-x-full': !isOpen, 'translate-x-0': isOpen }"
   >
     <div class="flex flex-col h-full py-4">
+      <!-- Logo Section -->
+      <div class="px-4 mb-4 flex items-center justify-center gap-2">
+        <img
+          src="@/assets/Riwi Wallet Logo.svg"
+          alt="Riwi Wallet Logo"
+          class="w-10 h-10 dark:hidden"
+        />
+        <img
+          src="@/assets/Riwi Wallet Logo.svg"
+          alt="Riwi Wallet Logo"
+          class="w-10 h-10 hidden dark:block"
+        />
+        <div class="text-center">
+          <h2 class="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-indigo-400">
+            Riwi Wallet
+          </h2>
+        </div>
+      </div>
+
       <!-- User Profile Card -->
       <div class="px-4 mb-4">
         <div
