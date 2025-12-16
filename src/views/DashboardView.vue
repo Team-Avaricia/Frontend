@@ -212,25 +212,25 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="w-full min-h-screen bg-gray-100 py-8 px-4">
+  <div class="w-full min-h-screen bg-gray-100 dark:bg-slate-900 py-8 px-4 transition-colors duration-300">
     <div class="max-w-7xl mx-auto">
       <!-- Loading State -->
       <div v-if="loading" class="flex items-center justify-center min-h-[400px]">
         <div class="text-center">
           <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p class="text-gray-600">Cargando datos...</p>
+          <p class="text-gray-600 dark:text-gray-400">Cargando datos...</p>
         </div>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="bg-red-50 border border-red-200 rounded-xl p-6">
+      <div v-else-if="error" class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-6">
         <div class="flex items-center">
-          <svg class="w-6 h-6 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 text-red-600 dark:text-red-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div>
-            <h3 class="font-semibold text-red-800">Error</h3>
-            <p class="text-red-700">{{ error }}</p>
+            <h3 class="font-semibold text-red-800 dark:text-red-300">Error</h3>
+            <p class="text-red-700 dark:text-red-400">{{ error }}</p>
           </div>
         </div>
       </div>
@@ -238,11 +238,11 @@ onUnmounted(() => {
       <!-- Main Content -->
       <div v-else>
         <!-- Header -->
-        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 mb-6 transition-colors duration-300">
           <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-              <h1 class="text-3xl font-bold text-gray-900">Panel de Control</h1>
-              <p class="text-gray-600 mt-2">
+              <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">Panel de Control</h1>
+              <p class="text-gray-600 dark:text-gray-400 mt-2">
                 Bienvenido, {{ user.name }} {{ user.lastName }} 👋
               </p>
             </div>
@@ -296,18 +296,18 @@ onUnmounted(() => {
           </div>
 
           <!-- Card de Ingresos -->
-          <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+          <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border-l-4 border-green-500 transition-colors duration-300">
             <div class="flex items-center justify-between mb-4">
-              <div class="p-3 bg-green-100 rounded-lg">
-                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="p-3 bg-green-100 dark:bg-green-900/50 rounded-lg">
+                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
                 </svg>
               </div>
-              <span class="text-green-600 text-sm font-medium bg-green-50 px-2 py-1 rounded">+12.5%</span>
+              <span class="text-green-600 dark:text-green-400 text-sm font-medium bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded">+12.5%</span>
             </div>
-            <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(totalIngresos) }}</p>
-            <p class="text-gray-500 text-sm mt-1">Total Ingresos</p>
-            <RouterLink to="/ingresos" class="mt-4 text-green-600 hover:text-green-700 text-sm font-medium flex items-center gap-1">
+            <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ formatCurrency(totalIngresos) }}</p>
+            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Total Ingresos</p>
+            <RouterLink to="/ingresos" class="mt-4 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 text-sm font-medium flex items-center gap-1">
               Ver detalles
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -316,18 +316,18 @@ onUnmounted(() => {
           </div>
 
           <!-- Card de Egresos -->
-          <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500">
+          <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border-l-4 border-red-500 transition-colors duration-300">
             <div class="flex items-center justify-between mb-4">
-              <div class="p-3 bg-red-100 rounded-lg">
-                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="p-3 bg-red-100 dark:bg-red-900/50 rounded-lg">
+                <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6" />
                 </svg>
               </div>
-              <span class="text-red-600 text-sm font-medium bg-red-50 px-2 py-1 rounded">-8.3%</span>
+              <span class="text-red-600 dark:text-red-400 text-sm font-medium bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded">-8.3%</span>
             </div>
-            <p class="text-2xl font-bold text-gray-900">{{ formatCurrency(totalEgresos) }}</p>
-            <p class="text-gray-500 text-sm mt-1">Total Egresos</p>
-            <RouterLink to="/egresos" class="mt-4 text-red-600 hover:text-red-700 text-sm font-medium flex items-center gap-1">
+            <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ formatCurrency(totalEgresos) }}</p>
+            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Total Egresos</p>
+            <RouterLink to="/egresos" class="mt-4 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium flex items-center gap-1">
               Ver detalles
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -339,19 +339,19 @@ onUnmounted(() => {
         <!-- Seccion de contenido principal -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <!-- Ultimas transacciones -->
-          <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+          <div class="lg:col-span-2 bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
             <div class="flex items-center justify-between mb-6">
-              <h3 class="text-xl font-semibold text-gray-900">Ultimas Transacciones</h3>
-              <span class="text-sm text-gray-500">{{ formatDate(new Date().toISOString()) }}</span>
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100">Ultimas Transacciones</h3>
+              <span class="text-sm text-gray-500 dark:text-gray-400">{{ formatDate(new Date().toISOString()) }}</span>
             </div>
 
             <!-- Sin transacciones -->
             <div v-if="!loading && ultimasTransacciones.length === 0" class="text-center py-12">
-              <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-16 h-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
-              <p class="text-gray-500">No hay transacciones aun</p>
-              <p class="text-sm text-gray-400 mt-1">Crea tu primera transaccion para ver el historial aqui</p>
+              <p class="text-gray-500 dark:text-gray-400">No hay transacciones aun</p>
+              <p class="text-sm text-gray-400 dark:text-gray-500 mt-1">Crea tu primera transaccion para ver el historial aqui</p>
             </div>
 
             <!-- Lista de transacciones -->
@@ -359,19 +359,19 @@ onUnmounted(() => {
               <div
                 v-for="transaccion in ultimasTransacciones"
                 :key="transaccion.id"
-                class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                class="flex items-center justify-between p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
               >
                 <div class="flex items-center gap-4">
                   <div
                     :class="[
                       'p-2 rounded-lg',
-                      transaccion.type === 'Income' ? 'bg-green-100' : 'bg-red-100'
+                      transaccion.type === 'Income' ? 'bg-green-100 dark:bg-green-900/50' : 'bg-red-100 dark:bg-red-900/50'
                     ]"
                   >
                     <svg
                       :class="[
                         'w-5 h-5',
-                        transaccion.type === 'Income' ? 'text-green-600' : 'text-red-600'
+                        transaccion.type === 'Income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                       ]"
                       fill="none"
                       stroke="currentColor"
@@ -394,14 +394,14 @@ onUnmounted(() => {
                     </svg>
                   </div>
                   <div>
-                    <p class="font-medium text-gray-900">{{ transaccion.description || 'Sin descripción' }}</p>
-                    <p class="text-sm text-gray-500">{{ transaccion.category }} • {{ formatDate(transaccion.createdAt) }}</p>
+                    <p class="font-medium text-gray-900 dark:text-gray-100">{{ transaccion.description || 'Sin descripción' }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ transaccion.category }} • {{ formatDate(transaccion.createdAt) }}</p>
                   </div>
                 </div>
                 <p
                   :class="[
                     'font-semibold',
-                    transaccion.type === 'Income' ? 'text-green-600' : 'text-red-600'
+                    transaccion.type === 'Income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
                   ]"
                 >
                   {{ transaccion.type === 'Income' ? '+' : '-' }}{{ formatCurrency(transaccion.amount) }}
@@ -413,29 +413,29 @@ onUnmounted(() => {
           <!-- Panel lateral -->
           <div class="space-y-6">
             <!-- Perfil rapido -->
-            <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
               <div class="flex items-center gap-4 mb-4">
                 <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
                   {{ user.name.charAt(0).toUpperCase() }}{{ user.lastName ? user.lastName.charAt(0).toUpperCase() : '' }}
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-900">{{ user.name }} {{ user.lastName }}</p>
-                  <p class="text-sm text-gray-500">@{{ user.userName }}</p>
+                  <p class="font-semibold text-gray-900 dark:text-gray-100">{{ user.name }} {{ user.lastName }}</p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">@{{ user.userName }}</p>
                 </div>
               </div>
-              <div class="border-t pt-4">
-                <p class="text-sm text-gray-500 mb-1">Email</p>
-                <p class="text-gray-900">{{ user.email }}</p>
+              <div class="border-t dark:border-gray-700 pt-4">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">Email</p>
+                <p class="text-gray-900 dark:text-gray-100">{{ user.email }}</p>
               </div>
             </div>
 
             <!-- Resumen por categoria -->
-            <div class="bg-white rounded-xl shadow-lg p-6">
-              <h3 class="text-lg font-semibold text-gray-900 mb-4">Top Gastos</h3>
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Top Gastos</h3>
 
               <!-- Sin gastos -->
               <div v-if="!loading && topGastos.length === 0" class="text-center py-8">
-                <p class="text-gray-500 text-sm">No hay gastos registrados</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">No hay gastos registrados</p>
               </div>
 
               <!-- Lista de categorías -->
@@ -454,34 +454,34 @@ onUnmounted(() => {
                         index === 2 ? 'bg-yellow-500' : 'bg-blue-500'
                       ]"
                     ></span>
-                    <span class="text-gray-700">{{ gasto.categoria }}</span>
+                    <span class="text-gray-700 dark:text-gray-300">{{ gasto.categoria }}</span>
                   </div>
-                  <span class="font-medium">{{ formatCurrency(gasto.total) }}</span>
+                  <span class="font-medium text-gray-900 dark:text-gray-100">{{ formatCurrency(gasto.total) }}</span>
                 </div>
               </div>
             </div>
 
             <!-- Acceso rapido -->
-            <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg p-6 border border-gray-200">
-              <h3 class="text-lg font-semibold mb-4 text-gray-800">Acceso Rapido</h3>
+            <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-700 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+              <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-100">Acceso Rapido</h3>
               <div class="grid grid-cols-2 gap-3">
                 <RouterLink
                   to="/ingresos"
-                  class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-center transition-colors shadow-sm"
+                  class="p-3 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 border border-gray-200 dark:border-gray-600 rounded-lg text-center transition-colors shadow-sm"
                 >
-                  <svg class="w-6 h-6 mx-auto mb-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-6 h-6 mx-auto mb-1 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span class="text-sm text-gray-700 font-medium">Ingresos</span>
+                  <span class="text-sm text-gray-700 dark:text-gray-300 font-medium">Ingresos</span>
                 </RouterLink>
                 <RouterLink
                   to="/egresos"
-                  class="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-center transition-colors shadow-sm"
+                  class="p-3 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 border border-gray-200 dark:border-gray-600 rounded-lg text-center transition-colors shadow-sm"
                 >
-                  <svg class="w-6 h-6 mx-auto mb-1 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-6 h-6 mx-auto mb-1 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                   </svg>
-                  <span class="text-sm text-gray-700 font-medium">Egresos</span>
+                  <span class="text-sm text-gray-700 dark:text-gray-300 font-medium">Egresos</span>
                 </RouterLink>
               </div>
             </div>

@@ -155,10 +155,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-full min-h-screen bg-gray-100 py-8 px-4">
+  <div class="w-full min-h-screen bg-gray-100 dark:bg-slate-900 py-8 px-4 transition-colors duration-300">
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
-      <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 mb-6 transition-colors duration-300">
         <div class="flex items-center gap-3">
           <div class="p-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,8 +171,8 @@ onMounted(async () => {
             </svg>
           </div>
           <div>
-            <h1 class="text-2xl font-bold text-gray-800">Reportes</h1>
-            <p class="text-gray-500 text-sm">Analiza tus transacciones y gastos por categoría</p>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Reportes</h1>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">Analiza tus transacciones y gastos por categoría</p>
           </div>
         </div>
       </div>
@@ -183,16 +183,16 @@ onMounted(async () => {
           <div
             class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"
           ></div>
-          <p class="text-gray-600">Cargando reportes...</p>
+          <p class="text-gray-600 dark:text-gray-400">Cargando reportes...</p>
         </div>
       </div>
 
       <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Category Summary -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
             <svg
-              class="w-5 h-5 text-indigo-600"
+              class="w-5 h-5 text-indigo-600 dark:text-indigo-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -213,9 +213,9 @@ onMounted(async () => {
             Gastos por Categoría
           </h2>
 
-          <div v-if="categorySummary.length === 0" class="text-center py-8 text-gray-500">
+          <div v-if="categorySummary.length === 0" class="text-center py-8 text-gray-500 dark:text-gray-400">
             <svg
-              class="w-12 h-12 mx-auto mb-3 text-gray-300"
+              class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -233,10 +233,10 @@ onMounted(async () => {
           <div v-else class="space-y-4">
             <div v-for="item in categorySummary" :key="item.category" class="relative">
               <div class="flex justify-between items-center mb-1">
-                <span class="text-sm font-medium text-gray-700">{{ item.category }}</span>
-                <span class="text-sm text-gray-600">{{ formatCurrency(item.totalAmount) }}</span>
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ item.category }}</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">{{ formatCurrency(item.totalAmount) }}</span>
               </div>
-              <div class="w-full bg-gray-200 rounded-full h-3">
+              <div class="w-full bg-gray-200 dark:bg-slate-600 rounded-full h-3">
                 <div
                   :class="getCategoryColor(item.category)"
                   class="h-3 rounded-full transition-all duration-500"
@@ -244,17 +244,17 @@ onMounted(async () => {
                 ></div>
               </div>
               <div class="flex justify-between mt-1">
-                <span class="text-xs text-gray-500">{{ item.transactionCount }} transacciones</span>
-                <span class="text-xs font-medium text-gray-600"
+                <span class="text-xs text-gray-500 dark:text-gray-400">{{ item.transactionCount }} transacciones</span>
+                <span class="text-xs font-medium text-gray-600 dark:text-gray-400"
                   >{{ item.percentage.toFixed(1) }}%</span
                 >
               </div>
             </div>
 
-            <div class="pt-4 border-t border-gray-200">
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
               <div class="flex justify-between items-center">
-                <span class="font-semibold text-gray-800">Total</span>
-                <span class="font-bold text-lg text-indigo-600">{{
+                <span class="font-semibold text-gray-800 dark:text-gray-100">Total</span>
+                <span class="font-bold text-lg text-indigo-600 dark:text-indigo-400">{{
                   formatCurrency(grandTotal)
                 }}</span>
               </div>
@@ -263,10 +263,10 @@ onMounted(async () => {
         </div>
 
         <!-- Transaction Search -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+          <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
             <svg
-              class="w-5 h-5 text-indigo-600"
+              class="w-5 h-5 text-indigo-600 dark:text-indigo-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -287,12 +287,12 @@ onMounted(async () => {
               v-model="searchQuery"
               type="text"
               placeholder="Buscar por descripción..."
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
             />
 
             <select
               v-model="selectedCategory"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
             >
               <option value="">Todas las categorías</option>
               <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
@@ -300,19 +300,19 @@ onMounted(async () => {
 
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-xs text-gray-500 mb-1">Desde</label>
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Desde</label>
                 <input
                   v-model="startDate"
                   type="date"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                 />
               </div>
               <div>
-                <label class="block text-xs text-gray-500 mb-1">Hasta</label>
+                <label class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Hasta</label>
                 <input
                   v-model="endDate"
                   type="date"
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+                  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                 />
               </div>
             </div>
@@ -326,7 +326,7 @@ onMounted(async () => {
               </button>
               <button
                 @click="clearFilters"
-                class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                class="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
               >
                 Limpiar
               </button>
@@ -338,19 +338,19 @@ onMounted(async () => {
             <div
               v-for="transaction in searchResults"
               :key="transaction.id"
-              class="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+              class="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg"
             >
               <div class="flex items-center gap-3">
                 <div
                   :class="[
                     'w-8 h-8 rounded-full flex items-center justify-center',
-                    transaction.type === 'Income' ? 'bg-green-100' : 'bg-red-100',
+                    transaction.type === 'Income' ? 'bg-green-100 dark:bg-green-900/50' : 'bg-red-100 dark:bg-red-900/50',
                   ]"
                 >
                   <svg
                     :class="[
                       'w-4 h-4',
-                      transaction.type === 'Income' ? 'text-green-600' : 'text-red-600',
+                      transaction.type === 'Income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400',
                     ]"
                     fill="none"
                     stroke="currentColor"
@@ -373,10 +373,10 @@ onMounted(async () => {
                   </svg>
                 </div>
                 <div>
-                  <p class="text-sm font-medium text-gray-800">
+                  <p class="text-sm font-medium text-gray-800 dark:text-gray-100">
                     {{ transaction.description || transaction.category }}
                   </p>
-                  <p class="text-xs text-gray-500">
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
                     {{ transaction.category }} • {{ formatDate(transaction.createdAt) }}
                   </p>
                 </div>
@@ -384,7 +384,7 @@ onMounted(async () => {
               <span
                 :class="[
                   'font-semibold',
-                  transaction.type === 'Income' ? 'text-green-600' : 'text-red-600',
+                  transaction.type === 'Income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400',
                 ]"
               >
                 {{ transaction.type === 'Income' ? '+' : '-'
@@ -393,9 +393,9 @@ onMounted(async () => {
             </div>
           </div>
 
-          <div v-else-if="!loading" class="text-center py-8 text-gray-500">
+          <div v-else-if="!loading" class="text-center py-8 text-gray-500 dark:text-gray-400">
             <svg
-              class="w-12 h-12 mx-auto mb-3 text-gray-300"
+              class="w-12 h-12 mx-auto mb-3 text-gray-300 dark:text-gray-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

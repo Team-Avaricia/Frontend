@@ -216,15 +216,15 @@ const deleteIncome = async (id: string) => {
 
 const getCategoriaColor = (categoria: string) => {
   const colores: Record<string, string> = {
-    'Salario': 'bg-blue-100 text-blue-800',
-    'Freelance': 'bg-purple-100 text-purple-800',
-    'Inversiones': 'bg-green-100 text-green-800',
-    'Ventas': 'bg-yellow-100 text-yellow-800',
-    'Regalos': 'bg-pink-100 text-pink-800',
-    'Reembolsos': 'bg-indigo-100 text-indigo-800',
-    'Otros': 'bg-gray-100 text-gray-800'
+    'Salario': 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
+    'Freelance': 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300',
+    'Inversiones': 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300',
+    'Ventas': 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300',
+    'Regalos': 'bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-300',
+    'Reembolsos': 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300',
+    'Otros': 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
   };
-  return colores[categoria] || 'bg-gray-100 text-gray-800';
+  return colores[categoria] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300';
 };
 
 // Inicializar
@@ -265,21 +265,21 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-full min-h-screen bg-gray-100 py-8 px-4">
+  <div class="w-full min-h-screen bg-gray-100 dark:bg-slate-900 py-8 px-4 transition-colors duration-300">
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
-      <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 mb-6 transition-colors duration-300">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div class="flex items-center gap-3">
-              <RouterLink to="/panel-control" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <RouterLink to="/panel-control" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </RouterLink>
-              <h1 class="text-3xl font-bold text-gray-900">Ingresos</h1>
+              <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">Ingresos</h1>
             </div>
-            <p class="text-gray-600 mt-2 ml-10">Gestiona todos tus ingresos y fuentes de dinero</p>
+            <p class="text-gray-600 dark:text-gray-400 mt-2 ml-10">Gestiona todos tus ingresos y fuentes de dinero</p>
           </div>
           <button
             @click="openNewModal"
@@ -309,10 +309,10 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <p class="text-gray-500 text-sm">Transacciones</p>
-          <p class="text-2xl font-bold text-gray-900 mt-1">{{ income.length }}</p>
-          <p class="text-green-600 text-sm mt-2 flex items-center gap-1">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+          <p class="text-gray-500 dark:text-gray-400 text-sm">Transacciones</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">{{ income.length }}</p>
+          <p class="text-green-600 dark:text-green-400 text-sm mt-2 flex items-center gap-1">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
             </svg>
@@ -320,12 +320,12 @@ onMounted(async () => {
           </p>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <p class="text-gray-500 text-sm">Promedio</p>
-          <p class="text-2xl font-bold text-gray-900 mt-1">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+          <p class="text-gray-500 dark:text-gray-400 text-sm">Promedio</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
             {{ income.length ? formatCurrency(totalIncome / income.length) : formatCurrency(0) }}
           </p>
-          <p class="text-gray-500 text-sm mt-2">Por transacción</p>
+          <p class="text-gray-500 dark:text-gray-400 text-sm mt-2">Por transacción</p>
         </div>
       </div>
 
@@ -333,26 +333,26 @@ onMounted(async () => {
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Lista de ingresos -->
         <div class="lg:col-span-3">
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden transition-colors duration-300">
             <!-- Filtros -->
-            <div class="p-4 border-b bg-gray-50">
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-700/50">
               <div class="flex flex-col md:flex-row gap-4">
                 <div class="flex-1">
                   <div class="relative">
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     <input
                       v-model="filtroBusqueda"
                       type="text"
                       placeholder="Buscar ingresos..."
-                      class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                     />
                   </div>
                 </div>
                 <select
                   v-model="filtroCategoria"
-                  class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                  class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                 >
                   <option value="">Todas las categorías</option>
                   <option v-for="cat in categorias" :key="cat" :value="cat">{{ cat }}</option>
@@ -362,7 +362,7 @@ onMounted(async () => {
                     @click="ordenarPor = 'fecha'; ordenAscendente = !ordenAscendente"
                     :class="[
                       'px-3 py-2 rounded-lg transition-colors',
-                      ordenarPor === 'fecha' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ordenarPor === 'fecha' ? 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-slate-600 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-500'
                     ]"
                   >
                     Fecha {{ ordenarPor === 'fecha' ? (ordenAscendente ? '↑' : '↓') : '' }}
@@ -371,7 +371,7 @@ onMounted(async () => {
                     @click="ordenarPor = 'monto'; ordenAscendente = !ordenAscendente"
                     :class="[
                       'px-3 py-2 rounded-lg transition-colors',
-                      ordenarPor === 'monto' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ordenarPor === 'monto' ? 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-slate-600 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-500'
                     ]"
                   >
                     Monto {{ ordenarPor === 'monto' ? (ordenAscendente ? '↑' : '↓') : '' }}
@@ -383,29 +383,29 @@ onMounted(async () => {
             <!-- Tabla de ingresos -->
             <div class="overflow-x-auto">
               <table class="w-full">
-                <thead class="bg-gray-50 border-b">
+                <thead class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-gray-700">
                   <tr>
-                    <th class="text-left py-4 px-6 font-semibold text-gray-700">Descripción</th>
-                    <th class="text-left py-4 px-6 font-semibold text-gray-700">Categoría</th>
-                    <th class="text-left py-4 px-6 font-semibold text-gray-700">Fecha</th>
-                    <th class="text-right py-4 px-6 font-semibold text-gray-700">Monto</th>
-                    <th class="text-center py-4 px-6 font-semibold text-gray-700">Acciones</th>
+                    <th class="text-left py-4 px-6 font-semibold text-gray-700 dark:text-gray-300">Descripción</th>
+                    <th class="text-left py-4 px-6 font-semibold text-gray-700 dark:text-gray-300">Categoría</th>
+                    <th class="text-left py-4 px-6 font-semibold text-gray-700 dark:text-gray-300">Fecha</th>
+                    <th class="text-right py-4 px-6 font-semibold text-gray-700 dark:text-gray-300">Monto</th>
+                    <th class="text-center py-4 px-6 font-semibold text-gray-700 dark:text-gray-300">Acciones</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                   <tr
                     v-for="item in incomeFiltered"
                     :key="item.id"
-                    class="hover:bg-gray-50 transition-colors"
+                    class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
                   >
                     <td class="py-4 px-6">
                       <div class="flex items-center gap-3">
-                        <div class="p-2 bg-green-100 rounded-lg">
-                          <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
+                          <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
                           </svg>
                         </div>
-                        <span class="font-medium text-gray-900">{{ item.descripcion }}</span>
+                        <span class="font-medium text-gray-900 dark:text-gray-100">{{ item.descripcion }}</span>
                       </div>
                     </td>
                     <td class="py-4 px-6">
@@ -413,15 +413,15 @@ onMounted(async () => {
                         {{ item.categoria }}
                       </span>
                     </td>
-                    <td class="py-4 px-6 text-gray-600">{{ formatDate(item.fecha) }}</td>
-                    <td class="py-4 px-6 text-right font-semibold text-green-600">
+                    <td class="py-4 px-6 text-gray-600 dark:text-gray-400">{{ formatDate(item.fecha) }}</td>
+                    <td class="py-4 px-6 text-right font-semibold text-green-600 dark:text-green-400">
                       +{{ formatCurrency(item.monto) }}
                     </td>
                     <td class="py-4 px-6">
                       <div class="flex justify-center gap-2">
                         <button
                           @click="openEditModal(item)"
-                          class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                          class="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                           title="Editar"
                         >
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -430,7 +430,7 @@ onMounted(async () => {
                         </button>
                         <button
                           @click="deleteIncome(item.id)"
-                          class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                          class="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                           title="Eliminar"
                         >
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -445,13 +445,13 @@ onMounted(async () => {
 
               <!-- Estado vacío -->
               <div v-if="incomeFiltered.length === 0" class="text-center py-12">
-                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <p class="text-gray-500">No se encontraron ingresos</p>
+                <p class="text-gray-500 dark:text-gray-400">No se encontraron ingresos</p>
                 <button
                   @click="openNewModal"
-                  class="mt-4 text-green-600 hover:text-green-700 font-medium"
+                  class="mt-4 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium"
                 >
                   Agregar primer ingreso
                 </button>
@@ -462,44 +462,44 @@ onMounted(async () => {
 
         <!-- Panel lateral con estadísticas -->
         <div class="space-y-6">
-          <div class="bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Por Categoría</h3>
+          <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Por Categoría</h3>
             <div class="space-y-4">
               <div v-for="stat in estadisticasPorCategoria" :key="stat.categoria">
                 <div class="flex justify-between items-center mb-1">
-                  <span class="text-gray-700 text-sm">{{ stat.categoria }}</span>
-                  <span class="text-gray-900 font-medium text-sm">{{ formatCurrency(stat.total) }}</span>
+                  <span class="text-gray-700 dark:text-gray-300 text-sm">{{ stat.categoria }}</span>
+                  <span class="text-gray-900 dark:text-gray-100 font-medium text-sm">{{ formatCurrency(stat.total) }}</span>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="w-full bg-gray-200 dark:bg-slate-600 rounded-full h-2">
                   <div
                     class="bg-green-500 h-2 rounded-full transition-all duration-300"
                     :style="{ width: `${(stat.total / totalIncome) * 100}%` }"
                   ></div>
                 </div>
-                <p class="text-xs text-gray-500 mt-1">{{ stat.count }} transacción(es)</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ stat.count }} transacción(es)</p>
               </div>
             </div>
           </div>
 
           <!-- Tips -->
-          <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
-            <h3 class="text-lg font-semibold text-green-800 mb-3 flex items-center gap-2">
+          <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 rounded-xl p-6 border border-green-200 dark:border-green-800 transition-colors duration-300">
+            <h3 class="text-lg font-semibold text-green-800 dark:text-green-300 mb-3 flex items-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
               Consejos
             </h3>
-            <ul class="text-sm text-green-700 space-y-2">
+            <ul class="text-sm text-green-700 dark:text-green-400 space-y-2">
               <li class="flex items-start gap-2">
-                <span class="text-green-500">•</span>
+                <span class="text-green-500 dark:text-green-400">•</span>
                 Registra todos tus ingresos para un mejor control financiero
               </li>
               <li class="flex items-start gap-2">
-                <span class="text-green-500">•</span>
+                <span class="text-green-500 dark:text-green-400">•</span>
                 Categoriza correctamente para obtener mejores estadísticas
               </li>
               <li class="flex items-start gap-2">
-                <span class="text-green-500">•</span>
+                <span class="text-green-500 dark:text-green-400">•</span>
                 Revisa tus ingresos regularmente para detectar patrones
               </li>
             </ul>
@@ -516,16 +516,16 @@ onMounted(async () => {
       class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
       @click.self="showModal = false"
     >
-      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all">
+      <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all">
         <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-900">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
             {{ editingId ? 'Editar Ingreso' : 'Nuevo Ingreso' }}
           </h2>
           <button
             @click="showModal = false"
-            class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
           >
-            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -533,49 +533,49 @@ onMounted(async () => {
 
         <form @submit.prevent="saveIncome" class="space-y-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descripción</label>
             <input
               v-model="formData.descripcion"
               type="text"
               required
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
               placeholder="Ej: Salario mensual"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monto</label>
             <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">$</span>
               <input
                 v-model.number="formData.monto"
                 type="number"
                 step="0.01"
                 min="0"
                 required
-                class="w-full pl-8 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                class="w-full pl-8 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                 placeholder="0.00"
               />
             </div>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Categoría</label>
             <select
               v-model="formData.categoria"
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
             >
               <option v-for="cat in categorias" :key="cat" :value="cat">{{ cat }}</option>
             </select>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha</label>
             <input
               v-model="formData.fecha"
               type="date"
               required
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
             />
           </div>
 
@@ -583,7 +583,7 @@ onMounted(async () => {
             <button
               type="button"
               @click="showModal = false"
-              class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors font-medium"
             >
               Cancelar
             </button>

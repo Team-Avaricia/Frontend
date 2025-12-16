@@ -1,6 +1,6 @@
 ﻿﻿﻿<template>
-  <div class="w-full flex items-center justify-center min-h-screen py-12 px-4" style="background-color: #F4F4F4;">
-    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-xl transition-colors duration-300">
+  <div class="w-full flex items-center justify-center min-h-screen py-12 px-4 bg-[#F4F4F4] dark:bg-slate-900 transition-colors duration-300">
+    <div class="w-full max-w-md p-8 space-y-6 bg-white dark:bg-slate-800 rounded-lg shadow-xl transition-colors duration-300">
       <div class="text-center">
         <div class="flex items-center justify-center gap-3 mb-4">
           <img
@@ -12,8 +12,8 @@
             Riwi Wallet
           </h2>
         </div>
-        <h1 class="text-2xl font-bold text-gray-800">Inicia Sesión</h1>
-        <p class="mt-2 text-gray-500">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Inicia Sesión</h1>
+        <p class="mt-2 text-gray-500 dark:text-gray-400">
           Aun no tienes una cuenta?
           <RouterLink to="/registrarse" class="font-medium text-indigo-600 hover:text-purple-600 transition-colors">
             Registrate gratis
@@ -23,7 +23,7 @@
 
       <form @submit.prevent="handleLogin" class="space-y-6">
         <div>
-          <label for="identifier" class="block text-sm font-medium text-gray-700">
+          <label for="identifier" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Correo Electronico o Nombre de Usuario
           </label>
           <input
@@ -32,13 +32,13 @@
             type="text"
             required
             placeholder="tu@correo.com o tu usuario"
-            class="w-full px-3 py-2 mt-1 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+            class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-gray-100 bg-white dark:bg-slate-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-400 dark:placeholder-gray-500"
           />
         </div>
 
         <div>
           <div class="flex items-center justify-between">
-            <label for="password" class="block text-sm font-medium text-gray-700">
+            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Contrasena
             </label>
             <RouterLink to="/recuperar-contrasena" class="text-sm text-indigo-600 hover:text-indigo-500">
@@ -52,12 +52,12 @@
               :type="showPassword ? 'text' : 'password'"
               required
               placeholder="********"
-              class="w-full px-3 py-2 mt-1 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10"
+              class="w-full px-3 py-2 mt-1 text-gray-800 dark:text-gray-100 bg-white dark:bg-slate-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10 placeholder-gray-400 dark:placeholder-gray-500"
             />
             <button
               type="button"
               @click="showPassword = !showPassword"
-              class="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-gray-500 hover:text-gray-700"
+              class="absolute right-3 top-1/2 -translate-y-1/2 mt-0.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
               aria-label="Toggle password visibility"
             >
               <svg v-if="!showPassword" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,10 +83,10 @@
 
       <div class="relative">
         <div class="absolute inset-0 flex items-center">
-          <div class="w-full border-t border-gray-300"></div>
+          <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
         </div>
         <div class="relative flex justify-center text-sm">
-          <span class="px-2 bg-white text-gray-500">O continua con</span>
+          <span class="px-2 bg-white dark:bg-slate-800 text-gray-500 dark:text-gray-400">O continua con</span>
         </div>
       </div>
 
@@ -95,7 +95,7 @@
         <button
           type="button"
           @click="handleGoogleLogin"
-          class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-white border-2 border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200 shadow-sm hover:shadow-md"
+          class="w-full flex items-center justify-center gap-3 px-4 py-2.5 bg-white dark:bg-slate-700 border-2 border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors duration-200 shadow-sm hover:shadow-md"
         >
           <svg class="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

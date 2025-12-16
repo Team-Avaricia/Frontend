@@ -1,1 +1,40 @@
 @import "tailwindcss";
+
+/* Dark mode configuration for Tailwind CSS v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* CSS Custom Properties for theming */
+:root {
+  /* Light mode colors */
+  --color-bg-primary: #F4F4F4;
+  --color-bg-secondary: #FFFFFF;
+  --color-bg-tertiary: #F9FAFB;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-tertiary: #6B7280;
+  --color-border: #D1D5DB;
+  --color-border-light: #E5E7EB;
+}
+
+.dark {
+  /* Dark mode colors */
+  --color-bg-primary: #0F172A;
+  --color-bg-secondary: #1E293B;
+  --color-bg-tertiary: #334155;
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #D1D5DB;
+  --color-text-tertiary: #9CA3AF;
+  --color-border: #475569;
+  --color-border-light: #334155;
+}
+
+/* Base styles */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+

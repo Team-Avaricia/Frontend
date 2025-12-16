@@ -223,18 +223,18 @@ const deleteExpense = async (id: string) => {
 
 const getCategoriaColor = (categoria: string) => {
   const colores: Record<string, string> = {
-    'Vivienda': 'bg-red-100 text-red-800',
-    'Alimentación': 'bg-orange-100 text-orange-800',
-    'Transporte': 'bg-blue-100 text-blue-800',
-    'Servicios': 'bg-yellow-100 text-yellow-800',
-    'Salud': 'bg-pink-100 text-pink-800',
-    'Educación': 'bg-purple-100 text-purple-800',
-    'Entretenimiento': 'bg-indigo-100 text-indigo-800',
-    'Ropa': 'bg-teal-100 text-teal-800',
-    'Deudas': 'bg-rose-100 text-rose-800',
-    'Otros': 'bg-gray-100 text-gray-800'
+    'Vivienda': 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300',
+    'Alimentación': 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300',
+    'Transporte': 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
+    'Servicios': 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300',
+    'Salud': 'bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-300',
+    'Educación': 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300',
+    'Entretenimiento': 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300',
+    'Ropa': 'bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300',
+    'Deudas': 'bg-rose-100 dark:bg-rose-900/50 text-rose-800 dark:text-rose-300',
+    'Otros': 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
   };
-  return colores[categoria] || 'bg-gray-100 text-gray-800';
+  return colores[categoria] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300';
 };
 
 const getCategoriaIcon = (categoria: string) => {
@@ -291,21 +291,21 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-full min-h-screen bg-gray-100 py-8 px-4">
+  <div class="w-full min-h-screen bg-gray-100 dark:bg-slate-900 py-8 px-4 transition-colors duration-300">
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
-      <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 mb-6 transition-colors duration-300">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div class="flex items-center gap-3">
-              <RouterLink to="/panel-control" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <RouterLink to="/panel-control" class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
               </RouterLink>
-              <h1 class="text-3xl font-bold text-gray-900">Egresos</h1>
+              <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">Egresos</h1>
             </div>
-            <p class="text-gray-600 mt-2 ml-10">Controla tus gastos y administra tu presupuesto</p>
+            <p class="text-gray-600 dark:text-gray-400 mt-2 ml-10">Controla tus gastos y administra tu presupuesto</p>
           </div>
           <button
             @click="openNewModal"
@@ -335,10 +335,10 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <p class="text-gray-500 text-sm">Transacciones</p>
-          <p class="text-2xl font-bold text-gray-900 mt-1">{{ expenses.length }}</p>
-          <p class="text-red-600 text-sm mt-2 flex items-center gap-1">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+          <p class="text-gray-500 dark:text-gray-400 text-sm">Transacciones</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">{{ expenses.length }}</p>
+          <p class="text-red-600 dark:text-red-400 text-sm mt-2 flex items-center gap-1">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
             </svg>
@@ -346,12 +346,12 @@ onMounted(async () => {
           </p>
         </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-6">
-          <p class="text-gray-500 text-sm">Mayor Gasto</p>
-          <p class="text-2xl font-bold text-gray-900 mt-1">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+          <p class="text-gray-500 dark:text-gray-400 text-sm">Mayor Gasto</p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
             {{ mayorGasto ? formatCurrency(mayorGasto.monto) : formatCurrency(0) }}
           </p>
-          <p class="text-gray-500 text-sm mt-2 truncate" :title="mayorGasto?.descripcion">
+          <p class="text-gray-500 dark:text-gray-400 text-sm mt-2 truncate" :title="mayorGasto?.descripcion">
             {{ mayorGasto?.descripcion || 'Sin egresos' }}
           </p>
         </div>
@@ -361,26 +361,26 @@ onMounted(async () => {
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Lista de egresos -->
         <div class="lg:col-span-3">
-          <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+          <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden transition-colors duration-300">
             <!-- Filtros -->
-            <div class="p-4 border-b bg-gray-50">
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-slate-700/50">
               <div class="flex flex-col md:flex-row gap-4">
                 <div class="flex-1">
                   <div class="relative">
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     <input
                       v-model="filtroBusqueda"
                       type="text"
                       placeholder="Buscar egresos..."
-                      class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500"
                     />
                   </div>
                 </div>
                 <select
                   v-model="filtroCategoria"
-                  class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                  class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                 >
                   <option value="">Todas las categorías</option>
                   <option v-for="cat in categorias" :key="cat" :value="cat">{{ cat }}</option>
@@ -390,7 +390,7 @@ onMounted(async () => {
                     @click="ordenarPor = 'fecha'; ordenAscendente = !ordenAscendente"
                     :class="[
                       'px-3 py-2 rounded-lg transition-colors',
-                      ordenarPor === 'fecha' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ordenarPor === 'fecha' ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400' : 'bg-gray-100 dark:bg-slate-600 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-500'
                     ]"
                   >
                     Fecha {{ ordenarPor === 'fecha' ? (ordenAscendente ? '?' : '?') : '' }}
@@ -399,7 +399,7 @@ onMounted(async () => {
                     @click="ordenarPor = 'monto'; ordenAscendente = !ordenAscendente"
                     :class="[
                       'px-3 py-2 rounded-lg transition-colors',
-                      ordenarPor === 'monto' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      ordenarPor === 'monto' ? 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400' : 'bg-gray-100 dark:bg-slate-600 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-500'
                     ]"
                   >
                     Monto {{ ordenarPor === 'monto' ? (ordenAscendente ? '?' : '?') : '' }}
@@ -411,29 +411,29 @@ onMounted(async () => {
             <!-- Tabla de egresos -->
             <div class="overflow-x-auto">
               <table class="w-full">
-                <thead class="bg-gray-50 border-b">
+                <thead class="bg-gray-50 dark:bg-slate-700/50 border-b border-gray-200 dark:border-gray-700">
                   <tr>
-                    <th class="text-left py-4 px-6 font-semibold text-gray-700">Descripción</th>
-                    <th class="text-left py-4 px-6 font-semibold text-gray-700">Categoría</th>
-                    <th class="text-left py-4 px-6 font-semibold text-gray-700">Fecha</th>
-                    <th class="text-right py-4 px-6 font-semibold text-gray-700">Monto</th>
-                    <th class="text-center py-4 px-6 font-semibold text-gray-700">Acciones</th>
+                    <th class="text-left py-4 px-6 font-semibold text-gray-700 dark:text-gray-300">Descripción</th>
+                    <th class="text-left py-4 px-6 font-semibold text-gray-700 dark:text-gray-300">Categoría</th>
+                    <th class="text-left py-4 px-6 font-semibold text-gray-700 dark:text-gray-300">Fecha</th>
+                    <th class="text-right py-4 px-6 font-semibold text-gray-700 dark:text-gray-300">Monto</th>
+                    <th class="text-center py-4 px-6 font-semibold text-gray-700 dark:text-gray-300">Acciones</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
                   <tr
                     v-for="expense in expensesFiltered"
                     :key="expense.id"
-                    class="hover:bg-gray-50 transition-colors"
+                    class="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
                   >
                     <td class="py-4 px-6">
                       <div class="flex items-center gap-3">
-                        <div class="p-2 bg-red-100 rounded-lg">
-                          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="p-2 bg-red-100 dark:bg-red-900/50 rounded-lg">
+                          <svg class="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getCategoriaIcon(expense.categoria)" />
                           </svg>
                         </div>
-                        <span class="font-medium text-gray-900">{{ expense.descripcion }}</span>
+                        <span class="font-medium text-gray-900 dark:text-gray-100">{{ expense.descripcion }}</span>
                       </div>
                     </td>
                     <td class="py-4 px-6">
@@ -441,15 +441,15 @@ onMounted(async () => {
                         {{ expense.categoria }}
                       </span>
                     </td>
-                    <td class="py-4 px-6 text-gray-600">{{ formatDate(expense.fecha) }}</td>
-                    <td class="py-4 px-6 text-right font-semibold text-red-600">
+                    <td class="py-4 px-6 text-gray-600 dark:text-gray-400">{{ formatDate(expense.fecha) }}</td>
+                    <td class="py-4 px-6 text-right font-semibold text-red-600 dark:text-red-400">
                       -{{ formatCurrency(expense.monto) }}
                     </td>
                     <td class="py-4 px-6">
                       <div class="flex justify-center gap-2">
                         <button
                           @click="openEditModal(expense)"
-                          class="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                          class="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors"
                           title="Editar"
                         >
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -458,7 +458,7 @@ onMounted(async () => {
                         </button>
                         <button
                           @click="deleteExpense(expense.id)"
-                          class="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                          class="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                           title="Eliminar"
                         >
                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -473,13 +473,13 @@ onMounted(async () => {
 
               <!-- Estado vacío -->
               <div v-if="expensesFiltered.length === 0" class="text-center py-12">
-                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <p class="text-gray-500">No se encontraron egresos</p>
+                <p class="text-gray-500 dark:text-gray-400">No se encontraron egresos</p>
                 <button
                   @click="openNewModal"
-                  class="mt-4 text-red-600 hover:text-red-700 font-medium"
+                  class="mt-4 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium"
                 >
                   Agregar primer egreso
                 </button>
@@ -490,28 +490,28 @@ onMounted(async () => {
 
         <!-- Panel lateral con estad•sticas -->
         <div class="space-y-6">
-          <div class="bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Por Categoría</h3>
+          <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Por Categoría</h3>
             <div class="space-y-4">
               <div v-for="stat in estadisticasPorCategoria" :key="stat.categoria">
                 <div class="flex justify-between items-center mb-1">
-                  <span class="text-gray-700 text-sm">{{ stat.categoria }}</span>
-                  <span class="text-gray-900 font-medium text-sm">{{ formatCurrency(stat.total) }}</span>
+                  <span class="text-gray-700 dark:text-gray-300 text-sm">{{ stat.categoria }}</span>
+                  <span class="text-gray-900 dark:text-gray-100 font-medium text-sm">{{ formatCurrency(stat.total) }}</span>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="w-full bg-gray-200 dark:bg-slate-600 rounded-full h-2">
                   <div
                     class="bg-red-500 h-2 rounded-full transition-all duration-300"
                     :style="{ width: `${(stat.total / totalExpenses) * 100}%` }"
                   ></div>
                 </div>
-                <p class="text-xs text-gray-500 mt-1">{{ stat.count }} transacción(es) • {{ ((stat.total / totalExpenses) * 100).toFixed(1) }}%</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ stat.count }} transacción(es) • {{ ((stat.total / totalExpenses) * 100).toFixed(1) }}%</p>
               </div>
             </div>
           </div>
 
           <!-- Alerta de presupuesto -->
-          <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-200">
-            <h3 class="text-lg font-semibold text-amber-800 mb-3 flex items-center gap-2">
+          <div class="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/30 rounded-xl p-6 border border-amber-200 dark:border-amber-800 transition-colors duration-300">
+            <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-300 mb-3 flex items-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
@@ -519,14 +519,14 @@ onMounted(async () => {
             </h3>
             <div class="space-y-3">
               <div class="flex items-center justify-between text-sm">
-                <span class="text-amber-700">Gasto promedio:</span>
-                <span class="font-medium text-amber-900">
+                <span class="text-amber-700 dark:text-amber-400">Gasto promedio:</span>
+                <span class="font-medium text-amber-900 dark:text-amber-300">
                   {{ expenses.length ? formatCurrency(totalExpenses / expenses.length) : formatCurrency(0) }}
                 </span>
               </div>
               <div class="flex items-center justify-between text-sm">
-                <span class="text-amber-700">Mayor categoría:</span>
-                <span class="font-medium text-amber-900">
+                <span class="text-amber-700 dark:text-amber-400">Mayor categoría:</span>
+                <span class="font-medium text-amber-900 dark:text-amber-300">
                   {{ estadisticasPorCategoria[0]?.categoria || 'N/A' }}
                 </span>
               </div>
@@ -534,24 +534,24 @@ onMounted(async () => {
           </div>
 
           <!-- Tips -->
-          <div class="bg-gradient-to-br from-red-50 to-rose-50 rounded-xl p-6 border border-red-200">
-            <h3 class="text-lg font-semibold text-red-800 mb-3 flex items-center gap-2">
+          <div class="bg-gradient-to-br from-red-50 to-rose-50 dark:from-red-900/30 dark:to-rose-900/30 rounded-xl p-6 border border-red-200 dark:border-red-800 transition-colors duration-300">
+            <h3 class="text-lg font-semibold text-red-800 dark:text-red-300 mb-3 flex items-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
               </svg>
               Consejos
             </h3>
-            <ul class="text-sm text-red-700 space-y-2">
+            <ul class="text-sm text-red-700 dark:text-red-400 space-y-2">
               <li class="flex items-start gap-2">
-                <span class="text-red-500">•</span>
+                <span class="text-red-500 dark:text-red-400">•</span>
                 Registra cada gasto inmediatamente para no olvidarlo
               </li>
               <li class="flex items-start gap-2">
-                <span class="text-red-500">•</span>
+                <span class="text-red-500 dark:text-red-400">•</span>
                 Establece límites por categoría para controlar gastos
               </li>
               <li class="flex items-start gap-2">
-                <span class="text-red-500">•</span>
+                <span class="text-red-500 dark:text-red-400">•</span>
                 Revisa semanalmente para identificar gastos innecesarios
               </li>
             </ul>
@@ -568,16 +568,16 @@ onMounted(async () => {
       class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
       @click.self="showModal = false"
     >
-      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all">
+      <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-md p-6 transform transition-all">
         <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-900">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100">
             {{ editingId ? 'Editar Egreso' : 'Nuevo Egreso' }}
           </h2>
           <button
             @click="showModal = false"
-            class="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            class="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
           >
-            <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -585,7 +585,7 @@ onMounted(async () => {
 
         <form @submit.prevent="saveExpense" class="space-y-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Descripción</label>
             <input
               v-model="formData.descripcion"
               type="text"

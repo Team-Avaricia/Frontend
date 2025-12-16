@@ -205,10 +205,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-full min-h-screen bg-gray-100 py-8 px-4">
+  <div class="w-full min-h-screen bg-gray-100 dark:bg-slate-900 py-8 px-4 transition-colors duration-300">
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
-      <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 mb-6 transition-colors duration-300">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div class="flex items-center gap-3">
             <div class="p-3 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl">
@@ -222,8 +222,8 @@ onMounted(async () => {
               </svg>
             </div>
             <div>
-              <h1 class="text-2xl font-bold text-gray-800">Reglas Financieras</h1>
-              <p class="text-gray-500 text-sm">Establece límites y metas para tus finanzas</p>
+              <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Reglas Financieras</h1>
+              <p class="text-gray-500 dark:text-gray-400 text-sm">Establece límites y metas para tus finanzas</p>
             </div>
           </div>
           <button
@@ -249,7 +249,7 @@ onMounted(async () => {
           <div
             class="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"
           ></div>
-          <p class="text-gray-600">Cargando reglas...</p>
+          <p class="text-gray-600 dark:text-gray-400">Cargando reglas...</p>
         </div>
       </div>
 
@@ -261,25 +261,25 @@ onMounted(async () => {
         <div
           v-for="rule in rules"
           :key="rule.id"
-          class="bg-white rounded-xl shadow-lg p-6 border-l-4"
-          :class="rule.isActive ? 'border-amber-500' : 'border-gray-300'"
+          class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 border-l-4 transition-colors duration-300"
+          :class="rule.isActive ? 'border-amber-500' : 'border-gray-300 dark:border-gray-600'"
         >
           <div class="flex justify-between items-start mb-4">
             <div>
               <span
                 class="inline-block px-2 py-1 text-xs font-medium rounded-full mb-2"
-                :class="rule.isActive ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'"
+                :class="rule.isActive ? 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'"
               >
                 {{ rule.isActive ? 'Activa' : 'Inactiva' }}
               </span>
-              <h3 class="font-semibold text-gray-800">{{ getRuleTypeLabel(rule.type) }}</h3>
-              <p v-if="rule.category" class="text-sm text-gray-500">{{ rule.category }}</p>
+              <h3 class="font-semibold text-gray-800 dark:text-gray-100">{{ getRuleTypeLabel(rule.type) }}</h3>
+              <p v-if="rule.category" class="text-sm text-gray-500 dark:text-gray-400">{{ rule.category }}</p>
             </div>
             <div class="flex gap-1">
               <button
                 v-if="rule.isActive"
                 @click="deactivateRule(rule.id)"
-                class="p-1.5 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                class="p-1.5 text-gray-400 dark:text-gray-500 hover:text-yellow-600 dark:hover:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/30 rounded-lg transition-colors"
                 title="Desactivar"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -293,7 +293,7 @@ onMounted(async () => {
               </button>
               <button
                 @click="deleteRule(rule.id)"
-                class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                class="p-1.5 text-gray-400 dark:text-gray-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                 title="Eliminar"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -310,10 +310,10 @@ onMounted(async () => {
 
           <div class="mb-4">
             <div class="flex justify-between text-sm mb-1">
-              <span class="text-gray-500"
+              <span class="text-gray-500 dark:text-gray-400"
                 >Límite {{ getPeriodLabel(rule.period).toLowerCase() }}</span
               >
-              <span class="font-semibold text-gray-800">{{
+              <span class="font-semibold text-gray-800 dark:text-gray-100">{{
                 formatCurrency(rule.amountLimit)
               }}</span>
             </div>
@@ -322,18 +322,18 @@ onMounted(async () => {
           <!-- Progress Bar -->
           <div v-if="getProgressForRule(rule.id)" class="mt-4">
             <div class="flex justify-between text-xs mb-1">
-              <span class="text-gray-500">Progreso</span>
+              <span class="text-gray-500 dark:text-gray-400">Progreso</span>
               <span
                 :class="
                   getProgressForRule(rule.id)?.isOverBudget
-                    ? 'text-red-600 font-semibold'
-                    : 'text-gray-600'
+                    ? 'text-red-600 dark:text-red-400 font-semibold'
+                    : 'text-gray-600 dark:text-gray-400'
                 "
               >
                 {{ (getProgressForRule(rule.id)?.percentUsed || 0).toFixed(0) }}%
               </span>
             </div>
-            <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="w-full bg-gray-200 dark:bg-slate-600 rounded-full h-2">
               <div
                 :class="getProgressColor(getProgressForRule(rule.id)?.percentUsed || 0)"
                 class="h-2 rounded-full transition-all duration-500"
@@ -343,10 +343,10 @@ onMounted(async () => {
               ></div>
             </div>
             <div class="flex justify-between text-xs mt-2">
-              <span class="text-gray-500">
+              <span class="text-gray-500 dark:text-gray-400">
                 Gastado: {{ formatCurrency(getProgressForRule(rule.id)?.spent || 0) }}
               </span>
-              <span class="text-gray-500">
+              <span class="text-gray-500 dark:text-gray-400">
                 Disponible: {{ formatCurrency(getProgressForRule(rule.id)?.remaining || 0) }}
               </span>
             </div>

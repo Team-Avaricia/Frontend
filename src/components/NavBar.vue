@@ -1,5 +1,5 @@
 <template>
-  <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b border-gray-300 shadow-lg" style="background-color: #F4F4F4;">
+  <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b border-gray-300 dark:border-gray-700 shadow-lg bg-[#F4F4F4] dark:bg-slate-900 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <!-- Left Section -->
@@ -8,7 +8,7 @@
           <button
             v-if="isAuthenticated && isProtectedRoute"
             @click="toggleSidebar"
-            class="p-2 rounded-xl text-gray-600 hover:bg-gradient-to-br hover:from-purple-50 hover:to-indigo-50 transition-all duration-300 lg:hidden group"
+            class="p-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gradient-to-br hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/30 dark:hover:to-indigo-900/30 transition-all duration-300 lg:hidden group"
           >
             <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -26,24 +26,39 @@
               <h1 class="text-xl font-bold bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-600 bg-clip-text text-transparent group-hover:from-purple-500 group-hover:to-indigo-500 transition-all duration-300">
                 Riwi Wallet
               </h1>
-              <p class="text-[10px] text-gray-500 font-medium -mt-1">Tu asistente financiero</p>
+              <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium -mt-1">Tu asistente financiero</p>
             </div>
           </RouterLink>
 
           <!-- Breadcrumbs (Only when authenticated) -->
-          <div v-if="isAuthenticated && isProtectedRoute" class="hidden md:flex items-center gap-2 ml-4 pl-4 border-l border-gray-300">
-            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div v-if="isAuthenticated && isProtectedRoute" class="hidden md:flex items-center gap-2 ml-4 pl-4 border-l border-gray-300 dark:border-gray-600">
+            <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
-            <span class="text-sm font-medium text-gray-600">{{ currentPageName }}</span>
+            <span class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ currentPageName }}</span>
           </div>
         </div>
 
         <!-- Right Section - Guest -->
         <div v-if="!isAuthenticated" class="flex items-center gap-3">
+          <!-- Theme Toggle Button -->
+          <button
+            @click="toggleTheme"
+            class="relative p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gradient-to-br hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/30 dark:hover:to-indigo-900/30 transition-all duration-300 group"
+            :title="theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+          >
+            <!-- Sun icon for dark mode -->
+            <svg v-if="theme === 'dark'" class="w-5 h-5 group-hover:scale-110 group-hover:rotate-12 transition-transform text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <!-- Moon icon for light mode -->
+            <svg v-else class="w-5 h-5 group-hover:scale-110 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
           <RouterLink
             to="/iniciar-sesion"
-            class="px-5 py-2.5 rounded-xl text-gray-700 hover:bg-gradient-to-br hover:from-gray-50 hover:to-gray-100 transition-all duration-300 font-semibold hover:scale-105 active:scale-95"
+            class="px-5 py-2.5 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gradient-to-br hover:from-gray-50 hover:to-gray-100 dark:hover:from-gray-800 dark:hover:to-gray-700 transition-all duration-300 font-semibold hover:scale-105 active:scale-95"
           >
             Iniciar sesión
           </RouterLink>
@@ -58,8 +73,24 @@
 
         <!-- Right Section - Authenticated -->
         <div v-if="isAuthenticated" class="flex items-center gap-3">
+          <!-- Theme Toggle Button -->
+          <button
+            @click="toggleTheme"
+            class="relative p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gradient-to-br hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/30 dark:hover:to-indigo-900/30 transition-all duration-300 group"
+            :title="theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
+          >
+            <!-- Sun icon for dark mode -->
+            <svg v-if="theme === 'dark'" class="w-5 h-5 group-hover:scale-110 group-hover:rotate-12 transition-transform text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <!-- Moon icon for light mode -->
+            <svg v-else class="w-5 h-5 group-hover:scale-110 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+
           <!-- Notifications Button -->
-          <button class="relative p-2.5 rounded-xl text-gray-600 hover:bg-gradient-to-br hover:from-purple-50 hover:to-indigo-50 transition-all duration-300 group">
+          <button class="relative p-2.5 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gradient-to-br hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/30 dark:hover:to-indigo-900/30 transition-all duration-300 group">
             <svg class="w-5 h-5 group-hover:scale-110 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
@@ -71,14 +102,14 @@
           <div class="relative" ref="userMenuRef">
             <button
               @click="toggleUserMenu"
-              class="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 hover:from-purple-50 hover:to-indigo-50 transition-all duration-300 border border-gray-200 hover:border-purple-300 group"
+              class="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/30 dark:hover:to-indigo-900/30 transition-all duration-300 border border-gray-200 dark:border-gray-600 hover:border-purple-300 dark:hover:border-purple-700 group"
             >
               <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300 ring-2 ring-white">
                 <span class="text-white font-bold text-sm">{{ userInitial }}</span>
               </div>
               <div class="hidden sm:flex flex-col items-start">
-                <span class="text-sm font-semibold text-gray-900">{{ userName }}</span>
-                <span class="text-xs text-gray-500">@{{ userHandle }}</span>
+                <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ userName }}</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">@{{ userHandle }}</span>
               </div>
               <svg
                 class="w-4 h-4 text-gray-500 transition-transform duration-300"
@@ -102,7 +133,7 @@
             >
               <div
                 v-if="isUserMenuOpen"
-                class="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden backdrop-blur-xl"
+                class="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden backdrop-blur-xl"
               >
                 <!-- User Info Header -->
                 <div class="bg-gradient-to-br from-purple-500 to-indigo-600 p-4 text-white">
@@ -130,8 +161,8 @@
                         </svg>
                       </div>
                       <div>
-                        <p class="text-sm font-semibold text-gray-900">Mi Perfil</p>
-                        <p class="text-xs text-gray-500">Ver información</p>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Mi Perfil</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Ver información</p>
                       </div>
                     </div>
                     <span class="px-2 py-0.5 text-[10px] font-semibold text-amber-700 bg-amber-100 rounded-full border border-amber-300">
@@ -142,34 +173,34 @@
                   <RouterLink
                     to="/configuracion"
                     @click="closeUserMenu"
-                    class="flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 transition-all duration-200 group"
+                    class="flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/30 dark:hover:to-indigo-900/30 transition-all duration-200 group"
                   >
-                    <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center group-hover:scale-110 transition-transform">
                       <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                     </div>
                     <div class="text-left">
-                      <p class="text-sm font-semibold text-gray-900">Configuración</p>
-                      <p class="text-xs text-gray-500">Preferencias</p>
+                      <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">Configuración</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">Preferencias</p>
                     </div>
                   </RouterLink>
 
-                  <div class="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-2"></div>
+                  <div class="h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent my-2"></div>
 
                   <button
                     @click="handleLogout"
-                    class="flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition-all duration-200 group w-full"
+                    class="flex items-center gap-3 px-4 py-3 hover:bg-red-50 dark:hover:bg-red-900/30 transition-all duration-200 group w-full"
                   >
-                    <div class="w-8 h-8 rounded-lg bg-red-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <div class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/50 flex items-center justify-center group-hover:scale-110 transition-transform">
                       <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                       </svg>
                     </div>
                     <div class="text-left">
-                      <p class="text-sm font-semibold text-red-600">Cerrar Sesión</p>
-                      <p class="text-xs text-gray-500">Salir de la cuenta</p>
+                      <p class="text-sm font-semibold text-red-600 dark:text-red-400">Cerrar Sesión</p>
+                      <p class="text-xs text-gray-500 dark:text-gray-400">Salir de la cuenta</p>
                     </div>
                   </button>
                 </div>
@@ -187,9 +218,11 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { authService } from '@/services/auth';
 import { useToast } from 'vue-toastification';
+import { useTheme } from '@/composables/useTheme';
 
 const router = useRouter();
 const toast = useToast();
+const { theme, toggleTheme } = useTheme();
 const emit = defineEmits<{ toggleSidebar: [] }>();
 
 const isAuthenticated = ref(false);
