@@ -27,13 +27,17 @@ interface Expense {
 
 // Categorías disponibles
 const categorias = [
-  'Alimentación',
+  'Comida',
   'Transporte',
   'Entretenimiento',
   'Salud',
   'Educación',
+  'Hogar',
+  'Ropa',
+  'Tecnología',
   'Servicios',
-  'Compras',
+  'Arriendo',
+  'Vivienda',
   'Otros'
 ];
 
@@ -224,13 +228,17 @@ const deleteExpense = async (id: string) => {
 const getCategoriaColor = (categoria: string) => {
   const colores: Record<string, string> = {
     'Vivienda': 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300',
-    'Alimentación': 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300',
+    'Comida': 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300',
+    'Alimentación': 'bg-orange-100 dark:bg-orange-900/50 text-orange-800 dark:text-orange-300', // Para compatibilidad
     'Transporte': 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
     'Servicios': 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300',
     'Salud': 'bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-300',
     'Educación': 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300',
     'Entretenimiento': 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300',
-    'Ropa': 'bg-teal-100 dark:bg-teal-900/50 text-teal-800 dark:text-teal-300',
+    'Ropa': 'bg-fuchsia-100 dark:bg-fuchsia-900/50 text-fuchsia-800 dark:text-fuchsia-300',
+    'Hogar': 'bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-300',
+    'Tecnología': 'bg-cyan-100 dark:bg-cyan-900/50 text-cyan-800 dark:text-cyan-300',
+    'Arriendo': 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300',
     'Deudas': 'bg-rose-100 dark:bg-rose-900/50 text-rose-800 dark:text-rose-300',
     'Otros': 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
   };
@@ -240,6 +248,7 @@ const getCategoriaColor = (categoria: string) => {
 const getCategoriaIcon = (categoria: string) => {
   const iconos: Record<string, string> = {
     'Vivienda': 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+    'Comida': 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z',
     'Alimentación': 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z',
     'Transporte': 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4',
     'Servicios': 'M13 10V3L4 14h7v7l9-11h-7z',
@@ -247,6 +256,9 @@ const getCategoriaIcon = (categoria: string) => {
     'Educación': 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z',
     'Entretenimiento': 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
     'Ropa': 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z',
+    'Hogar': 'M3 12l9-9 9 9M4 10.5V20a1 1 0 001 1h4v-7h2v7h4a1 1 0 001-1v-9.5',
+    'Tecnología': 'M9 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2h-2M9 7h6m-6 4h6m-6 4h6M9 3v18',
+    'Arriendo': 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
     'Deudas': 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z',
     'Otros': 'M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z'
   };
@@ -590,44 +602,44 @@ onMounted(async () => {
               v-model="formData.descripcion"
               type="text"
               required
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 placeholder-gray-400 dark:placeholder-gray-500"
               placeholder="Ej: Compra en supermercado"
             />
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Monto</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Monto</label>
             <div class="relative">
-              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+              <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">$</span>
               <input
                 v-model.number="formData.monto"
                 type="number"
                 step="0.01"
                 min="0"
                 required
-                class="w-full pl-8 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                class="w-full pl-8 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 placeholder-gray-400 dark:placeholder-gray-500"
                 placeholder="0.00"
               />
             </div>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Categoría</label>
             <select
               v-model="formData.categoria"
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
             >
               <option v-for="cat in categorias" :key="cat" :value="cat">{{ cat }}</option>
             </select>
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fecha</label>
             <input
               v-model="formData.fecha"
               type="date"
               required
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
             />
           </div>
 
@@ -635,7 +647,7 @@ onMounted(async () => {
             <button
               type="button"
               @click="showModal = false"
-              class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              class="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-slate-700 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-600 transition-colors font-medium"
             >
               Cancelar
             </button>

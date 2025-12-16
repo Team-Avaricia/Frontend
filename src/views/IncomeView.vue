@@ -30,9 +30,7 @@ const categorias = [
   'Salario',
   'Freelance',
   'Inversiones',
-  'Ventas',
   'Regalos',
-  'Reembolsos',
   'Otros'
 ];
 
@@ -219,9 +217,7 @@ const getCategoriaColor = (categoria: string) => {
     'Salario': 'bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300',
     'Freelance': 'bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300',
     'Inversiones': 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300',
-    'Ventas': 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300',
     'Regalos': 'bg-pink-100 dark:bg-pink-900/50 text-pink-800 dark:text-pink-300',
-    'Reembolsos': 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300',
     'Otros': 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300'
   };
   return colores[categoria] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300';
