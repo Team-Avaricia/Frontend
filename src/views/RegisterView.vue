@@ -1,4 +1,4 @@
-﻿﻿<template>
+﻿<template>
   <div class="w-full flex items-center justify-center min-h-screen py-12 px-4 bg-[#F4F4F4] dark:bg-slate-900 transition-colors duration-300">
     <div class="w-full max-w-md p-8 space-y-6 bg-white dark:bg-slate-800 rounded-lg shadow-xl transition-colors duration-300">
       <div class="text-center">
