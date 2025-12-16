@@ -165,10 +165,12 @@ export interface TelegramLinkResponse {
 }
 
 export interface TelegramStatusResponse {
-  isLinked: boolean;
+  linked: boolean;
   telegramId?: number;
   telegramUsername?: string;
   linkedAt?: string;
+  pendingCode?: boolean;
+  codeExpiresAt?: string;
 }
 
 export interface LinkTelegramRequest {

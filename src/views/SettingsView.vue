@@ -14,7 +14,7 @@ const telegramStatus = ref<TelegramStatusResponse | null>(null)
 const telegramLink = ref<TelegramLinkResponse | null>(null)
 const isUnlinking = ref(false)
 
-const isLinked = computed(() => telegramStatus.value?.isLinked ?? false)
+const isLinked = computed(() => telegramStatus.value?.linked ?? false)
 
 const loadUserInfo = () => {
   const userInfoStr = localStorage.getItem('userInfo')
@@ -90,7 +90,7 @@ const unlinkTelegram = async () => {
 
   try {
     await mainApi.users.deleteTelegram(userId.value)
-    telegramStatus.value = { isLinked: false }
+    telegramStatus.value = { linked: false }
     telegramLink.value = null
     successMessage.value = 'Telegram desvinculado exitosamente'
     setTimeout(() => {
