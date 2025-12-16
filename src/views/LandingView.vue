@@ -1,4 +1,4 @@
-﻿﻿<script setup lang="ts">
+﻿<script setup lang="ts">
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -119,25 +119,25 @@ const benefits = [
     </section>
 
     <!-- Features Section with Tailwind -->
-    <section class="py-20 px-5 bg-gray-50">
+    <section class="py-20 px-5 bg-gray-50 dark:bg-slate-800 transition-colors duration-300">
       <div class="max-w-7xl mx-auto">
-        <h2 class="text-4xl lg:text-5xl text-center mb-4 text-gray-800 font-bold">
+        <h2 class="text-4xl lg:text-5xl text-center mb-4 text-gray-800 dark:text-gray-100 font-bold">
           ¿Por qué Riwi Wallet?
         </h2>
-        <p class="text-center text-lg text-gray-600 mb-12">
+        <p class="text-center text-lg text-gray-600 dark:text-gray-400 mb-12">
           Una solución de vanguardia que transforma la gestión financiera tradicional
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
             v-for="(feature, index) in features"
             :key="index"
-            class="bg-white p-10 rounded-xl text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            class="bg-white dark:bg-slate-700 p-10 rounded-xl text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
           >
             <div class="text-5xl lg:text-6xl mb-5">{{ feature.icon }}</div>
-            <h3 class="text-xl lg:text-2xl mb-4 text-gray-800 font-semibold">
+            <h3 class="text-xl lg:text-2xl mb-4 text-gray-800 dark:text-gray-100 font-semibold">
               {{ feature.title }}
             </h3>
-            <p class="text-gray-600 leading-relaxed">
+            <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
               {{ feature.description }}
             </p>
           </div>
@@ -146,9 +146,9 @@ const benefits = [
     </section>
 
     <!-- How It Works Section with Tailwind -->
-    <section class="py-20 px-5 bg-white">
+    <section class="py-20 px-5 bg-white dark:bg-slate-900 transition-colors duration-300">
       <div class="max-w-7xl mx-auto">
-        <h2 class="text-4xl lg:text-5xl text-center mb-12 text-gray-800 font-bold">
+        <h2 class="text-4xl lg:text-5xl text-center mb-12 text-gray-800 dark:text-gray-100 font-bold">
           Cómo Funciona
         </h2>
         <div class="flex flex-wrap justify-between items-center gap-5 max-w-5xl mx-auto">
@@ -156,44 +156,44 @@ const benefits = [
             <div class="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-700 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-5">
               1
             </div>
-            <h3 class="text-xl lg:text-2xl mb-2.5 text-gray-800 font-semibold">Regístrate</h3>
-            <p class="text-gray-600 text-sm leading-relaxed">
+            <h3 class="text-xl lg:text-2xl mb-2.5 text-gray-800 dark:text-gray-100 font-semibold">Regístrate</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
               Crea tu cuenta en segundos y conecta tu mensajería favorita
             </p>
           </div>
 
-          <div class="hidden lg:block text-3xl text-gray-300 font-bold">→</div>
+          <div class="hidden lg:block text-3xl text-gray-300 dark:text-gray-600 font-bold">→</div>
 
           <div class="flex-1 min-w-[180px] text-center">
             <div class="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-700 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-5">
               2
             </div>
-            <h3 class="text-xl lg:text-2xl mb-2.5 text-gray-800 font-semibold">Configura</h3>
-            <p class="text-gray-600 text-sm leading-relaxed">
+            <h3 class="text-xl lg:text-2xl mb-2.5 text-gray-800 dark:text-gray-100 font-semibold">Configura</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
               Define tu presupuesto mensual y reglas personalizadas
             </p>
           </div>
 
-          <div class="hidden lg:block text-3xl text-gray-300 font-bold">→</div>
+          <div class="hidden lg:block text-3xl text-gray-300 dark:text-gray-600 font-bold">→</div>
 
           <div class="flex-1 min-w-[180px] text-center">
             <div class="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-700 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-5">
               3
             </div>
-            <h3 class="text-xl lg:text-2xl mb-2.5 text-gray-800 font-semibold">Consulta</h3>
-            <p class="text-gray-600 text-sm leading-relaxed">
+            <h3 class="text-xl lg:text-2xl mb-2.5 text-gray-800 dark:text-gray-100 font-semibold">Consulta</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
               Pregunta antes de gastar y recibe respuestas instantáneas
             </p>
           </div>
 
-          <div class="hidden lg:block text-3xl text-gray-300 font-bold">→</div>
+          <div class="hidden lg:block text-3xl text-gray-300 dark:text-gray-600 font-bold">→</div>
 
           <div class="flex-1 min-w-[180px] text-center">
             <div class="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-700 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-5">
               4
             </div>
-            <h3 class="text-xl lg:text-2xl mb-2.5 text-gray-800 font-semibold">Ahorra</h3>
-            <p class="text-gray-600 text-sm leading-relaxed">
+            <h3 class="text-xl lg:text-2xl mb-2.5 text-gray-800 dark:text-gray-100 font-semibold">Ahorra</h3>
+            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
               Alcanza tus metas financieras con control proactivo
             </p>
           </div>
@@ -246,17 +246,17 @@ const benefits = [
     </section>
 
     <!-- CTA Section with Tailwind -->
-    <section class="py-20 px-5 bg-gray-800 text-white text-center">
+    <section class="py-20 px-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900 text-gray-800 dark:text-gray-100 text-center transition-colors duration-300">
       <div class="max-w-7xl mx-auto">
         <h2 class="text-4xl lg:text-5xl mb-5 font-bold">
           ¿Listo para Transformar tus Finanzas?
         </h2>
-        <p class="text-lg lg:text-xl mb-10 opacity-90">
+        <p class="text-lg lg:text-xl mb-10 text-gray-600 dark:text-gray-400">
           Únete a miles de usuarios que ya controlan sus gastos de forma inteligente
         </p>
         <button
           @click="navigateToRegister"
-          class="px-12 py-4 text-lg bg-white text-indigo-600 rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl shadow-lg"
+          class="px-12 py-4 text-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg font-semibold uppercase tracking-wide transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl shadow-lg hover:from-indigo-700 hover:to-purple-700"
         >
           Crear Cuenta Gratuita
         </button>

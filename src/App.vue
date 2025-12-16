@@ -46,7 +46,7 @@ router.afterEach(() => {
 </script>
 
 <template>
-  <div class="app-container">
+  <div class="app-container bg-[#F4F4F4] dark:bg-slate-900 transition-colors duration-300">
     <NavBar @toggle-sidebar="toggleSidebar" />
 
     <div class="app-content">
@@ -68,7 +68,6 @@ router.afterEach(() => {
 <style scoped>
 .app-container {
   min-height: 100vh;
-  background-color: #f9fafb;
 }
 
 .app-content {
@@ -80,7 +79,7 @@ router.afterEach(() => {
   transition: margin-left 0.3s ease-in-out;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023px) {
   .app-main {
     margin-left: 0 !important;
   }

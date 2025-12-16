@@ -3,9 +3,14 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import Toast from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
+import { useTheme } from '@/composables/useTheme'
 
 import App from './App.vue'
 import router from './router'
+
+// Initialize theme before mounting the app
+const { initTheme } = useTheme()
+initTheme()
 
 const app = createApp(App)
 

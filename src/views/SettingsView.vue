@@ -2,6 +2,9 @@
 import { ref, onMounted, computed } from 'vue'
 import { mainApi } from '@/services/api'
 import type { TelegramStatusResponse, TelegramLinkResponse } from '@/types/api'
+import { useTheme } from '@/composables/useTheme'
+
+const { theme, toggleTheme } = useTheme()
 
 const loading = ref(true)
 const error = ref<string | null>(null)
@@ -142,10 +145,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="w-full min-h-screen bg-gray-50 py-8 px-4">
-    <div class="max-w-4xl mx-auto">
+  <div class="w-full min-h-screen bg-gray-100 dark:bg-slate-900 py-8 px-4 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto">
       <!-- Header -->
-      <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 mb-6 transition-colors duration-300">
         <div class="flex items-center gap-3">
           <div class="p-3 bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl">
             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -164,8 +167,8 @@ onMounted(async () => {
             </svg>
           </div>
           <div>
-            <h1 class="text-2xl font-bold text-gray-800">Configuración</h1>
-            <p class="text-gray-500 text-sm">Gestiona tus integraciones y preferencias</p>
+            <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Configuración</h1>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">Gestiona tus integraciones y preferencias</p>
           </div>
         </div>
       </div>
@@ -173,7 +176,7 @@ onMounted(async () => {
       <!-- Success Message -->
       <div
         v-if="successMessage"
-        class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6 flex items-center gap-2"
+        class="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded-xl mb-6 flex items-center gap-2"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -189,7 +192,7 @@ onMounted(async () => {
       <!-- Error Message -->
       <div
         v-if="error"
-        class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 flex items-center gap-2"
+        class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl mb-6 flex items-center gap-2"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
@@ -206,16 +209,65 @@ onMounted(async () => {
       <div v-if="loading" class="flex items-center justify-center min-h-[400px]">
         <div class="text-center">
           <div
-            class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600 mx-auto mb-4"
+            class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600 dark:border-gray-400 mx-auto mb-4"
           ></div>
-          <p class="text-gray-600">Cargando configuración...</p>
+          <p class="text-gray-600 dark:text-gray-400">Cargando configuración...</p>
         </div>
       </div>
 
       <div v-else class="space-y-6">
+        <!-- Theme Settings -->
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden transition-colors duration-300">
+          <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+            <div class="flex items-center gap-3">
+              <div class="p-2 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-lg">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Apariencia</h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                  Personaliza el aspecto visual de la aplicación
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="p-2 rounded-lg" :class="theme === 'dark' ? 'bg-indigo-900/50' : 'bg-yellow-100'">
+                  <svg v-if="theme === 'dark'" class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                  <svg v-else class="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium text-gray-800 dark:text-gray-100">Modo {{ theme === 'dark' ? 'Oscuro' : 'Claro' }}</p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">{{ theme === 'dark' ? 'Interfaz oscura activa' : 'Interfaz clara activa' }}</p>
+                </div>
+              </div>
+              <button
+                @click="toggleTheme"
+                class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                :class="theme === 'dark' ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-gray-600'"
+              >
+                <span
+                  aria-hidden="true"
+                  class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                  :class="theme === 'dark' ? 'translate-x-5' : 'translate-x-0'"
+                ></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Telegram Integration -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-          <div class="p-6 border-b border-gray-100">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg overflow-hidden transition-colors duration-300">
+          <div class="p-6 border-b border-gray-100 dark:border-gray-700">
             <div class="flex items-center gap-3">
               <div class="p-2 bg-blue-500 rounded-lg">
                 <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
@@ -225,8 +277,8 @@ onMounted(async () => {
                 </svg>
               </div>
               <div>
-                <h2 class="text-lg font-semibold text-gray-800">Telegram</h2>
-                <p class="text-sm text-gray-500">
+                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Telegram</h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400">
                   Conecta tu cuenta de Telegram para recibir notificaciones
                 </p>
               </div>
@@ -236,7 +288,7 @@ onMounted(async () => {
           <div class="p-6">
             <!-- Linked State -->
             <div v-if="isLinked" class="space-y-4">
-              <div class="flex items-center gap-3 p-4 bg-green-50 rounded-xl">
+              <div class="flex items-center gap-3 p-4 bg-green-50 dark:bg-green-900/30 rounded-xl">
                 <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
                   <svg
                     class="w-5 h-5 text-white"
@@ -253,19 +305,19 @@ onMounted(async () => {
                   </svg>
                 </div>
                 <div>
-                  <p class="font-semibold text-green-800">Cuenta vinculada</p>
-                  <p v-if="telegramStatus?.telegramUsername" class="text-sm text-green-600">
+                  <p class="font-semibold text-green-800 dark:text-green-300">Cuenta vinculada</p>
+                  <p v-if="telegramStatus?.telegramUsername" class="text-sm text-green-600 dark:text-green-400">
                     @{{ telegramStatus.telegramUsername }}
                   </p>
-                  <p v-if="telegramStatus?.linkedAt" class="text-xs text-green-500">
+                  <p v-if="telegramStatus?.linkedAt" class="text-xs text-green-500 dark:text-green-500">
                     Vinculado el {{ formatDate(telegramStatus.linkedAt) }}
                   </p>
                 </div>
               </div>
 
-              <div class="bg-gray-50 rounded-xl p-4">
-                <h4 class="font-medium text-gray-700 mb-2">Funcionalidades disponibles:</h4>
-                <ul class="space-y-2 text-sm text-gray-600">
+              <div class="bg-gray-50 dark:bg-slate-700/50 rounded-xl p-4">
+                <h4 class="font-medium text-gray-700 dark:text-gray-200 mb-2">Funcionalidades disponibles:</h4>
+                <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                   <li class="flex items-center gap-2">
                     <svg
                       class="w-4 h-4 text-green-500"
@@ -357,10 +409,10 @@ onMounted(async () => {
 
             <!-- Not Linked State -->
             <div v-else class="space-y-4">
-              <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
-                <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+              <div class="flex items-center gap-3 p-4 bg-gray-50 dark:bg-slate-700/50 rounded-xl">
+                <div class="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
                   <svg
-                    class="w-5 h-5 text-gray-500"
+                    class="w-5 h-5 text-gray-500 dark:text-gray-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -374,22 +426,22 @@ onMounted(async () => {
                   </svg>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-700">Cuenta no vinculada</p>
-                  <p class="text-sm text-gray-500">
+                  <p class="font-semibold text-gray-700 dark:text-gray-200">Cuenta no vinculada</p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
                     Vincula tu Telegram para recibir notificaciones
                   </p>
                 </div>
               </div>
 
-              <div v-if="telegramLink" class="bg-blue-50 rounded-xl p-4">
-                <p class="text-sm text-blue-800 mb-3">
+              <div v-if="telegramLink" class="bg-blue-50 dark:bg-blue-900/30 rounded-xl p-4">
+                <p class="text-sm text-blue-800 dark:text-blue-300 mb-3">
                   Haz clic en el siguiente enlace para vincular tu cuenta de Telegram:
                 </p>
 
                 <!-- Mostrar el enlace para debugging -->
-                <div class="mb-3 p-2 bg-white rounded border border-blue-200">
-                  <p class="text-xs text-gray-500 mb-1">Enlace de vinculación:</p>
-                  <p class="text-xs font-mono text-blue-600 break-all">{{ telegramLink.linkUrl }}</p>
+                <div class="mb-3 p-2 bg-white dark:bg-slate-700 rounded border border-blue-200 dark:border-blue-800">
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Enlace de vinculación:</p>
+                  <p class="text-xs font-mono text-blue-600 dark:text-blue-400 break-all">{{ telegramLink.linkUrl }}</p>
                 </div>
 
                 <div class="flex gap-2">
@@ -409,7 +461,7 @@ onMounted(async () => {
                   </a>
                   <button
                     @click="copyLink"
-                    class="px-4 py-3 border border-blue-300 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors"
+                    class="px-4 py-3 border border-blue-300 dark:border-blue-700 text-blue-600 dark:text-blue-400 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
                     title="Copiar enlace"
                   >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -422,7 +474,7 @@ onMounted(async () => {
                     </svg>
                   </button>
                 </div>
-                <p v-if="telegramLink.expiresAt" class="text-xs text-blue-600 mt-2">
+                <p v-if="telegramLink.expiresAt" class="text-xs text-blue-600 dark:text-blue-400 mt-2">
                   El enlace expira el {{ formatDate(telegramLink.expiresAt) }}
                 </p>
               </div>
@@ -447,11 +499,11 @@ onMounted(async () => {
         </div>
 
         <!-- More Settings Coming Soon -->
-        <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 transition-colors duration-300">
           <div class="flex items-center gap-3 opacity-50">
-            <div class="p-2 bg-gray-200 rounded-lg">
+            <div class="p-2 bg-gray-200 dark:bg-gray-700 rounded-lg">
               <svg
-                class="w-6 h-6 text-gray-500"
+                class="w-6 h-6 text-gray-500 dark:text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -465,8 +517,8 @@ onMounted(async () => {
               </svg>
             </div>
             <div>
-              <h2 class="text-lg font-semibold text-gray-800">Más configuraciones</h2>
-              <p class="text-sm text-gray-500">Próximamente más opciones de configuración</p>
+              <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Más configuraciones</h2>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Próximamente más opciones de configuración</p>
             </div>
           </div>
         </div>

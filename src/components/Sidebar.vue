@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 ease-in-out z-40 shadow-lg"
+    class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 border-r border-gray-300 dark:border-gray-700 transition-all duration-300 ease-in-out z-40 shadow-lg bg-[#F4F4F4] dark:bg-slate-900"
     :class="{ '-translate-x-full': !isOpen, 'translate-x-0': isOpen }"
   >
     <div class="flex flex-col h-full py-4">
@@ -9,15 +9,10 @@
         <img
           src="@/assets/Riwi Wallet Logo.svg"
           alt="Riwi Wallet Logo"
-          class="w-10 h-10 dark:hidden"
-        />
-        <img
-          src="@/assets/Riwi Wallet Logo.svg"
-          alt="Riwi Wallet Logo"
-          class="w-10 h-10 hidden dark:block"
+          class="w-10 h-10"
         />
         <div class="text-center">
-          <h2 class="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-indigo-400">
+          <h2 class="text-lg font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
             Riwi Wallet
           </h2>
         </div>
@@ -53,7 +48,7 @@
       <div class="px-4 mb-4">
         <div class="grid grid-cols-2 gap-2">
           <div
-            class="bg-green-50 dark:bg-green-900/20 rounded-lg p-2 border border-green-200 dark:border-green-800"
+            class="bg-green-50 dark:bg-green-900/30 rounded-lg p-2 border border-green-200 dark:border-green-800"
           >
             <div class="flex items-center gap-1.5">
               <div class="w-6 h-6 rounded bg-green-500 flex items-center justify-center">
@@ -86,7 +81,7 @@
             </div>
           </div>
           <div
-            class="bg-red-50 dark:bg-red-900/20 rounded-lg p-2 border border-red-200 dark:border-red-800"
+            class="bg-red-50 dark:bg-red-900/30 rounded-lg p-2 border border-red-200 dark:border-red-800"
           >
             <div class="flex items-center gap-1.5">
               <div class="w-6 h-6 rounded bg-red-500 flex items-center justify-center">
@@ -136,7 +131,7 @@
           :class="
             isActive('/panel-control')
               ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-md shadow-purple-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:translate-x-1'
           "
         >
           <div
@@ -144,7 +139,7 @@
             :class="
               isActive('/panel-control')
                 ? 'bg-white/20'
-                : 'bg-purple-100 dark:bg-purple-900/30 group-hover:scale-110'
+                : 'bg-purple-100 dark:bg-purple-900/50 group-hover:scale-110'
             "
           >
             <svg
@@ -177,7 +172,7 @@
           :class="
             isActive('/ingresos')
               ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-md shadow-green-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:translate-x-1'
           "
         >
           <div
@@ -185,7 +180,7 @@
             :class="
               isActive('/ingresos')
                 ? 'bg-white/20'
-                : 'bg-green-100 dark:bg-green-900/30 group-hover:scale-110'
+                : 'bg-green-100 dark:bg-green-900/50 group-hover:scale-110'
             "
           >
             <svg
@@ -216,7 +211,7 @@
           :class="
             isActive('/egresos')
               ? 'bg-gradient-to-r from-red-500 to-rose-600 text-white shadow-md shadow-red-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:translate-x-1'
           "
         >
           <div
@@ -224,7 +219,7 @@
             :class="
               isActive('/egresos')
                 ? 'bg-white/20'
-                : 'bg-red-100 dark:bg-red-900/30 group-hover:scale-110'
+                : 'bg-red-100 dark:bg-red-900/50 group-hover:scale-110'
             "
           >
             <svg
@@ -261,7 +256,7 @@
           :class="
             isActive('/reportes')
               ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-md shadow-blue-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:translate-x-1'
           "
         >
           <div
@@ -269,7 +264,7 @@
             :class="
               isActive('/reportes')
                 ? 'bg-white/20'
-                : 'bg-blue-100 dark:bg-blue-900/30 group-hover:scale-110'
+                : 'bg-blue-100 dark:bg-blue-900/50 group-hover:scale-110'
             "
           >
             <svg
@@ -300,7 +295,7 @@
           :class="
             isActive('/reglas-financieras')
               ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md shadow-amber-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:translate-x-1'
           "
         >
           <div
@@ -308,7 +303,7 @@
             :class="
               isActive('/reglas-financieras')
                 ? 'bg-white/20'
-                : 'bg-amber-100 dark:bg-amber-900/30 group-hover:scale-110'
+                : 'bg-amber-100 dark:bg-amber-900/50 group-hover:scale-110'
             "
           >
             <svg
@@ -343,7 +338,7 @@
           :class="
             isActive('/configuracion')
               ? 'bg-gradient-to-r from-gray-600 to-gray-800 text-white shadow-md shadow-gray-500/30'
-              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:translate-x-1'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:translate-x-1'
           "
         >
           <div
@@ -351,7 +346,7 @@
             :class="
               isActive('/configuracion')
                 ? 'bg-white/20'
-                : 'bg-gray-100 dark:bg-gray-700/50 group-hover:scale-110'
+                : 'bg-gray-100 dark:bg-gray-700 group-hover:scale-110'
             "
           >
             <svg
@@ -389,7 +384,7 @@
       <div class="px-4 pt-3 border-t border-gray-200 dark:border-gray-700 space-y-2">
         <!-- Help Button -->
         <button
-          class="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all group"
+          class="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all group"
         >
           <svg
             class="w-4 h-4 group-hover:rotate-12 transition-transform"
@@ -409,7 +404,7 @@
 
         <!-- Version Info -->
         <div
-          class="flex items-center justify-between px-3 py-2 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-lg"
+          class="flex items-center justify-between px-3 py-2 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-lg"
         >
           <div class="flex items-center gap-2">
             <div
