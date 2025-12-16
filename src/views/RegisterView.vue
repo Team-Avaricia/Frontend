@@ -2,19 +2,17 @@
   <div class="w-full flex items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-purple-100 py-12 px-4">
     <div class="w-full max-w-md p-8 space-y-6 bg-white dark:bg-gray-800 rounded-lg shadow-xl transition-colors duration-300">
       <div class="text-center">
-        <div class="flex items-center justify-center gap-2 mb-4">
+        <div class="flex items-center justify-center gap-3 mb-4">
           <img
             src="@/assets/Riwi Wallet Logo.svg"
             alt="Riwi Wallet Logo"
             class="w-12 h-12"
           />
-          <img
-            src="@/assets/Riwi Wallet Logotipo.svg"
-            alt="Riwi Wallet"
-            class="h-8"
-          />
+          <h2 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            Riwi Wallet
+          </h2>
         </div>
-        <h1 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Crea tu Cuenta</h1>
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Crea tu Cuenta</h1>
         <p class="mt-2 text-gray-500 dark:text-gray-400">
           Ya tienes una?
           <RouterLink to="/iniciar-sesion" class="font-medium text-indigo-600 hover:text-purple-600 transition-colors">

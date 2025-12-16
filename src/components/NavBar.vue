@@ -22,11 +22,12 @@
               alt="Riwi Wallet Logo"
               class="w-10 h-10 transition-all duration-300 group-hover:scale-105 group-hover:rotate-3"
             />
-            <img
-              src="@/assets/Riwi Wallet Logotipo.svg"
-              alt="Riwi Wallet"
-              class="h-8 transition-all duration-300 group-hover:scale-105 hidden sm:block"
-            />
+            <div>
+              <h1 class="text-xl font-bold bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-600 bg-clip-text text-transparent group-hover:from-purple-500 group-hover:to-indigo-500 transition-all duration-300">
+                Riwi Wallet
+              </h1>
+              <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium -mt-1">Tu asistente financiero</p>
+            </div>
           </RouterLink>
 
           <!-- Breadcrumbs (Only when authenticated) -->
@@ -118,24 +119,30 @@
 
                 <!-- Menu Items -->
                 <div class="py-2">
+                  <button
+                    disabled
+                    class="flex items-center justify-between gap-3 px-4 py-3 opacity-60 cursor-not-allowed w-full relative"
+                  >
+                    <div class="flex items-center gap-3">
+                      <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white">Mi Perfil</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Ver información</p>
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 text-[10px] font-semibold text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 rounded-full border border-amber-300 dark:border-amber-700">
+                      Próximamente
+                    </span>
+                  </button>
+
                   <RouterLink
-                    to="/panel-control"
+                    to="/configuracion"
                     @click="closeUserMenu"
                     class="flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/20 dark:hover:to-indigo-900/20 transition-all duration-200 group"
-                  >
-                    <div class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <svg class="w-4 h-4 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p class="text-sm font-semibold text-gray-900 dark:text-white">Mi Perfil</p>
-                      <p class="text-xs text-gray-500 dark:text-gray-400">Ver información</p>
-                    </div>
-                  </RouterLink>
-
-                  <button
-                    class="flex items-center gap-3 px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 dark:hover:from-purple-900/20 dark:hover:to-indigo-900/20 transition-all duration-200 group w-full"
                   >
                     <div class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center group-hover:scale-110 transition-transform">
                       <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +154,7 @@
                       <p class="text-sm font-semibold text-gray-900 dark:text-white">Configuración</p>
                       <p class="text-xs text-gray-500 dark:text-gray-400">Preferencias</p>
                     </div>
-                  </button>
+                  </RouterLink>
 
                   <div class="h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent my-2"></div>
 

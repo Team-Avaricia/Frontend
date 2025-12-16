@@ -60,21 +60,17 @@ const benefits = [
         <div class="z-10">
           <div class="flex items-center gap-3 mb-6">
             <img
-              src="@/assets/Riwi Wallet Logo.svg"
+              src="@/assets/Riwi Wallet Logo Alt.svg"
               alt="Riwi Wallet Logo"
               class="w-16 h-16"
             />
-            <img
-              src="@/assets/Riwi Wallet Logotipo.svg"
-              alt="Riwi Wallet"
-              class="h-12"
-            />
+            <h1 class="text-5xl lg:text-6xl font-extrabold tracking-tight text-white">
+              Riwi Wallet
+            </h1>
           </div>
-          <h1 class="mb-5 flex flex-col gap-2.5">
-            <span class="text-2xl lg:text-3xl font-semibold opacity-95">
-              Tu Asistente Financiero Inteligente
-            </span>
-          </h1>
+          <h2 class="mb-5 text-2xl lg:text-3xl font-semibold opacity-95">
+            Tu Asistente Financiero Inteligente
+          </h2>
           <p class="text-lg lg:text-xl leading-relaxed mb-8 opacity-90">
             Transforma tu gestión financiera con IA proactiva. Controla tus gastos en tiempo real
             a través de WhatsApp o Telegram y toma decisiones inteligentes antes de gastar.

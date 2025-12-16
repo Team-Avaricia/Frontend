@@ -1,4 +1,4 @@
-?<script setup lang="ts">
+<script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { mainApi } from '@/services/api';
@@ -25,13 +25,13 @@ interface Expense {
   categoria: string;
 }
 
-// Categor�as disponibles
+// Categorías disponibles
 const categorias = [
-  'Alimentaci�n',
+  'Alimentación',
   'Transporte',
   'Entretenimiento',
   'Salud',
-  'Educaci�n',
+  'Educación',
   'Servicios',
   'Compras',
   'Otros'
@@ -56,18 +56,18 @@ const filtroBusqueda = ref('');
 const ordenarPor = ref<'fecha' | 'monto'>('fecha');
 const ordenAscendente = ref(false);
 
-// C�lculos
+// C•lculos
 const totalExpenses = computed(() => expenses.value.reduce((sum, item) => sum + item.monto, 0));
 
 const expensesFiltered = computed(() => {
   let resultado = [...expenses.value];
 
-  // Filtrar por categor�a
+  // Filtrar por categoría
   if (filtroCategoria.value) {
     resultado = resultado.filter(e => e.categoria === filtroCategoria.value);
   }
 
-  // Filtrar por b�squeda
+  // Filtrar por b•squeda
   if (filtroBusqueda.value) {
     const busqueda = filtroBusqueda.value.toLowerCase();
     resultado = resultado.filter(e =>
@@ -130,7 +130,7 @@ const loadExpenses = async () => {
     // Convertir Transaction a Egreso
     expenses.value = response.data.map((t: Transaction) => ({
       id: t.id,
-      descripcion: t.description || 'Sin descripci�n',
+      descripcion: t.description || 'Sin descripción',
       monto: t.amount,
       fecha: t.createdAt,
       categoria: t.category
@@ -179,8 +179,8 @@ const openEditModal = (item: Expense) => {
 const saveExpense = async () => {
   try {
     if (editingId.value !== null) {
-      // TODO: Implementar edici�n en el backend
-      toast.info('La edici�n de transacciones estar� disponible pr�ximamente');
+      // TODO: Implementar edición en el backend
+      toast.info('La edición de transacciones estar• disponible próximamente');
       showModal.value = false;
       return;
     }
@@ -206,7 +206,7 @@ const saveExpense = async () => {
 };
 
 const deleteExpense = async (id: string) => {
-  if (!confirm('�Est�s seguro de que deseas eliminar este egreso?')) {
+  if (!confirm('¿Estás seguro de que deseas eliminar este egreso?')) {
     return;
   }
 
@@ -224,11 +224,11 @@ const deleteExpense = async (id: string) => {
 const getCategoriaColor = (categoria: string) => {
   const colores: Record<string, string> = {
     'Vivienda': 'bg-red-100 text-red-800',
-    'Alimentaci�n': 'bg-orange-100 text-orange-800',
+    'Alimentación': 'bg-orange-100 text-orange-800',
     'Transporte': 'bg-blue-100 text-blue-800',
     'Servicios': 'bg-yellow-100 text-yellow-800',
     'Salud': 'bg-pink-100 text-pink-800',
-    'Educaci�n': 'bg-purple-100 text-purple-800',
+    'Educación': 'bg-purple-100 text-purple-800',
     'Entretenimiento': 'bg-indigo-100 text-indigo-800',
     'Ropa': 'bg-teal-100 text-teal-800',
     'Deudas': 'bg-rose-100 text-rose-800',
@@ -240,11 +240,11 @@ const getCategoriaColor = (categoria: string) => {
 const getCategoriaIcon = (categoria: string) => {
   const iconos: Record<string, string> = {
     'Vivienda': 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
-    'Alimentaci�n': 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z',
+    'Alimentación': 'M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z',
     'Transporte': 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4',
     'Servicios': 'M13 10V3L4 14h7v7l9-11h-7z',
     'Salud': 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
-    'Educaci�n': 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z',
+    'Educación': 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z',
     'Entretenimiento': 'M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
     'Ropa': 'M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z',
     'Deudas': 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z',
@@ -284,7 +284,7 @@ onMounted(async () => {
   if (userId.value) {
     await loadExpenses();
   } else {
-    toast.error('No se pudo obtener la informaci�n del usuario');
+    toast.error('No se pudo obtener la información del usuario');
     loading.value = false;
   }
 });
@@ -319,7 +319,7 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- Estad�sticas principales -->
+      <!-- Estadísticas principales -->
       <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-xl shadow-lg p-6 text-white md:col-span-2">
           <div class="flex items-center justify-between">
@@ -382,7 +382,7 @@ onMounted(async () => {
                   v-model="filtroCategoria"
                   class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
                 >
-                  <option value="">Todas las categor�as</option>
+                  <option value="">Todas las categorías</option>
                   <option v-for="cat in categorias" :key="cat" :value="cat">{{ cat }}</option>
                 </select>
                 <div class="flex gap-2">
@@ -413,8 +413,8 @@ onMounted(async () => {
               <table class="w-full">
                 <thead class="bg-gray-50 border-b">
                   <tr>
-                    <th class="text-left py-4 px-6 font-semibold text-gray-700">Descripci�n</th>
-                    <th class="text-left py-4 px-6 font-semibold text-gray-700">Categor�a</th>
+                    <th class="text-left py-4 px-6 font-semibold text-gray-700">Descripción</th>
+                    <th class="text-left py-4 px-6 font-semibold text-gray-700">Categoría</th>
                     <th class="text-left py-4 px-6 font-semibold text-gray-700">Fecha</th>
                     <th class="text-right py-4 px-6 font-semibold text-gray-700">Monto</th>
                     <th class="text-center py-4 px-6 font-semibold text-gray-700">Acciones</th>
@@ -471,7 +471,7 @@ onMounted(async () => {
                 </tbody>
               </table>
 
-              <!-- Estado vac�o -->
+              <!-- Estado vacío -->
               <div v-if="expensesFiltered.length === 0" class="text-center py-12">
                 <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -488,10 +488,10 @@ onMounted(async () => {
           </div>
         </div>
 
-        <!-- Panel lateral con estad�sticas -->
+        <!-- Panel lateral con estad•sticas -->
         <div class="space-y-6">
           <div class="bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Por Categor�a</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Por Categoría</h3>
             <div class="space-y-4">
               <div v-for="stat in estadisticasPorCategoria" :key="stat.categoria">
                 <div class="flex justify-between items-center mb-1">
@@ -504,7 +504,7 @@ onMounted(async () => {
                     :style="{ width: `${(stat.total / totalExpenses) * 100}%` }"
                   ></div>
                 </div>
-                <p class="text-xs text-gray-500 mt-1">{{ stat.count }} transacci�n(es) � {{ ((stat.total / totalExpenses) * 100).toFixed(1) }}%</p>
+                <p class="text-xs text-gray-500 mt-1">{{ stat.count }} transacción(es) • {{ ((stat.total / totalExpenses) * 100).toFixed(1) }}%</p>
               </div>
             </div>
           </div>
@@ -515,7 +515,7 @@ onMounted(async () => {
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
-              An�lisis de Gastos
+              Análisis de Gastos
             </h3>
             <div class="space-y-3">
               <div class="flex items-center justify-between text-sm">
@@ -525,7 +525,7 @@ onMounted(async () => {
                 </span>
               </div>
               <div class="flex items-center justify-between text-sm">
-                <span class="text-amber-700">Mayor categor�a:</span>
+                <span class="text-amber-700">Mayor categoría:</span>
                 <span class="font-medium text-amber-900">
                   {{ estadisticasPorCategoria[0]?.categoria || 'N/A' }}
                 </span>
@@ -543,15 +543,15 @@ onMounted(async () => {
             </h3>
             <ul class="text-sm text-red-700 space-y-2">
               <li class="flex items-start gap-2">
-                <span class="text-red-500">�</span>
+                <span class="text-red-500">•</span>
                 Registra cada gasto inmediatamente para no olvidarlo
               </li>
               <li class="flex items-start gap-2">
-                <span class="text-red-500">�</span>
-                Establece l�mites por categor�a para controlar gastos
+                <span class="text-red-500">•</span>
+                Establece límites por categoría para controlar gastos
               </li>
               <li class="flex items-start gap-2">
-                <span class="text-red-500">�</span>
+                <span class="text-red-500">•</span>
                 Revisa semanalmente para identificar gastos innecesarios
               </li>
             </ul>
@@ -585,7 +585,7 @@ onMounted(async () => {
 
         <form @submit.prevent="saveExpense" class="space-y-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Descripci�n</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
             <input
               v-model="formData.descripcion"
               type="text"
@@ -612,7 +612,7 @@ onMounted(async () => {
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Categor�a</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
             <select
               v-model="formData.categoria"
               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
